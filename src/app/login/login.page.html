@@ -1,0 +1,17 @@
+<ion-content class="no-scroll">
+  <div class="logo">
+    <ion-img src="/assets/logo.png"></ion-img>
+  </div>
+  <form [formGroup]="signInForm" novalidate>
+    <div class="error" *ngIf="signInForm.invalid">Неверный логин или пароль</div>
+    <div class="form-group">
+      <ion-label><ion-icon name="person"></ion-icon></ion-label>
+      <ion-input type="text" placeholder="Логин" formControlName="username"></ion-input>
+    </div>
+    <div class="form-group">
+      <ion-label><ion-icon name="lock"></ion-icon></ion-label>
+      <ion-input type="password" placeholder="Пароль" formControlName="password"></ion-input>
+    </div>
+    <ion-button class="sign-in" type="submit" expand="block" [disabled]="signInForm.invalid">ВОЙТИ</ion-button>
+  </form>
+</ion-content>

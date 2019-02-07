@@ -1,0 +1,44 @@
+.logo {
+    margin-top: 18%;
+    padding: 60px;
+}
+
+ion-img {
+    display: block;
+    max-width: 240px;
+    margin: 0 auto;
+}
+
+form {
+    padding: 0 30px;
+}
+
+.form-group {
+    position: relative;
+    height: 48px;
+    margin-bottom: 20px;
+    padding: 5px 20px;
+    padding-left: 50px;
+    border: 1px solid #CED0D2;
+    border-radius: 6px;
+    box-shadow: 0 3px 4px rgba(96, 100, 112, 0.10);
+    ion-label {
+        position: absolute;
+        top: 12px;
+        left: 16px;
+        font-size: 1.2em;
+        color: #B0B2B8;
+    }
+    .native-input {
+        font-size: 16px;
+        color: #B0B2B8!important;
+        opacity: 0.5;
+        &:focus {
+            opacity: 1;
+        }
+    }
+}
+
+.no-scroll .scroll-content {
+    overflow: hidden;
+}
