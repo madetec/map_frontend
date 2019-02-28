@@ -1,6 +1,7 @@
 .logo {
     margin-top: 5%;
     padding: 60px;
+    padding-bottom: 20px;
 }
 
 ion-img {
@@ -40,10 +41,20 @@ form {
     }
 }
 
+.message {
+    text-align: center;
+    font-size: 16px;
+    font-family: Helvetica;
+    color: #4A4A4A;
+    margin-bottom: 60px;
+
+}
+
 p {
     display: block;
-    text-align: right;
-    font-size: 14px;
+    text-align: left;
+    font-size: 16px;
+    font-family: helvetica;
 
     a {
         color: #606470;
