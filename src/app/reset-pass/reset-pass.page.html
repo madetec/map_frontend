@@ -1,0 +1,17 @@
+<ion-content class="no-scroll">
+  <div class="logo">
+    <ion-img src="/assets/logo.png"></ion-img>
+  </div>
+  <form [formGroup]="resetForm" novalidate>
+    <div class="message">Сбросить пароль</div>
+    <div class="form-group">
+      <ion-label><ion-icon name="phone-portrait"></ion-icon></ion-label>
+      <ion-input type="text" placeholder="+998** *** ** **" formControlName="code"></ion-input>
+    </div>
+    <div>
+      <p>Новый пароль придет на корпоративный номер телефона зарегистрированного в базе.</p>
+    </div>
+      <ion-button shape="round" class="btn" type="submit" expand="block" fill="clear" [disabled]="resetForm.invalid">ВОСТАНОВИТЬ</ion-button>
+  </form>
+  <footer><p>AK «UZBEKTELECOM» 2019. All rights reserved</p></footer>
+</ion-content>

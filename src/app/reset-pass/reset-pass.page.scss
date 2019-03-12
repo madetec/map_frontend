@@ -1,0 +1,88 @@
+.logo {
+    margin-top: 5%;
+    padding: 60px;
+    padding-bottom: 20px;
+}
+
+ion-img {
+    display: block;
+    max-width: 240px;
+    margin: 0 auto;
+}
+
+form {
+    padding: 0 30px;
+}
+
+.form-group {
+    position: relative;
+    height: 48px;
+    margin-bottom: 20px;
+    padding: 5px 20px;
+    padding-left: 50px;
+    border: 1px solid #CED0D2;
+    border-radius: 6px;
+    box-shadow: 0 3px 4px #378ADB(96, 100, 112, 0.10);
+    ion-label {
+        position: absolute;
+        top: 12px;
+        left: 16px;
+        font-size: 1.2em;
+        color: #B0B2B8;
+    }
+    .native-input {
+        font-size: 16px;
+        color: #378ADB!important;
+        box-shadow: #378ADB , 10px;
+        opacity: 0.5;
+        &:focus {
+            opacity: 1;
+        }
+    }
+}
+
+.message {
+    text-align: center;
+    font-size: 16px;
+    font-family: Helvetica;
+    color: #4A4A4A;
+    margin-bottom: 60px;
+
+}
+
+p {
+    display: block;
+    text-align: left;
+    font-size: 16px;
+    font-family: helvetica;
+
+    a {
+        color: #606470;
+    }
+}
+.btn {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    height: 48px!important;
+    color: #fff;
+    box-shadow: 0 6px 8px #89B4E7;
+    background: linear-gradient(#378ADB, #61A8FB);
+    border-radius: 24px;
+}
+
+.no-scroll .scroll-content {
+    overflow: hidden;
+}
+
+footer {
+    p {
+        position: absolute;
+        left: 0;
+        right: 0;
+        text-align: center;
+        bottom: 23px;
+        color: #606470;
+        font-size: 10px;
+        margin: 0;
+    }
+}

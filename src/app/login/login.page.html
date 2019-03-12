@@ -12,6 +12,8 @@
       <ion-label><ion-icon name="lock"></ion-icon></ion-label>
       <ion-input type="password" placeholder="Пароль" formControlName="password"></ion-input>
     </div>
-    <ion-button class="sign-in" type="submit" expand="block" [disabled]="signInForm.invalid">ВОЙТИ</ion-button>
+      <p><a routerLink="/reset-pass">Забыли пароль?</a></p>
+    <ion-button shape="round" class="sign-in btn" (click)="onSubmit()" expand="block" fill="clear" [disabled]="signInForm.invalid">ВОЙТИ</ion-button>
   </form>
+  <footer><p>AK «UZBEKTELECOM» 2019. All rights reserved</p></footer>
 </ion-content>
