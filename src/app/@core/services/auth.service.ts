@@ -25,15 +25,16 @@ export class AuthService {
   login(username: string, pass: string, client_id: string, client_secret: string) {
     const body = JSON.stringify({grant_type: 'password', username: username, password: pass, client_id: client_id, client_secret: client_secret});
 
-    return this.http.post<any>(`http://api.telecom-car.uz/oauth2/token`, body, {
+    // return this.http.post<any>(`http://api.telecom-car.uz/oauth2/token`, body, {
+    return this.http.post<any>(`http://localhost:1337/api.telecom-car.uz/oauth2/token`, body, {
       headers: {'Content-Type': 'application/json'}
-    }).pipe(map(user => {
-        if (user && user.token) {
+    }).pipe(map(data => {
+        if (data && data.access_token) {
           // store user details and jwt token in local storage to keep user logged in between page refreshes
-          localStorage.setItem('currentUser', JSON.stringify(user));
-          this.currentUserSubject.next(user);
+          localStorage.setItem('currentUser', JSON.stringify(data));
+          this.currentUserSubject.next(data);
         }
-        return user;
+        return data;
       }));
   }
 

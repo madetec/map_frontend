@@ -25,7 +25,10 @@ export class LoginPage implements OnInit {
     // this.authService.login('madetec', '1qazxsw23edc', 'testclient', 'testpass').subscribe((data) => {
     //   console.log(data);
     // });
-    this.router.navigate(['/main-map']);
+    this.authService.login(this.signInForm.controls.username.value, this.signInForm.controls.password.value, 'testclient', 'testpass').subscribe((data) => {
+      console.log(data);
+      // this.router.navigate(['/main-map']);
+    });
   }
 
 }
