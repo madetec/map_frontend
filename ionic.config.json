@@ -1,7 +1,8 @@
 {
   "name": "map_frontend",
   "integrations": {
-    "cordova": {}
+    "cordova": {},
+    "capacitor": {}
   },
   "type": "angular",
   "proxies": [

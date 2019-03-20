@@ -1,0 +1,6 @@
+{
+  "appId": "io.ionic.starter",
+  "appName": "map_frontend",
+  "bundledWebRuntime": false,
+  "webDir": "www"
+}
