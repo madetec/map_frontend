@@ -1,10 +1,23 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>main-map</ion-title>
+<ion-header class="main-header">
+  <ion-toolbar class="main-toolbar">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Telecom Car
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon slot="icon-only" name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <!--create a element for map. #Map - identifier -->
   <div #Map class="map"></div>
+  <div class="map-current-location">
+    <ion-icon slot="icon-only" name="pin"></ion-icon>
+  </div>
 </ion-content>

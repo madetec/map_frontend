@@ -38,7 +38,8 @@ export class MainMapPage implements OnInit {
       this.mapOptions = {
           center: this.location,
           zoom: 16,
-          mapTypeControl: false
+          mapTypeControl: false,
+          disableDefaultUI: true
       };
       setTimeout(() => {
           this.map = new google.maps.Map(this.mapElement.nativeElement, this.mapOptions);
