@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 import { MainMapPage } from './main-map.page';
 
@@ -21,6 +22,9 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [MainMapPage]
+  declarations: [MainMapPage],
+  providers: [
+    Geolocation    
+  ]
 })
 export class MainMapPageModule {}

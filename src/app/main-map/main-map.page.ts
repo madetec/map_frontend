@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 @Component({
   selector: 'app-main-map',
@@ -7,9 +8,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainMapPage implements OnInit {
 
-  constructor() { }
+  constructor(private geolocation: Geolocation) { }
 
   ngOnInit() {
+    this.geolocation.getCurrentPosition().then((resp) => {
+      // resp.coords.latitude
+      // resp.coords.longitude
+      console.log(resp.coords);
+     }).catch((error) => {
+       console.log('Error getting location', error);
+     });
+     
+     let watch = this.geolocation.watchPosition();
+     watch.subscribe((data) => {
+       console.log(data);
+      // data can be a set of coordinates, or an error (if an error occurred).
+      // data.coords.latitude
+      // data.coords.longitude
+     });
   }
 
 }
