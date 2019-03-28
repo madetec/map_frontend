@@ -22,12 +22,14 @@ export class LoginPage implements OnInit {
   }
 
   onSubmit() {
-    // this.authService.login('madetec', '1qazxsw23edc', 'testclient', 'testpass').subscribe((data) => {
-    //   console.log(data);
-    // });
     this.authService.login(this.signInForm.controls.username.value, this.signInForm.controls.password.value, 'testclient', 'testpass').subscribe((data) => {
-      console.log(data);
-      // this.router.navigate(['/main-map']);
+      this.authService.getUserRole().subscribe(res => {
+        if(res.role === 'user') {
+          this.router.navigate(['/main-user']);
+        } else if(res.role === 'driver') {
+          this.router.navigate(['/main-driver']);
+        }
+      });
     });
   }
 

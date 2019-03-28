@@ -3,12 +3,11 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 declare var google: any;
 
 @Component({
-  selector: 'app-main-map',
-  templateUrl: './main-map.page.html',
-  styleUrls: ['./main-map.page.scss'],
+  selector: 'app-main-user',
+  templateUrl: './main-user.page.html',
+  styleUrls: ['./main-user.page.scss'],
 })
-export class MainMapPage implements OnInit {
-  
+export class MainUserPage implements OnInit {
   @ViewChild('Map') mapElement: ElementRef;
   map: any;
   mapOptions: any;
@@ -30,10 +29,12 @@ export class MainMapPage implements OnInit {
     
   ngOnInit() {
       /*Get Current location*/
-      this.geolocation.getCurrentPosition().then((position) =>  {
-          this.location.lat = position.coords.latitude;
-          this.location.lng = position.coords.longitude;
-      });
+    //   this.geolocation.getCurrentPosition().then((position) =>  {
+    //       this.location.lat = position.coords.latitude;
+    //       this.location.lng = position.coords.longitude;
+    //     });
+      this.location.lat = 41.310997;
+      this.location.lng = 69.277880;
       /*Map options*/
       this.mapOptions = {
           center: this.location,

@@ -17,7 +17,8 @@ const routes: Routes = [
   },
   { path: 'login', loadChildren: './login/login.module#LoginPageModule' },
   { path: 'reset-pass', loadChildren: './reset-pass/reset-pass.module#ResetPassPageModule' },
-  { path: 'main-map', loadChildren: './main-map/main-map.module#MainMapPageModule' }
+  { path: 'main-driver', loadChildren: './main-driver/main-driver.module#MainDriverPageModule' },
+  { path: 'main-user', loadChildren: './main-user/main-user.module#MainUserPageModule' }
 ];
 
 @NgModule({

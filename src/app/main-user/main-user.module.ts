@@ -7,16 +7,17 @@ import { IonicModule } from '@ionic/angular';
 
 import { AuthGuard } from '../@core/guards/auth.guard';
 import { Role } from '../@core/models/role';
-import { MainMapPage } from './main-map.page';
+import { MainUserPage } from './main-user.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: MainMapPage,
+    component: MainUserPage,
     canActivate: [AuthGuard],
     data: { roles: [Role.User] }
   }
 ];
+
 
 @NgModule({
   imports: [
@@ -25,6 +26,6 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [MainMapPage]
+  declarations: [MainUserPage]
 })
-export class MainMapPageModule {}
+export class MainUserPageModule {}

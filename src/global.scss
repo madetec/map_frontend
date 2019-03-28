@@ -24,6 +24,21 @@
         box-shadow: 0px 5px 5px 5px rgba(255, 255, 255, 0.4);
     }
 }
+.btn {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    height: 48px!important;
+    color: #fff;
+    border-radius: 24px;
+}
+.menu {
+    .header-md:after {
+        background: #fff;
+    }
+    .menu-icon {
+        color: #3277D8;
+    }
+}
 // .main-toolbar {
 //     --background: transparent;
 // }

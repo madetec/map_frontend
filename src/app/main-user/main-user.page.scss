@@ -1,0 +1,40 @@
+.map{
+    height: 100%;
+}
+.map-current-location{
+    position: absolute;
+    top: 80px;
+    left: 20px;
+    right: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 12px;
+}
+.map-order-from{
+    position: absolute;
+    bottom: 80px;
+    left: 20px;
+    right: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 0px 12px;
+
+    ion-icon{
+        color: #DC5529;
+    }
+
+    ion-input{
+        size: 14px;
+        height: 48px;
+        width: 335px;
+    }
+}
+.order-accept{
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    background: linear-gradient(#DC5529, #F9AE95);
+    box-shadow: 0 6px 8px #EA805E;
+    text-transform: none;
+}
