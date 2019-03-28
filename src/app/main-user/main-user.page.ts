@@ -5,7 +5,7 @@ declare var google: any;
 @Component({
   selector: 'app-main-user',
   templateUrl: './main-user.page.html',
-  styleUrls: ['./main-user.page.scss'],
+  styleUrls: ['./main-user.page.scss']
 })
 export class MainUserPage implements OnInit {
   @ViewChild('Map') mapElement: ElementRef;
