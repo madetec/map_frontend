@@ -56,7 +56,7 @@ export class AuthService {
         this.currentRoleSubject.next(data.role);
       }
       return data;
-    }));;
+    }));
   }
 
   logout() {

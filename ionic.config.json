@@ -6,8 +6,8 @@
   "type": "angular",
   "proxies": [
     {
-      "path": "/api",
-      "proxyUrl": "http://cors.api.com/api"
+      "path": "/",
+      "proxyUrl": "http://api.telecom-car.test"
     }
   ]
 }

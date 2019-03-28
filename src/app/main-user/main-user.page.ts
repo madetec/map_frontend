@@ -11,7 +11,7 @@ export class MainUserPage implements OnInit {
   @ViewChild('Map') mapElement: ElementRef;
   map: any;
   mapOptions: any;
-  location = {lat: null, lng: null};
+  location = {lat: 41.310997, lng: 69.277880};
   markerOptions: any = {position: null, map: null, title: null};
   marker: any;
   apiKey: any = 'AIzaSyDHLzW7e35n33f2pVHwRl790N9Uv-SIZv4'; /*Your API Key*/
@@ -29,12 +29,12 @@ export class MainUserPage implements OnInit {
     
   ngOnInit() {
       /*Get Current location*/
-    //   this.geolocation.getCurrentPosition().then((position) =>  {
-    //       this.location.lat = position.coords.latitude;
-    //       this.location.lng = position.coords.longitude;
-    //     });
-      this.location.lat = 41.310997;
-      this.location.lng = 69.277880;
+      this.geolocation.getCurrentPosition().then((position) =>  {
+          this.location.lat = position.coords.latitude;
+          this.location.lng = position.coords.longitude;
+        });
+      // this.location.lat = 41.310997;
+      // this.location.lng = 69.277880;
       /*Map options*/
       this.mapOptions = {
           center: this.location,
