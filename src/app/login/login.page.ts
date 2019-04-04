@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MenuController } from '@ionic/angular';
 import { AuthService } from '../@core/services/auth.service';
 
 @Component({
@@ -12,7 +13,7 @@ export class LoginPage implements OnInit {
 
   signInForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) { }
+  constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router, private menuCtrl: MenuController) { }
 
   ngOnInit() {
     this.signInForm = this.formBuilder.group({
@@ -31,6 +32,10 @@ export class LoginPage implements OnInit {
         }
       });
     });
+  }
+
+  ionViewWillEnter() {
+    this.menuCtrl.enable(false);
   }
 
 }
