@@ -1,5 +1,6 @@
 import { Component, OnInit, ElementRef, NgZone, ViewChild } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { MenuController } from '@ionic/angular';
 declare var google: any;
 
 @Component({
@@ -16,7 +17,7 @@ export class MainUserPage implements OnInit {
   marker: any;
   apiKey: any = 'AIzaSyDHLzW7e35n33f2pVHwRl790N9Uv-SIZv4'; /*Your API Key*/
 
-  constructor(public zone: NgZone, public geolocation: Geolocation) {
+  constructor(public zone: NgZone, public geolocation: Geolocation, private menuCtrl: MenuController) {
     const script = document.createElement('script');
       script.id = 'googleMap';
       if (this.apiKey) {
@@ -50,6 +51,10 @@ export class MainUserPage implements OnInit {
           this.markerOptions.title = 'My Location';
           this.marker = new google.maps.Marker(this.markerOptions);
       }, 3000);
+  }
+
+  ionViewWillEnter() {
+    this.menuCtrl.enable(true);
   }
 
 }

@@ -2,8 +2,9 @@
   <div class="logo">
     <ion-img src="/assets/logo.png"></ion-img>
   </div>
-  <form [formGroup]="signInForm" novalidate>
-    <div class="error" *ngIf="signInForm.invalid">Неверный логин или пароль</div>
+  <form [formGroup]="signInForm" novalidate class="login-form">
+    <div class="error" *ngIf="hasError">Неверный логин или пароль</div>
+    <!-- <div class="error" *ngIf="hasError">{{errMsg}}</div> -->
     <div class="form-group">
       <ion-label><ion-icon name="person"></ion-icon></ion-label>
       <ion-input type="text" placeholder="Логин" formControlName="username"></ion-input>

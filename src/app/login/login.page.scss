@@ -42,20 +42,34 @@ form {
 
 p {
     display: block;
-    text-align: right;
     font-size: 14px;
+    text-align: right;
 
     a {
         color: #606470;
     }
 }
 .btn {
-    box-shadow: 0 6px 8px #89B4E7;
     background: linear-gradient(#378ADB, #61A8FB);
+    box-shadow: 0 6px 8px #89B4E7;
 }
 
 .no-scroll .scroll-content {
     overflow: hidden;
+}
+
+.login-form {
+    position: relative;
+}
+
+.error {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    right: 0;
+    font-size: 16px;
+    text-align: center;
+    color: #CB5361;
 }
 
 footer {

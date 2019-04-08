@@ -12,6 +12,8 @@ import { AuthService } from '../@core/services/auth.service';
 export class LoginPage implements OnInit {
 
   signInForm: FormGroup;
+  hasError: boolean = false;
+  errMsg: string;
 
   constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router, private menuCtrl: MenuController) { }
 
@@ -19,6 +21,10 @@ export class LoginPage implements OnInit {
     this.signInForm = this.formBuilder.group({
       username: [''],
       password: ['']
+    });
+    this.authService.onLoginIncorrect.subscribe(res => {
+      this.hasError = true;
+      this.errMsg = res;
     });
   }
 
