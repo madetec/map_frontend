@@ -5,9 +5,6 @@ import {map} from 'rxjs/operators';
 
 import {User} from '../models/user';
 
-import {Device} from '@ionic-native/device/ngx';
-import {FcmService} from './fcm.service';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -21,9 +18,7 @@ export class AuthService {
   onLoginIncorrect = new EventEmitter<string>();
 
     constructor(
-        private http: HttpClient,
-        private device: Device,
-        private fcm: FcmService,
+        private http: HttpClient
     ) {
         this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
         this.currentRoleSubject = new BehaviorSubject<string>(JSON.parse(localStorage.getItem('currentUserRole')));
@@ -69,18 +64,9 @@ export class AuthService {
   }
 
     setFirebaseToken(): void {
-        this.fcm.getToken();
-        let firebase_token = localStorage.getItem('firebase_token');
-        alert(firebase_token);
-        if(firebase_token != 'undefined'){
-            firebase_token = JSON.parse(firebase_token);
-            alert(firebase_token);
-            let data = {
-                uid: this.device.uuid,
-                firebase_token: firebase_token,
-                name: this.device.platform + ', ' + this.device.version
-            };
-            let response = this.http.post<any>(`http://api.telecom-car.uz/device/add`, data, {
+        let firebase_data = localStorage.getItem('firebase_data');
+            firebase_data = JSON.parse(firebase_data);
+            let response = this.http.post<any>(`http://api.telecom-car.uz/device/add`, firebase_data, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${this.currentUserSubject.value.access_token}`
@@ -88,11 +74,7 @@ export class AuthService {
             }).pipe(map(data => {
               return data;
             }));
-            response.subscribe(res => {
-              alert(JSON.stringify(res));
-            });
-            
-        }
+            response.subscribe(res => {});
     }
 
   logout() {

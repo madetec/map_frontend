@@ -18,7 +18,6 @@ import {AngularFireModule} from 'angularfire2';
 import {AngularFirestoreModule} from 'angularfire2/firestore';
 import {Firebase} from '@ionic-native/firebase/ngx';
 import {FcmService} from './@core/services/fcm.service';
-import {ToastService} from './@core/services/toast.service';
 
 const config = {
     apiKey: 'AIzaSyCaCwfI9iDsX31Brcv28EwUPWZgcpQRQqM',
@@ -47,7 +46,6 @@ const config = {
       Firebase,
       Device,
       FcmService,
-      ToastService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
