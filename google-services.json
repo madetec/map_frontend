@@ -1,0 +1,35 @@
+{
+  "project_info": {
+    "project_number": "515812942516",
+    "firebase_url": "https://telecom-car24.firebaseio.com",
+    "project_id": "telecom-car24",
+    "storage_bucket": "telecom-car24.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:515812942516:android:99a9da1a13f4f603",
+        "android_client_info": {
+          "package_name": "com.uztelecom.telecom_car"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxqSDi3fW_U-W1RzgxpJaeUrP6CeMKok4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "515812942516-4gu6lg8ivihrr5g9o8pscl3b81n8j8ce.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

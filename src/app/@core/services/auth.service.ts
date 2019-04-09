@@ -1,9 +1,12 @@
-import { Injectable, EventEmitter } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {EventEmitter, Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
-import { User } from '../models/user';
+import {User} from '../models/user';
+
+import {Device} from '@ionic-native/device/ngx';
+import {FcmService} from './fcm.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,14 +17,19 @@ export class AuthService {
   private currentRoleSubject: BehaviorSubject<string>;
   public currentUser: Observable<User>;
   public currentRole: Observable<string>;
+    public firebaseToken;
   onLoginIncorrect = new EventEmitter<string>();
 
-  constructor(private http: HttpClient) {
-    this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
-    this.currentRoleSubject = new BehaviorSubject<string>(JSON.parse(localStorage.getItem('currentUserRole')));
-    this.currentUser = this.currentUserSubject.asObservable();
-    this.currentRole = this.currentRoleSubject.asObservable();
-  }
+    constructor(
+        private http: HttpClient,
+        private device: Device,
+        private fcm: FcmService,
+    ) {
+        this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
+        this.currentRoleSubject = new BehaviorSubject<string>(JSON.parse(localStorage.getItem('currentUserRole')));
+        this.currentUser = this.currentUserSubject.asObservable();
+        this.currentRole = this.currentRoleSubject.asObservable();
+    }
 
   public get currentUserValue(): User {
     return this.currentUserSubject.value;
@@ -31,10 +39,10 @@ export class AuthService {
     return this.currentRoleSubject.value;
   }
 
-  login(username: string, pass: string, client_id: string, client_secret: string) {
+
+    login(username: string, pass: string, client_id: string, client_secret: string) {
     const body = JSON.stringify({grant_type: 'password', username: username, password: pass, client_id: client_id, client_secret: client_secret});
 
-    // return this.http.post<any>(`http://api.telecom-car.uz/oauth2/token`, body, {
     return this.http.post<any>(`http://api.telecom-car.uz/oauth2/token`, body, {
       headers: {'Content-Type': 'application/json'}
     }).pipe(map(data => {
@@ -59,6 +67,33 @@ export class AuthService {
       return data;
     }));
   }
+
+    setFirebaseToken(): void {
+        this.fcm.getToken();
+        let firebase_token = localStorage.getItem('firebase_token');
+        alert(firebase_token);
+        if(firebase_token != 'undefined'){
+            firebase_token = JSON.parse(firebase_token);
+            alert(firebase_token);
+            let data = {
+                uid: this.device.uuid,
+                firebase_token: firebase_token,
+                name: this.device.platform + ', ' + this.device.version
+            };
+            let response = this.http.post<any>(`http://api.telecom-car.uz/device/add`, data, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.currentUserSubject.value.access_token}`
+                }
+            }).pipe(map(data => {
+              return data;
+            }));
+            response.subscribe(res => {
+              alert(JSON.stringify(res));
+            });
+            
+        }
+    }
 
   logout() {
     localStorage.removeItem('currentUser');

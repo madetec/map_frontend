@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { MenuController } from '@ionic/angular';
-import { AuthService } from '../@core/services/auth.service';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {MenuController} from '@ionic/angular';
+import {AuthService} from '../@core/services/auth.service';
+
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,11 @@ export class LoginPage implements OnInit {
   hasError: boolean = false;
   errMsg: string;
 
-  constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router, private menuCtrl: MenuController) { }
+    constructor(
+        private formBuilder: FormBuilder,
+        private authService: AuthService,
+        private router: Router,
+        private menuCtrl: MenuController) {}
 
   ngOnInit() {
     this.signInForm = this.formBuilder.group({
@@ -32,8 +37,10 @@ export class LoginPage implements OnInit {
     this.authService.login(this.signInForm.controls.username.value, this.signInForm.controls.password.value, 'testclient', 'testpass').subscribe((data) => {
       this.authService.getUserRole().subscribe(res => {
         if(res.role === 'user') {
+          this.authService.setFirebaseToken();
           this.router.navigate(['/main-user']);
         } else if(res.role === 'driver') {
+          this.authService.setFirebaseToken();
           this.router.navigate(['/main-driver']);
         }
       });
