@@ -18,7 +18,9 @@ const routes: Routes = [
   { path: 'login', loadChildren: './login/login.module#LoginPageModule' },
   { path: 'reset-pass', loadChildren: './reset-pass/reset-pass.module#ResetPassPageModule' },
   { path: 'main-driver', loadChildren: './main-driver/main-driver.module#MainDriverPageModule' },
-  { path: 'main-user', loadChildren: './main-user/main-user.module#MainUserPageModule' }
+  { path: 'main-user', loadChildren: './main-user/main-user.module#MainUserPageModule' },
+  { path: 'profile', loadChildren: './profile/profile.module#ProfilePageModule' },
+  { path: 'order-history', loadChildren: './order-history/order-history.module#OrderHistoryPageModule' }
 ];
 
 @NgModule({

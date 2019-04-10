@@ -19,8 +19,8 @@ export class AppComponent {
     },
     {
       title: 'История поездок',
-      url: '/history',
-      icon: 'sync'
+      url: '/order-history',
+      icon: 'filing'
     },
     {
       title: 'Оповещания',

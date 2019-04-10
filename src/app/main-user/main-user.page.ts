@@ -27,7 +27,6 @@ export class MainUserPage implements OnInit {
       }
       document.head.appendChild(script);
   }
-    
   ngOnInit() {
       /*Get Current location*/
       this.geolocation.getCurrentPosition().then((position) =>  {

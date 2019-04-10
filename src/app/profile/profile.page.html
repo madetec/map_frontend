@@ -1,0 +1,52 @@
+<ion-header class="main-header">
+    <ion-toolbar class="main-toolbar">
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>
+            Профиль
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <ion-card>
+        <ion-card-content>
+            <ion-item>
+                <ion-label>
+                    {{fullName}}
+                </ion-label>
+                <ion-icon name="person"></ion-icon>
+            </ion-item>
+            <ion-item>
+                <ion-label>
+                    {{subdivision}}
+                </ion-label>
+                <ion-icon name="business"></ion-icon>
+            </ion-item>
+            <ion-item>
+                <ion-label>
+                    {{position}}
+                </ion-label>
+                <ion-icon name="briefcase"></ion-icon>
+            </ion-item>
+            <ion-item>
+                <ion-label>
+                    {{main_phone}}
+                </ion-label>
+                <ion-icon name="call"></ion-icon>
+            </ion-item>
+            <ion-item>
+                <ion-label>
+                    {{main_address}}
+                </ion-label>
+                <ion-icon name="pin"></ion-icon>
+            </ion-item>
+            <ion-item>
+                <ion-label>
+                    {{username}}
+                </ion-label>
+                <ion-icon name="finger-print"></ion-icon>
+            </ion-item>
+        </ion-card-content>
+    </ion-card>
+</ion-content>

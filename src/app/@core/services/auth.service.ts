@@ -14,7 +14,7 @@ export class AuthService {
   private currentRoleSubject: BehaviorSubject<string>;
   public currentUser: Observable<User>;
   public currentRole: Observable<string>;
-    public firebaseToken;
+  public firebaseToken;
   onLoginIncorrect = new EventEmitter<string>();
 
     constructor(
