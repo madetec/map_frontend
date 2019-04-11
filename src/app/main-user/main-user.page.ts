@@ -13,26 +13,18 @@ export class MainUserPage implements OnInit {
     map: any;
     location = {lat: 41.310997, lng: 69.277880};
     currentLocationAddress = 'Текущее местоположение';
-
     constructor(
         public geo: Geolocation,
         private menuCtrl: MenuController
     ) {
     }
   ngOnInit() {
+      this.updateLocation();
       setInterval(this.updateLocation, 1000);
-      this.geo.getCurrentPosition().then((position) => {
-          this.location.lat = position.coords.latitude;
-          this.location.lng = position.coords.longitude;
-      });
+      this.loadMap();
   }
 
-  ionViewWillEnter() {
-    this.menuCtrl.enable(true);
-      this.loadmap();
-  }
-
-    loadmap() {
+    loadMap() {
         this.map = L.map('map', {
             center: [
                 this.location.lat,
@@ -80,13 +72,16 @@ export class MainUserPage implements OnInit {
 
     updateLocation() {
         try {
-            this.geo.getCurrentPosition().then((position) => {
-                this.location.lat = position.coords.latitude;
-                this.location.lng = position.coords.longitude;
-            });
+            this.geo.getCurrentPosition()
+                .then((position) => this.setLocation(position));
         } catch (e) {
-            console.log(e);
         }
+    }
+
+
+    setLocation(position) {
+        this.location.lat = position.coords.latitude;
+        this.location.lng = position.coords.longitude;
     }
 
 }

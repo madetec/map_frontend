@@ -6,12 +6,19 @@ import {StatusBar} from '@ionic-native/status-bar/ngx';
 
 import {FcmService} from './@core/services/fcm.service';
 
+import {Router} from '@angular/router';
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html'
 })
 export class AppComponent {
   public appPages = [
+    {
+      title: 'Главная',
+      url: '/main-user.page',
+      icon: 'pin'
+    },
     {
       title: 'Профиль',
       url: '/profile',
@@ -42,9 +49,9 @@ export class AppComponent {
       private platform: Platform,
       private splashScreen: SplashScreen,
       private statusBar: StatusBar,
-      private fcm: FcmService
+      private fcm: FcmService,
+      private router: Router
   ) {
-
     this.initializeApp();
   }
 
@@ -54,6 +61,11 @@ export class AppComponent {
         this.statusBar.styleDefault();
         this.splashScreen.hide();
         this.fcm.getToken();
+        if (localStorage.getItem('currentUser')) {
+            this.router.navigateByUrl('/main-user');
+        } else {
+            this.router.navigateByUrl('/login');
+        }
     });
   }
 }
