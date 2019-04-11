@@ -32,7 +32,7 @@ form {
     .native-input {
         font-size: 16px;
         color: #378ADB!important;
-        box-shadow: #378ADB , 10px;
+        box-shadow: #378ADB,10px;
         opacity: 0.5;
         &:focus {
             opacity: 1;
@@ -80,4 +80,8 @@ footer {
         text-align: center;
         color: #606470;
     }
+}
+
+.form-group-error{
+    border: 1px solid #d20043!important;
 }

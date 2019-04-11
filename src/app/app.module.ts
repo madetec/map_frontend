@@ -19,6 +19,8 @@ import {AngularFirestoreModule} from 'angularfire2/firestore';
 import {Firebase} from '@ionic-native/firebase/ngx';
 import {FcmService} from './@core/services/fcm.service';
 
+import {Network} from '@ionic-native/network/ngx';
+
 const config = {
     apiKey: 'AIzaSyCaCwfI9iDsX31Brcv28EwUPWZgcpQRQqM',
     authDomain: 'telecom-car24.firebaseapp.com',
@@ -46,6 +48,7 @@ const config = {
       Firebase,
       Device,
       FcmService,
+      Network,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
