@@ -5,7 +5,6 @@ import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
 
 import {FcmService} from './@core/services/fcm.service';
-import {Network} from '@ionic-native/network/ngx';
 
 @Component({
   selector: 'app-root',
@@ -39,7 +38,6 @@ export class AppComponent {
       icon: 'log-out'
     }
   ];
-
   constructor(
       private platform: Platform,
       private splashScreen: SplashScreen,

@@ -15,13 +15,16 @@
 </ion-header>
 
 <ion-content>
-  <!--create a element for map. #Map - identifier -->
-  <div id="map" #Map class="map"></div>
   <div class="map-current-location">
-    <ion-icon style="color:#157ff1; vertical-align: middle;" slot="icon-only" name="pin"></ion-icon><span style="color:#868686; vertical-align: middle;"> Текущее местоположение</span>
+    <ion-icon style="color:#157ff1; vertical-align: middle;" slot="icon-only" name="pin"></ion-icon><span style="color:#868686; vertical-align: middle;"> {{currentLocationAddress}}</span>
   </div>
+<div id="centralization" class="cbutton cbutton--effect-novak" (click)="onPanTo()">
+  <ion-icon icon="icon-only" name="navigate"></ion-icon>
+</div>
+
   <div class="map-order-from"><ion-input type="text" placeholder="Откуда?">
     <ion-icon slot="icon-only" name="compass"></ion-icon></ion-input>
   </div>
   <ion-button shape="round" class="order-accept btn" (click)="onSubmit()" expand="block" fill="clear">Подтвердить локацию</ion-button>
+  <div id="map" class="map"></div>
 </ion-content>

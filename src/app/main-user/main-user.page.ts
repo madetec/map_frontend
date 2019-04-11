@@ -1,59 +1,92 @@
-import { Component, OnInit, ElementRef, NgZone, ViewChild } from '@angular/core';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
-import { MenuController } from '@ionic/angular';
-declare var google: any;
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Geolocation} from '@ionic-native/geolocation/ngx';
+import {MenuController} from '@ionic/angular';
+import L from 'leaflet/dist/leaflet.js';
 
 @Component({
   selector: 'app-main-user',
   templateUrl: './main-user.page.html',
-  styleUrls: ['./main-user.page.scss']
+    styleUrls: ['./main-user.page.scss']
 })
 export class MainUserPage implements OnInit {
-  @ViewChild('Map') mapElement: ElementRef;
-  map: any;
-  mapOptions: any;
-  location = {lat: 41.310997, lng: 69.277880};
-  markerOptions: any = {position: null, map: null, title: null};
-  marker: any;
-  apiKey: any = 'AIzaSyDHLzW7e35n33f2pVHwRl790N9Uv-SIZv4'; /*Your API Key*/
+    @ViewChild('map') mapContainer: ElementRef;
+    map: any;
+    location = {lat: 41.310997, lng: 69.277880};
+    currentLocationAddress = 'Текущее местоположение';
 
-  constructor(public zone: NgZone, public geolocation: Geolocation, private menuCtrl: MenuController) {
-    const script = document.createElement('script');
-      script.id = 'googleMap';
-      if (this.apiKey) {
-          script.src = 'https://maps.googleapis.com/maps/api/js?key=' + this.apiKey;
-      } else {
-          script.src = 'https://maps.googleapis.com/maps/api/js?key=';
-      }
-      document.head.appendChild(script);
-  }
+    constructor(
+        public geo: Geolocation,
+        private menuCtrl: MenuController
+    ) {
+    }
   ngOnInit() {
-      /*Get Current location*/
-      this.geolocation.getCurrentPosition().then((position) =>  {
+      setInterval(this.updateLocation, 1000);
+      this.geo.getCurrentPosition().then((position) => {
           this.location.lat = position.coords.latitude;
           this.location.lng = position.coords.longitude;
-        });
-      // this.location.lat = 41.310997;
-      // this.location.lng = 69.277880;
-      /*Map options*/
-      this.mapOptions = {
-          center: this.location,
-          zoom: 16,
-          mapTypeControl: false,
-          disableDefaultUI: true
-      };
-      setTimeout(() => {
-          this.map = new google.maps.Map(this.mapElement.nativeElement, this.mapOptions);
-          /*Marker Options*/
-          this.markerOptions.position = this.location;
-          this.markerOptions.map = this.map;
-          this.markerOptions.title = 'My Location';
-          this.marker = new google.maps.Marker(this.markerOptions);
-      }, 3000);
+      });
   }
 
   ionViewWillEnter() {
     this.menuCtrl.enable(true);
+      this.loadmap();
   }
+
+    loadmap() {
+        this.map = L.map('map', {
+            center: [
+                this.location.lat,
+                this.location.lng
+            ],
+            zoomControl: false,
+            zoom: 15
+        });
+        L.tileLayer('https://map.uztelecom.uz/hot/{z}/{x}/{y}.png', {
+            attributions: 'https://telecom-car.uz',
+            maxZoom: 18
+        }).addTo(this.map);
+
+        const userIcon = L.icon({
+            iconUrl: 'assets/icon/user.svg',
+            iconSize: [38, 95], // size of the icon
+            shadowSize: [50, 64], // size of the shadow
+            iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
+            shadowAnchor: [4, 62],  // the same for the shadow
+            popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
+        });
+
+        const mainMarker = L.marker([
+            this.location.lat,
+            this.location.lng
+        ], {icon: userIcon}).addTo(this.map);
+
+        this.map.on('move', function (event) {
+            mainMarker.setLatLng(this.getCenter());
+        });
+    }
+
+    onPanTo() {
+        this.map.panTo([
+            this.location.lat,
+            this.location.lng
+        ]);
+        setTimeout(function () {
+            (document).getElementById('centralization').classList.add('cbutton--click');
+        }, 150);
+        setTimeout(function () {
+            (document).getElementById('centralization').classList.remove('cbutton--click');
+        }, 700);
+    }
+
+    updateLocation() {
+        try {
+            this.geo.getCurrentPosition().then((position) => {
+                this.location.lat = position.coords.latitude;
+                this.location.lng = position.coords.longitude;
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    }
 
 }
