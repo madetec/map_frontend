@@ -1,8 +1,8 @@
-import { EventEmitter, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { User } from '../models/user';
+import {EventEmitter, Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {User} from '../models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +14,7 @@ export class AuthService {
   public currentUser: Observable < User > ;
   public currentRole: Observable < string > ;
   public firebaseToken;
+    public text: string;
   onLoginIncorrect = new EventEmitter < string > ();
 
   constructor(
@@ -23,6 +24,7 @@ export class AuthService {
     this.currentRoleSubject = new BehaviorSubject < string > (JSON.parse(localStorage.getItem('currentUserRole')));
     this.currentUser = this.currentUserSubject.asObservable();
     this.currentRole = this.currentRoleSubject.asObservable();
+
   }
 
   public get currentUserValue(): User {
@@ -100,4 +102,27 @@ export class AuthService {
     this.currentUserSubject.next(null);
     this.currentRoleSubject.next(null);
   }
+
+    getTextCurrentLocation(lng, lat) {
+        let token = this.currentUserSubject.value.access_token;
+        this.currentUserSubject.value.access_token = undefined;
+
+        this.http.get<any>('https://geocode-maps.yandex.ru/1.x/', {
+            params: {
+                apiKey: '28dabf92-4d44-4291-a67b-ebee0a411fb2',
+                format: 'json',
+                geocode: lng + ',' + lat
+            }
+        }).subscribe(data => {
+            localStorage.setItem('textCurrentLocation', data.response
+                .GeoObjectCollection
+                .featureMember[0]
+                .GeoObject
+                .metaDataProperty
+                .GeocoderMetaData
+                .text);
+        });
+        this.currentUserSubject.value.access_token = token;
+    }
+
 }

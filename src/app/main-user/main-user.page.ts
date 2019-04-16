@@ -2,7 +2,9 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
 import {MenuController, Platform} from '@ionic/angular';
 import L from 'leaflet/dist/leaflet.js';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {BehaviorSubject} from 'rxjs/index';
+import {User} from '../@core/models/user';
+import {AuthService} from '../@core/services/auth.service';
 
 
 @Component({
@@ -13,21 +15,18 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 export class MainUserPage implements OnInit {
     @ViewChild('map') mapContainer: ElementRef;
     map: any;
-    location = {lat: 41.310387, lng: 69.274695};
+    location = {lat: 41.310387, lng: 69.274695, data: null};
     currentLocationAddress = 'Текущее местоположение';
     pin_user_marker: any;
-    pin_a_marker: any;
-    pin_driver_marker: any;
-    pin_b_marker: any;
-    apiKey = '28dabf92-4d44-4291-a67b-ebee0a411fb2';
-    geocoder = 'https://geocode-maps.yandex.ru/1.x/';
-    headers: HttpHeaders;
+
+    private currentUserSubject: BehaviorSubject<User>;
     constructor(
         private geo: Geolocation,
         private menuCtrl: MenuController,
         private platform: Platform,
-        private http: HttpClient
+        private service: AuthService
     ) {
+        this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
     }
 
     ionViewWillEnter() {
@@ -35,16 +34,7 @@ export class MainUserPage implements OnInit {
         this.updateLocation();
         setInterval(this.updateLocation, 1000);
         this.loadMap();
-        this.http.get<any>(this.geocoder, {
-            params: {
-                apiKey: this.apiKey,
-                geocode: this.location.lng + ',' + this.location.lat
-            },
-            headers:{}
-        })
-            .subscribe(res => {
-                alert(JSON.stringify(res));
-            });
+        this.currentLocationAddress = localStorage.getItem('textCurrentLocation');
     }
 
     loadMap() {
@@ -106,8 +96,6 @@ export class MainUserPage implements OnInit {
         } catch (e) {
         }
     }
-
-
     setLocation(position) {
         this.location.lat = position.coords.latitude;
         this.location.lng = position.coords.longitude;
@@ -118,5 +106,6 @@ export class MainUserPage implements OnInit {
     }
 
     ngOnInit() {
+        this.service.getTextCurrentLocation(this.location.lng, this.location.lat);
     }
 }
