@@ -1,12 +1,12 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Routes, RouterModule } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {RouterModule, Routes} from '@angular/router';
 
-import { IonicModule } from '@ionic/angular';
+import {IonicModule} from '@ionic/angular';
 
-import { AuthGuard } from '../@core/guards/auth.guard';
-import { Role } from '../@core/models/role';
-import { OrderHistoryPage } from './order-history.page';
+import {AuthGuard} from '../@core/guards/auth.guard';
+import {Role} from '../@core/models/role';
+import {OrderHistoryPage} from './order-history.page';
 
 const routes: Routes = [
   {
@@ -24,6 +24,6 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [OrderHistoryPage]
+    declarations: [OrderHistoryPage],
 })
 export class OrderHistoryPageModule {}

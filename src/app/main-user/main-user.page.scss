@@ -6,12 +6,18 @@
 .map-current-location{
     position: absolute;
     top: 80px;
-    left: 20px;
-    right: 20px;
-    background-color: #fff;
-    border-radius: 5px;
+    left: 30px;
+    right: 30px;
+    text-align: center;
     padding: 12px;
     z-index: 2;
+    h1 {
+        font-size: 35px;
+        color: #262626;
+        font-family: "Roboto", "Helvetica Neue", sans-serif;
+        font-weight: 300;
+        text-shadow: 0 10px 25px rgba(0,0,0,1);
+    }
 }
 .map-order-from{
     position: absolute;
@@ -34,7 +40,7 @@
     }
 }
 .order-accept{
-    width: 100%;
+    width: 92%;
     position: absolute;
     bottom: 20px;
     left: 20px;
@@ -52,6 +58,7 @@
     &:focus, &:active, &:link, &:visited, .activated {
         outline: none !important;
         color: white !important;
+        border-color: transparent !important;
     }
     &:active{
         background: linear-gradient(#dc5224, #f9ac89);
@@ -62,12 +69,12 @@
     }
 }
 
-#centralization{
+#panTo {
     position: absolute;
     width: 40px;
     height: 40px;
     bottom: 140px;
-    right: 20px;
+    right: 5px;
     font-size: 20px;
     text-align: center;
     transform: rotate(45deg);

@@ -59,6 +59,11 @@ p {
     font-family: "Roboto", "Helvetica Neue", sans-serif;
     letter-spacing: 1px;
     transition: .2s;
+    &:focus, &:active, &:link, &:visited, .activated {
+        outline: none !important;
+        color: white !important;
+        border-color: transparent !important;
+    }
     &:active{
         background: linear-gradient(#378ADB, #61A8FB);
         -webkit-box-shadow: 0px 2px 5px 0px rgba(137,180,231,1);

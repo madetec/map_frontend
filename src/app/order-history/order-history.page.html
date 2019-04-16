@@ -9,37 +9,17 @@
     </ion-toolbar>
 </ion-header>
 <ion-content>
-    <ion-card>
+    <ion-card *ngFor="let order of orders; let i = index">
+        <ion-card-header>
+            <ion-card-subtitle>{{order.status.name}}</ion-card-subtitle>
+            <ion-card-title>{{order.created_at * 1000 | date:'d MMMM, в HH:mm'}}</ion-card-title>
+        </ion-card-header>
         <ion-card-content>
-            <ion-item>
-                <ion-label>
-                    A location
-                </ion-label>
-                <ion-icon name="pin" slot="start" color="primary"></ion-icon>
-            </ion-item>
-            <ion-item>
-                <ion-label>
-                    B Location
-                </ion-label>
-                <ion-icon name="pin" slot="start" color="primary"></ion-icon>
-            </ion-item>
-        </ion-card-content>
-    </ion-card>
-
-    <ion-card>
-        <ion-card-content>
-            <ion-item>
-                <ion-label>
-                    A location
-                </ion-label>
-                <ion-icon name="pin" slot="start" color="primary"></ion-icon>
-            </ion-item>
-            <ion-item>
-                <ion-label>
-                    B Location
-                </ion-label>
-                <ion-icon name="pin" slot="start" color="primary"></ion-icon>
-            </ion-item>
+            <ion-icon name="pin" slot="start" color="danger"></ion-icon>
+            {{order.from.address}}
+            <br>
+            <ion-icon name="pin" slot="start" color="primary"></ion-icon>
+            {{order.to.address}}
         </ion-card-content>
     </ion-card>
 </ion-content>

@@ -15,10 +15,11 @@
 </ion-header>
 
 <ion-content>
+  <div id="map" class="map"></div>
   <div class="map-current-location">
-    <ion-icon style="color:#157ff1; vertical-align: middle;" slot="icon-only" name="pin"></ion-icon><span style="color:#868686; vertical-align: middle;"> {{currentLocationAddress}}</span>
+    <h1>{{currentLocationAddress}}</h1>
   </div>
-<div id="centralization" class="cbutton cbutton--effect-novak" (click)="onPanTo()">
+<div id="panTo" class="cbutton cbutton--effect-novak" (click)="onPanTo()">
   <ion-icon icon="icon-only" name="navigate"></ion-icon>
 </div>
 
@@ -26,5 +27,4 @@
     <ion-icon slot="icon-only" name="compass"></ion-icon></ion-input>
   </div>
   <button shape="round" class="order-accept btn" (click)="onSubmit()" expand="block" fill="clear">Подтвердить локацию</button>
-  <div id="map" class="map"></div>
 </ion-content>

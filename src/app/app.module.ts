@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {LOCALE_ID, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {RouteReuseStrategy} from '@angular/router';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
@@ -20,6 +20,11 @@ import {Firebase} from '@ionic-native/firebase/ngx';
 import {FcmService} from './@core/services/fcm.service';
 
 import {Network} from '@ionic-native/network/ngx';
+
+import localeRu from '@angular/common/locales/ru';
+import {registerLocaleData} from '@angular/common';
+
+registerLocaleData(localeRu);
 
 const config = {
     apiKey: 'AIzaSyCaCwfI9iDsX31Brcv28EwUPWZgcpQRQqM',
@@ -49,6 +54,7 @@ const config = {
       Device,
       FcmService,
       Network,
+      {provide: LOCALE_ID, useValue: 'ru'},
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

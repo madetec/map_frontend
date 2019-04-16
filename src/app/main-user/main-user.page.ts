@@ -1,7 +1,9 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
-import {MenuController} from '@ionic/angular';
+import {MenuController, Platform} from '@ionic/angular';
 import L from 'leaflet/dist/leaflet.js';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+
 
 @Component({
   selector: 'app-main-user',
@@ -11,18 +13,39 @@ import L from 'leaflet/dist/leaflet.js';
 export class MainUserPage implements OnInit {
     @ViewChild('map') mapContainer: ElementRef;
     map: any;
-    location = {lat: 41.310997, lng: 69.277880};
+    location = {lat: 41.310387, lng: 69.274695};
     currentLocationAddress = 'Текущее местоположение';
+    pin_user_marker: any;
+    pin_a_marker: any;
+    pin_driver_marker: any;
+    pin_b_marker: any;
+    apiKey = '28dabf92-4d44-4291-a67b-ebee0a411fb2';
+    geocoder = 'https://geocode-maps.yandex.ru/1.x/';
+    headers: HttpHeaders;
     constructor(
-        public geo: Geolocation,
-        private menuCtrl: MenuController
+        private geo: Geolocation,
+        private menuCtrl: MenuController,
+        private platform: Platform,
+        private http: HttpClient
     ) {
     }
-  ngOnInit() {
-      this.updateLocation();
-      setInterval(this.updateLocation, 1000);
-      this.loadMap();
-  }
+
+    ionViewWillEnter() {
+        this.menuCtrl.enable(true);
+        this.updateLocation();
+        setInterval(this.updateLocation, 1000);
+        this.loadMap();
+        this.http.get<any>(this.geocoder, {
+            params: {
+                apiKey: this.apiKey,
+                geocode: this.location.lng + ',' + this.location.lat
+            },
+            headers:{}
+        })
+            .subscribe(res => {
+                alert(JSON.stringify(res));
+            });
+    }
 
     loadMap() {
         this.map = L.map('map', {
@@ -30,30 +53,35 @@ export class MainUserPage implements OnInit {
                 this.location.lat,
                 this.location.lng
             ],
-            zoomControl: false,
-            zoom: 15
+            zoom: 15,
+            zoomControl: false
         });
         L.tileLayer('https://map.uztelecom.uz/hot/{z}/{x}/{y}.png', {
             attributions: 'https://telecom-car.uz',
             maxZoom: 18
         }).addTo(this.map);
-
-        const userIcon = L.icon({
-            iconUrl: 'assets/icon/user.svg',
-            iconSize: [38, 95], // size of the icon
-            shadowSize: [50, 64], // size of the shadow
-            iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
-            shadowAnchor: [4, 62],  // the same for the shadow
-            popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
+        const pin_a = L.icon({
+            iconUrl: 'assets/icon/pin_a.svg',
+            iconSize: [50, 62.3],
+            shadowSize: [50, 62.3],
+            iconAnchor: [25, 62.3],
+            shadowAnchor: [4, 62],
+            popupAnchor: [-3, -76]
         });
-
-        const mainMarker = L.marker([
+        const pin_user = L.icon({
+            iconUrl: 'assets/icon/pin_user.svg',
+            iconSize: [30, 30], // size of the icon
+        });
+        this.pin_user_marker = L.marker([
             this.location.lat,
             this.location.lng
-        ], {icon: userIcon}).addTo(this.map);
-
+        ], {icon: pin_user}).addTo(this.map);
+        const pin_a_marker = L.marker([
+            this.location.lat,
+            this.location.lng
+        ], {icon: pin_a}).addTo(this.map);
         this.map.on('move', function (event) {
-            mainMarker.setLatLng(this.getCenter());
+            pin_a_marker.setLatLng(this.getCenter());
         });
     }
 
@@ -63,13 +91,14 @@ export class MainUserPage implements OnInit {
             this.location.lng
         ]);
         setTimeout(function () {
-            (document).getElementById('centralization').classList.add('cbutton--click');
+            (document).getElementById('panTo')
+                .classList.add('cbutton--click');
         }, 150);
         setTimeout(function () {
-            (document).getElementById('centralization').classList.remove('cbutton--click');
+            (document).getElementById('panTo')
+                .classList.remove('cbutton--click');
         }, 700);
     }
-
     updateLocation() {
         try {
             this.geo.getCurrentPosition()
@@ -82,6 +111,12 @@ export class MainUserPage implements OnInit {
     setLocation(position) {
         this.location.lat = position.coords.latitude;
         this.location.lng = position.coords.longitude;
+        this.pin_user_marker.setLatLng([
+            this.location.lat,
+            this.location.lng
+        ]);
     }
 
+    ngOnInit() {
+    }
 }

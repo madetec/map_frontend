@@ -16,7 +16,7 @@ export class AppComponent {
   public appPages = [
     {
       title: 'Главная',
-      url: '/main-user.page',
+      url: '/main-user',
       icon: 'pin'
     },
     {
@@ -54,8 +54,6 @@ export class AppComponent {
   ) {
     this.initializeApp();
   }
-
-
   initializeApp() {
     this.platform.ready().then(() => {
         this.statusBar.styleDefault();
