@@ -8,10 +8,6 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'home',
-    loadChildren: './home/home.module#HomePageModule'
-  },
-  {
     path: 'list',
     loadChildren: './list/list.module#ListPageModule'
   },
@@ -20,7 +16,7 @@ const routes: Routes = [
   { path: 'main-driver', loadChildren: './main-driver/main-driver.module#MainDriverPageModule' },
   { path: 'main-user', loadChildren: './main-user/main-user.module#MainUserPageModule' },
   { path: 'profile', loadChildren: './profile/profile.module#ProfilePageModule' },
-  { path: 'order-history', loadChildren: './order-history/order-history.module#OrderHistoryPageModule' }
+  { path: 'order-history', loadChildren: './order-history/order-history.module#OrderHistoryPageModule' },
 ];
 
 @NgModule({

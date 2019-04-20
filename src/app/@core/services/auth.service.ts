@@ -1,128 +1,126 @@
 import {EventEmitter, Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject, Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
 import {User} from '../models/user';
+import {map} from 'rxjs/operators';
+import {HttpClient} from '@angular/common/http';
+import {Router} from '@angular/router';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class AuthService {
+    public user: User;
 
-  private currentUserSubject: BehaviorSubject < User > ;
-  private currentRoleSubject: BehaviorSubject < string > ;
-  public currentUser: Observable < User > ;
-  public currentRole: Observable < string > ;
-  public firebaseToken;
+    public firebaseToken;
     public text: string;
-  onLoginIncorrect = new EventEmitter < string > ();
+    onLoginIncorrect = new EventEmitter<string>();
 
   constructor(
-    private http: HttpClient
+      private http: HttpClient,
+      private router: Router
   ) {
-    this.currentUserSubject = new BehaviorSubject < User > (JSON.parse(localStorage.getItem('currentUser')));
-    this.currentRoleSubject = new BehaviorSubject < string > (JSON.parse(localStorage.getItem('currentUserRole')));
-    this.currentUser = this.currentUserSubject.asObservable();
-    this.currentRole = this.currentRoleSubject.asObservable();
-
-  }
-
-  public get currentUserValue(): User {
-    return this.currentUserSubject.value;
-  }
-
-  public get currentUserRole(): String {
-    return this.currentRoleSubject.value;
-  }
-
-
-  login(username: string, pass: string, client_id: string, client_secret: string) {
-    const body = JSON.stringify({
-      grant_type: 'password',
-      username: username,
-      password: pass,
-      client_id: client_id,
-      client_secret: client_secret
-    });
-
-    return this.http.post < any > (`http://api.telecom-car.uz/oauth2/token`, body, {
-      headers: {
-        'Content-Type': 'application/json'
+      if (localStorage.getItem('currentUser')) {
+          this.user = new User(JSON.parse(localStorage.getItem('currentUser')));
+      } else {
+          this.user = new User();
       }
-    }).pipe(map(data => {
-      if (data && data.access_token) {
-        localStorage.setItem('currentUser', JSON.stringify(data));
-        this.currentUserSubject.next(data);
-      }
-      return data;
-    }));
   }
 
-  getUserRole() {
-    return this.http.get < any > (`http://api.telecom-car.uz/user/role`, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.currentUserSubject.value.access_token}`
-      }
-    }).pipe(map(data => {
-      if (data && data.role) {
-        localStorage.setItem('currentUserRole', JSON.stringify(data.role));
-        this.currentRoleSubject.next(data.role);
-      }
-      return data;
-    }));
-  }
+    public get getCurrentUser(): User {
+        return this.user;
+    }
 
-  getProfile() {
-    return this.http.get < any > (`http://api.telecom-car.uz/user/profile`, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.currentUserSubject.value.access_token}`
-      }
-    });
-  }
+    login(username: string, password: string) {
+        let url = 'http://api.telecom-car.uz/oauth2/token';
+        let data = this.authRequestData(username, password);
+        let options = {headers: {'Content-Type': 'application/json'}};
+        return this.http.post<any>(url, data, options)
+            .pipe(map(data => {
+                if (data && data.access_token) {
+                    this.user.setAuthData(
+                        username,
+                        data.access_token,
+                        data.expires_in,
+                        data.token_type,
+                        data.scope,
+                        data.refresh_token
+                    );
+                }
+            }));
+    }
 
-  setFirebaseToken(): void {
-    let firebase_data = localStorage.getItem('firebase_data');
-    firebase_data = JSON.parse(firebase_data);
-    let response = this.http.post < any > (`http://api.telecom-car.uz/device/add`, firebase_data, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.currentUserSubject.value.access_token}`
-      }
-    }).pipe(map(data => {
-      return data;
-    }));
-    response.subscribe(res => {});
-  }
+    getUserRole() {
+        return this.http.get<any>('http://api.telecom-car.uz/user/role')
+            .pipe(map(data => {
+                if (data && data.role) {
+                    this.user.setRole(data.role, data.roleName);
+                }
+            }));
+    }
 
-  logout() {
-    localStorage.removeItem('currentUser');
-    localStorage.removeItem('currentUserRole');
-    this.currentUserSubject.next(null);
-    this.currentRoleSubject.next(null);
-  }
+    getProfile() {
+        return this.http.get<any>('http://api.telecom-car.uz/user/profile')
+            .pipe(map((data) => {
+                if (data.name) {
+                    this.user.setProfile(
+                        data.name,
+                        data.last_name,
+                        data.father_name,
+                        data.subdivision,
+                        data.position,
+                        data.main_phone,
+                        data.main_address,
+                        data.phones,
+                        data.addresses,
+                        data.status
+                    );
+                }
+            }));
+    }
+
+    setFirebaseToken(): void {
+        let firebase_data = localStorage.getItem('firebase_data');
+        firebase_data = JSON.parse(firebase_data);
+        let response = this.http.post <any>(`http://api.telecom-car.uz/device/add`, firebase_data);
+        response.subscribe();
+    }
+
+    logout() {
+        localStorage.removeItem('currentUser');
+        this.user = new User();
+    }
 
     getTextCurrentLocation(lng, lat) {
-        let token = this.currentUserSubject.value.access_token;
-        this.currentUserSubject.value.access_token = undefined;
-
-        this.http.get<any>('https://geocode-maps.yandex.ru/1.x/', {
+        return this.http.get<any>('https://geocode-maps.yandex.ru/1.x/', {
             params: {
                 apiKey: '28dabf92-4d44-4291-a67b-ebee0a411fb2',
                 format: 'json',
                 geocode: lng + ',' + lat
             }
-        }).subscribe(data => {
-            localStorage.setItem('textCurrentLocation', data.response
+        }).pipe(map(data => {
+            console.log('setItem');
+            this.text = data.response
                 .GeoObjectCollection
                 .featureMember[0]
                 .GeoObject
-                .metaDataProperty
-                .GeocoderMetaData
-                .text);
-        });
-        this.currentUserSubject.value.access_token = token;
+                .name;
+        }));
     }
 
+    private authRequestData(username: string, password: string) {
+        return {
+            grant_type: 'password',
+            username: username,
+            password: password,
+            client_id: 'testclient',
+            client_secret: 'testpass'
+        };
+    }
+
+    redirect() {
+        if (this.user) {
+            if (this.user.role === 'user') {
+                this.router.navigate(['/main-user']);
+            } else if (this.user.role === 'driver') {
+                this.router.navigate(['/main-driver']);
+            }
+        }
+    }
 }

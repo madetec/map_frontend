@@ -23,6 +23,7 @@ import {Network} from '@ionic-native/network/ngx';
 
 import localeRu from '@angular/common/locales/ru';
 import {registerLocaleData} from '@angular/common';
+import {AuthService} from './@core/services/auth.service';
 
 registerLocaleData(localeRu);
 
@@ -54,6 +55,7 @@ const config = {
       Device,
       FcmService,
       Network,
+      AuthService,
       {provide: LOCALE_ID, useValue: 'ru'},
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

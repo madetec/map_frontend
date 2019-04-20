@@ -1,11 +1,15 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {Geolocation} from '@ionic-native/geolocation/ngx';
 import {MenuController, Platform} from '@ionic/angular';
-import L from 'leaflet/dist/leaflet.js';
-import {BehaviorSubject} from 'rxjs/index';
+import * as L from 'leaflet/dist/leaflet.js';
 import {User} from '../@core/models/user';
 import {AuthService} from '../@core/services/auth.service';
+import {Geolocation} from '@ionic-native/geolocation/ngx';
+import {Network} from '@ionic-native/network/ngx';
 
+export interface Location {
+    lat: number;
+    lng: number;
+}
 
 @Component({
   selector: 'app-main-user',
@@ -14,27 +18,31 @@ import {AuthService} from '../@core/services/auth.service';
 })
 export class MainUserPage implements OnInit {
     @ViewChild('map') mapContainer: ElementRef;
+    user: User;
+    currentAddress: string;
     map: any;
-    location = {lat: 41.310387, lng: 69.274695, data: null};
-    currentLocationAddress = 'Текущее местоположение';
+    location: Location;
     pin_user_marker: any;
-
-    private currentUserSubject: BehaviorSubject<User>;
     constructor(
-        private geo: Geolocation,
+        private geolocation: Geolocation,
         private menuCtrl: MenuController,
         private platform: Platform,
         private service: AuthService
     ) {
-        this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
+        this.user = this.service.getCurrentUser;
+        this.location = {
+            lat: 41.310387,
+            lng: 69.274695
+        };
     }
 
     ionViewWillEnter() {
         this.menuCtrl.enable(true);
         this.updateLocation();
+        this.updateAddress(this.location.lng, this.location.lat);
         setInterval(this.updateLocation, 1000);
         this.loadMap();
-        this.currentLocationAddress = localStorage.getItem('textCurrentLocation');
+
     }
 
     loadMap() {
@@ -60,7 +68,7 @@ export class MainUserPage implements OnInit {
         });
         const pin_user = L.icon({
             iconUrl: 'assets/icon/pin_user.svg',
-            iconSize: [30, 30], // size of the icon
+            iconSize: [30, 30],
         });
         this.pin_user_marker = L.marker([
             this.location.lat,
@@ -70,9 +78,20 @@ export class MainUserPage implements OnInit {
             this.location.lat,
             this.location.lng
         ], {icon: pin_a}).addTo(this.map);
-        this.map.on('move', function (event) {
-            pin_a_marker.setLatLng(this.getCenter());
-        });
+        this.map.on('move', (e) => this.onMove(e, pin_a_marker));
+        this.map.on('moveend', (e) => this.onMoveEnd(e));
+    }
+
+    onMove(event, marker) {
+        const position = event.target.getCenter();
+        marker.setLatLng(position);
+        this.clearAddress();
+    }
+
+    onMoveEnd(event) {
+        const position = event.target.getCenter();
+        console.log('updateAddress');
+        this.updateAddress(position.lng, position.lat);
     }
 
     onPanTo() {
@@ -80,6 +99,7 @@ export class MainUserPage implements OnInit {
             this.location.lat,
             this.location.lng
         ]);
+        this.updateAddress(this.location.lng, this.location.lat);
         setTimeout(function () {
             (document).getElementById('panTo')
                 .classList.add('cbutton--click');
@@ -91,7 +111,7 @@ export class MainUserPage implements OnInit {
     }
     updateLocation() {
         try {
-            this.geo.getCurrentPosition()
+            this.geolocation.getCurrentPosition()
                 .then((position) => this.setLocation(position));
         } catch (e) {
         }
@@ -103,9 +123,23 @@ export class MainUserPage implements OnInit {
             this.location.lat,
             this.location.lng
         ]);
+        this.updateAddress(this.location.lng, this.location.lat);
+    }
+
+    updateAddress(lng, lat) {
+        const data = this.service.getTextCurrentLocation(lng, lat);
+        const access_token = this.service.user.access_token;
+        this.service.user.access_token = undefined;
+        data.subscribe(res => {
+            this.currentAddress = this.service.text;
+        });
+        this.service.user.access_token = access_token;
+    }
+
+    clearAddress() {
+        this.currentAddress = null;
     }
 
     ngOnInit() {
-        this.service.getTextCurrentLocation(this.location.lng, this.location.lat);
     }
 }

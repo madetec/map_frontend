@@ -17,13 +17,13 @@
 <ion-content>
   <div id="map" class="map"></div>
   <div class="map-current-location">
-    <h2>{{currentLocationAddress}}</h2>
+    <h2>{{currentAddress}}</h2>
   </div>
 <div id="panTo" class="cbutton cbutton--effect-novak" (click)="onPanTo()">
   <ion-icon icon="icon-only" name="navigate"></ion-icon>
 </div>
 
-  <div class="map-order-from"><ion-input type="text" placeholder="Откуда?">
+  <div class="map-order-from"><ion-input (click)="onClickTo()" type="text" placeholder="Откуда?">
     <ion-icon slot="icon-only" name="compass"></ion-icon></ion-input>
   </div>
   <button shape="round" class="order-accept btn" (click)="onSubmit()" expand="block" fill="clear">Подтвердить локацию</button>

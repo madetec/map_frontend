@@ -1,16 +1,7 @@
-import {
-  Component,
-  OnInit,
-  ElementRef,
-  NgZone,
-  ViewChild
-} from '@angular/core';
-import {
-  Geolocation
-} from '@ionic-native/geolocation/ngx';
-import {
-  MenuController
-} from '@ionic/angular';
+import {Component, ElementRef, NgZone, OnInit, ViewChild} from '@angular/core';
+import {Geolocation} from '@ionic-native/geolocation/ngx';
+import {MenuController} from '@ionic/angular';
+
 declare var google: any;
 
 @Component({
