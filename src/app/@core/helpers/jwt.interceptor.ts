@@ -13,13 +13,14 @@ export class JwtInterceptor implements HttpInterceptor {
         // add authorization header with jwt token if available
         this.currentUser = this.authService.getCurrentUser;
         if (this.currentUser && this.currentUser.access_token) {
-            console.log(request.url);
-            request = request.clone({
-                setHeaders: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${this.currentUser.access_token}`
-                }
-            });
+            if (request.url !== 'https://geocode-maps.yandex.ru/1.x/') {
+                request = request.clone({
+                    setHeaders: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${this.currentUser.access_token}`
+                    }
+                });
+            }
         }
         return next.handle(request);
     }

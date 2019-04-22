@@ -17,14 +17,31 @@
 <ion-content>
   <div id="map" class="map"></div>
   <div class="map-current-location">
-    <h2>{{currentAddress}}</h2>
+    <h2 class="animated" [ngClass]="{'fadeInUp': currentAddress}">
+      {{currentAddress}}</h2>
   </div>
 <div id="panTo" class="cbutton cbutton--effect-novak" (click)="onPanTo()">
   <ion-icon icon="icon-only" name="navigate"></ion-icon>
 </div>
 
-  <div class="map-order-from"><ion-input (click)="onClickTo()" type="text" placeholder="Откуда?">
-    <ion-icon slot="icon-only" name="compass"></ion-icon></ion-input>
+  <div class="map-order-from">
+    <ion-item>
+      <ion-icon slot="start" color="warning" name="pin"></ion-icon>
+      <ion-label>{{currentAddress}}</ion-label>
+    </ion-item>
+    <ion-item lines="full">
+      <ion-icon slot="start" name="pin"></ion-icon>
+      <ion-label (click)="onModal()">{{to}}</ion-label>
+      <ion-buttons slot="end">
+        <ion-button [disabled]="!markers.pinB" (click)="onClearTo()">
+          <ion-icon slot="icon-only" name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+    <ion-item>
+      <button [disabled]="!markers.pinB" shape="round" class="order-accept btn" (click)="onSubmit()" expand="block"
+              fill="clear">Подтвердить локацию
+      </button>
+    </ion-item>
   </div>
-  <button shape="round" class="order-accept btn" (click)="onSubmit()" expand="block" fill="clear">Подтвердить локацию</button>
 </ion-content>

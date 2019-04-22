@@ -1,0 +1,28 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>
+            <ion-input (keyup)="onKeyup($event)" type="text" placeholder="Куда?">
+                <ion-icon slot="icon-only" name="pin"></ion-icon>
+            </ion-input>
+        </ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="onDismiss('cancel')">
+                <ion-icon slot="icon-only" name="close"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-list>
+        <p id="addressesNotFound" *ngIf="!addresses || addresses === []">Адреса не найдены</p>
+        <ion-item *ngFor="let address of addresses; index as i">
+            <ion-label text-wrap (click)="onClickAddress(i)">
+                <ion-text color="medium-shade">
+                    <h2>{{address.GeoObject.name}}</h2>
+                </ion-text>
+                <p>{{address.GeoObject.description}}</p>
+            </ion-label>
+        </ion-item>
+    </ion-list>
+</ion-content>

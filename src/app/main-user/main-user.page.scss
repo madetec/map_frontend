@@ -19,31 +19,28 @@
 }
 .map-order-from{
     position: absolute;
-    bottom: 80px;
-    left: 20px;
-    right: 20px;
-    background-color: #fff;
-    border-radius: 5px;
-    padding: 0px 12px;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
     z-index: 2;
-    ion-icon{
-        color: #DC5529;
-        z-index: 2;
-    }
-    ion-input{
-        size: 14px;
-        height: 48px;
-        width: 335px;
-        z-index: 2;
+    border-radius: 24px 24px 0 0;
+    overflow: hidden;
+    & > ion-item {
+        color: #565656;
+        border-radius: 10px!important;
+        & > ion-icon {
+          color: #0054dc;
+          z-index: 2;
+          margin: 0 10px 0 0;
+        }
     }
 }
 .order-accept{
     width: 92%;
-    position: absolute;
-    bottom: 20px;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
+    margin: 20px auto;
     background: linear-gradient(#DC5529, #F9AE95);
     -webkit-box-shadow: 0px 7px 15px 0px rgba(234,128,94,1);
     -moz-box-shadow: 0px 7px 15px 0px rgba(234,128,94,1);
@@ -66,14 +63,20 @@
         box-shadow: 0px 2px 5px 0px rgba(234,128,94,1);
         transition: .2s;
     }
+  &:disabled {
+    background: linear-gradient(#aaaaaa, #d4d1ce) !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+  }
 }
 
 #panTo {
     position: absolute;
     width: 40px;
     height: 40px;
-    bottom: 140px;
-    right: 5px;
+    bottom: 180px;
+    right: 0;
     font-size: 20px;
     text-align: center;
     transform: rotate(45deg);

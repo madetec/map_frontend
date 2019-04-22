@@ -9,7 +9,7 @@ export class AuthService {
     public user: User;
 
     public firebaseToken;
-    public text: string;
+    public text: any;
     onLoginIncorrect = new EventEmitter<string>();
 
   constructor(
@@ -87,20 +87,23 @@ export class AuthService {
         this.user = new User();
     }
 
-    getTextCurrentLocation(lng, lat) {
+    getTextCurrentLocation(geocode) {
+        if (Array.isArray(geocode)) {
+            geocode = geocode.join();
+        } else if (typeof geocode === 'string') {
+            geocode = geocode.split(/ /g).join('+');
+        }
         return this.http.get<any>('https://geocode-maps.yandex.ru/1.x/', {
             params: {
                 apiKey: '28dabf92-4d44-4291-a67b-ebee0a411fb2',
                 format: 'json',
-                geocode: lng + ',' + lat
+                geocode: geocode
             }
         }).pipe(map(data => {
-            console.log('setItem');
-            this.text = data.response
-                .GeoObjectCollection
-                .featureMember[0]
-                .GeoObject
-                .name;
+            if (data) {
+                return data.response;
+            }
+            return null;
         }));
     }
 

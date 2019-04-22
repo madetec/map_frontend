@@ -20,6 +20,7 @@ export class AppComponent {
         role: null
     };
     public appPages: any;
+    public onlineOffline: boolean = navigator.onLine;
 
     constructor(
         private platform: Platform,
@@ -31,6 +32,9 @@ export class AppComponent {
         private network: Network
     ) {
         this.initializeApp();
+        if (!navigator.onLine) {
+            this.router.navigate(['/error']);
+        }
     }
 
     initializeApp() {
@@ -39,6 +43,9 @@ export class AppComponent {
             this.statusBar.styleDefault();
             this.splashScreen.hide();
             this.fcm.getToken();
+        });
+        window.addEventListener('offline', () => {
+            this.router.navigate(['/error']);
         });
     }
 

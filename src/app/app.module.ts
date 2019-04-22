@@ -24,6 +24,8 @@ import {Network} from '@ionic-native/network/ngx';
 import localeRu from '@angular/common/locales/ru';
 import {registerLocaleData} from '@angular/common';
 import {AuthService} from './@core/services/auth.service';
+import {ModalPage} from './modal/modal.page';
+import {ModalPageModule} from './modal/modal.module';
 
 registerLocaleData(localeRu);
 
@@ -38,14 +40,15 @@ const config = {
 
 @NgModule({
   declarations: [AppComponent],
-  entryComponents: [],
+  entryComponents: [ModalPage],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
       HttpClientModule,
       AngularFireModule.initializeApp(config),
-      AngularFirestoreModule
+      AngularFirestoreModule,
+      ModalPageModule
   ],
   providers: [
     StatusBar,

@@ -17,6 +17,8 @@ const routes: Routes = [
   { path: 'main-user', loadChildren: './main-user/main-user.module#MainUserPageModule' },
   { path: 'profile', loadChildren: './profile/profile.module#ProfilePageModule' },
   { path: 'order-history', loadChildren: './order-history/order-history.module#OrderHistoryPageModule' },
+  { path: 'error', loadChildren: './error/error.module#ErrorPageModule' },
+  { path: 'modal', loadChildren: './modal/modal.module#ModalPageModule' },
 ];
 
 @NgModule({
