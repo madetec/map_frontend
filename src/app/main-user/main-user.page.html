@@ -17,8 +17,8 @@
 <ion-content>
   <div id="map" class="map"></div>
   <div class="map-current-location">
-    <h2 class="animated" [ngClass]="{'fadeInUp': currentAddress}">
-      {{currentAddress}}</h2>
+    <h2 class="animated" [ngClass]="{'fadeInUp': location.from.address}">
+      {{location.from.address}}</h2>
   </div>
 <div id="panTo" class="cbutton cbutton--effect-novak" (click)="onPanTo()">
   <ion-icon icon="icon-only" name="navigate"></ion-icon>
@@ -27,11 +27,11 @@
   <div class="map-order-from">
     <ion-item>
       <ion-icon slot="start" color="warning" name="pin"></ion-icon>
-      <ion-label>{{currentAddress}}</ion-label>
+      <ion-label>{{location.from.address}}</ion-label>
     </ion-item>
     <ion-item lines="full">
       <ion-icon slot="start" name="pin"></ion-icon>
-      <ion-label (click)="onModal()">{{to}}</ion-label>
+      <ion-label (click)="onModal()">{{location.to.address}}</ion-label>
       <ion-buttons slot="end">
         <ion-button [disabled]="!markers.pinB" (click)="onClearTo()">
           <ion-icon slot="icon-only" name="close"></ion-icon>

@@ -11,6 +11,10 @@ export class OrderRepositoryService {
     ) {
     }
 
+    getActiveOrder() {
+        return this.http.get <any>('http://api.telecom-car.uz/user/order/active');
+    }
+
     getOrders() {
         return this.http.get <any>('http://api.telecom-car.uz/user/order');
     }
