@@ -1,0 +1,34 @@
+<ion-card>
+  <ion-buttons>
+    <ion-button (click)="onDismiss('close')">
+      <ion-icon name="close"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+  <ion-card-header>
+    <ion-card-subtitle>Сегодня 13:15
+    </ion-card-subtitle>
+    <ion-card-title>Ожидание</ion-card-title>
+    <ion-card-subtitle>Машина скоро приедить, ожидайте...</ion-card-subtitle>
+  </ion-card-header>
+  <ion-card-content>
+    <ion-item>
+      <ion-icon color="warning" name="pin" slot="start"></ion-icon>
+      <ion-label>откудого</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-icon color="primary" name="pin" slot="start"></ion-icon>
+      <ion-label>куда</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-icon color="primary" name="person" slot="start"></ion-icon>
+      <ion-label>Алишер Усманов</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-icon color="primary" name="car" slot="start"></ion-icon>
+      <ion-label>Daewoo Nexia 01 399 ABC</ion-label>
+    </ion-item>
+    <ion-buttons>
+      <ion-button>отменить заказ</ion-button>
+    </ion-buttons>
+  </ion-card-content>
+</ion-card>

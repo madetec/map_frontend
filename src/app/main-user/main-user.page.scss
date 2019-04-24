@@ -92,3 +92,23 @@
     }
     cursor: pointer;
 }
+
+
+ion-card{
+    position: absolute;
+    width: 90%;
+    height: 55%;
+    bottom: 0;
+    right: 0;
+    top: 10%;
+    left: 0;
+    margin: 0 auto;
+    z-index: 3;
+    --background: #fff;
+    overflow: scroll;
+    ion-card-content{
+        ion-button{
+            margin: 0 auto;
+        }
+    }
+}

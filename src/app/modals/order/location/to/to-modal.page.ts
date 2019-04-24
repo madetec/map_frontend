@@ -1,24 +1,24 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ModalController, NavParams} from '@ionic/angular';
-import {AuthService} from '../@core/services/auth.service';
+import {AuthService} from '../../../../@core/services/auth.service';
 
 @Component({
-    selector: 'modal-page',
-    templateUrl: './modal.page.html',
-    styleUrls: ['./modal.page.scss'],
+    selector: 'to-modal-page',
+    templateUrl: './to-modal.page.html',
+    styleUrls: ['./to-modal.page.scss'],
 })
-export class ModalPage implements OnInit {
+export class ToModalPage implements OnInit {
     @Input() value: number;
     private addresses: any;
 
     constructor(
         navParams: NavParams,
-        private modalController: ModalController,
+        private modalCtrl: ModalController,
         private service: AuthService) {
     }
 
     onDismiss(data) {
-        this.modalController.dismiss({'result': data});
+        this.modalCtrl.dismiss({'result': data});
     }
 
     onClickAddress(index) {

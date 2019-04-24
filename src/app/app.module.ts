@@ -24,8 +24,10 @@ import {Network} from '@ionic-native/network/ngx';
 import localeRu from '@angular/common/locales/ru';
 import {registerLocaleData} from '@angular/common';
 import {AuthService} from './@core/services/auth.service';
-import {ModalPage} from './modal/modal.page';
-import {ModalPageModule} from './modal/modal.module';
+import {ToModalModule} from './modals/order/location/to/to-modal.module';
+import {ActiveModalModule} from './modals/order/active/active-modal.module';
+import {WaitModalModule} from './modals/order/wait/wait-modal.module';
+import {YaHelper} from './@core/helpers/yandex-geocoder.helper';
 
 registerLocaleData(localeRu);
 
@@ -40,7 +42,7 @@ const config = {
 
 @NgModule({
   declarations: [AppComponent],
-  entryComponents: [ModalPage],
+  entryComponents: [],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
@@ -48,7 +50,9 @@ const config = {
       HttpClientModule,
       AngularFireModule.initializeApp(config),
       AngularFirestoreModule,
-      ModalPageModule
+    ToModalModule,
+    ActiveModalModule,
+    WaitModalModule
   ],
   providers: [
     StatusBar,
@@ -59,7 +63,8 @@ const config = {
       FcmService,
       Network,
       AuthService,
-      {provide: LOCALE_ID, useValue: 'ru'},
+      YaHelper,
+    {provide: LOCALE_ID, useValue: 'ru'},
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

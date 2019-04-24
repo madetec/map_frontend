@@ -18,7 +18,9 @@ const routes: Routes = [
   { path: 'profile', loadChildren: './profile/profile.module#ProfilePageModule' },
   { path: 'order-history', loadChildren: './order-history/order-history.module#OrderHistoryPageModule' },
   { path: 'error', loadChildren: './error/error.module#ErrorPageModule' },
-  { path: 'modal', loadChildren: './modal/modal.module#ModalPageModule' },
+  { path: 'to-modal', loadChildren: './modals/order/location/to/to-modal.module#ToModalModule' },
+  { path: 'active-modal', loadChildren: './modals/order/active/active-modal.module#ActiveModalModule' },
+  { path: 'wait-modal', loadChildren: './modals/order/wait/wait-modal.module#WaitModalModule' },
 ];
 
 @NgModule({

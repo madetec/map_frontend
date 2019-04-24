@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>515812942516-r652oehpaq2al580b159a1r0lf2kdm15.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.515812942516-r652oehpaq2al580b159a1r0lf2kdm15</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBc6vxQkOA3XxW49kvp_Z3iJOb9kJWlPp4</string>
+	<key>GCM_SENDER_ID</key>
+	<string>515812942516</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.uztelecom.telecom-car</string>
+	<key>PROJECT_ID</key>
+	<string>telecom-car24</string>
+	<key>STORAGE_BUCKET</key>
+	<string>telecom-car24.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:515812942516:ios:4bdaa4f8da1b4946</string>
+	<key>DATABASE_URL</key>
+	<string>https://telecom-car24.firebaseio.com</string>
+</dict>
+</plist>

@@ -4,9 +4,10 @@ import * as L from 'leaflet/dist/leaflet.js';
 import {User} from '../@core/models/user';
 import {AuthService} from '../@core/services/auth.service';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
-import {ModalPage} from '../modal/modal.page';
 import {Markers} from '../@core/models/markers';
 import {OrderRepositoryService} from '../@core/repositories/order/order-repository.service';
+import {ToModalPage} from '../modals/order/location/to/to-modal.page';
+import {YaHelper} from '../@core/helpers/yandex-geocoder.helper';
 
 
 @Component({
@@ -44,7 +45,8 @@ export class MainUserPage implements OnInit {
         private service: AuthService,
         public modalController: ModalController,
         public loadingController: LoadingController,
-        public order: OrderRepositoryService
+        public order: OrderRepositoryService,
+        private yaHelper: YaHelper
     ) {
         this.user = this.service.getCurrentUser;
         this.location.to.address = 'Куда?';
@@ -61,14 +63,12 @@ export class MainUserPage implements OnInit {
         setInterval(this.updateUserLocation, 1000);
         this.updateAddress(this.location.from.lng, this.location.from.lat);
     }
-
     async toModalPresent() {
         this.toModal = await this.modalController.create({
-            component: ModalPage,
+            component: ToModalPage,
             componentProps: {value: 123}
         });
         await this.toModal.present();
-
         const {data} = await this.toModal.onDidDismiss();
         if (data.result !== 'cancel') {
             this.location.to.address = data.result.GeoObject.name;
@@ -158,14 +158,14 @@ export class MainUserPage implements OnInit {
     setUserLocation(lat: number, lng: number) {
         this.location.lat = lat;
         this.location.lng = lng;
-        this.markers.pinUser.setLatLng([
-            this.location.lat,
-            this.location.lng
-        ]);
-        this.markers.pinA.setLatLng([
-            this.location.lat,
-            this.location.lng
-        ]);
+        this.markers.pinUser.setLatLng({
+            lat: this.location.lat,
+            lng: this.location.lng
+        });
+        this.markers.pinA.setLatLng({
+            lat: this.location.lat,
+            lng: this.location.lng
+        });
         this.map.panTo([
             this.location.lat,
             this.location.lng
@@ -180,31 +180,11 @@ export class MainUserPage implements OnInit {
         }
     }
 
-    setLocation(position) {
-        this.location.from.lat = position.coords.latitude;
-        this.location.from.lng = position.coords.longitude;
-        this.updateAddress(this.location.from.lng, this.location.from.lat);
-    }
-
     updateAddress(lng, lat) {
         const data = this.service.getTextCurrentLocation([lng, lat]);
         data.subscribe(res => {
             if (res) {
-                this.location.from.address = res.GeoObjectCollection
-                    .featureMember[0]
-                    .GeoObject
-                    .name;
-                let latlng = res.GeoObjectCollection
-                    .featureMember[0]
-                    .GeoObject
-                    .Point
-                    .pos;
-                latlng = latlng.split(' ');
-                latlng[0] = parseFloat(latlng[0]);
-                latlng[1] = parseFloat(latlng[1]);
-                latlng.reverse();
-                this.location.from.lat = latlng[0];
-                this.location.from.lng = latlng[1];
+                this.location.from = this.yaHelper.getAddress(res);
             }
         });
     }
@@ -221,14 +201,14 @@ export class MainUserPage implements OnInit {
 
     onSubmit() {
         this.presentLoading('Оформление заказа...', 0, 'crescent');
-        const newOrder = this.order.createOrder({
-            from_lat: this.location.from.lat,
-            from_lng: this.location.from.lng,
-            from_address: this.location.from.address,
-            to_lat: this.location.to.lat,
-            to_lng: this.location.to.lng,
-            to_address: this.location.to.address
-        }).subscribe(data => {
+        this.order.createOrder(
+            this.location.from.lat,
+            this.location.from.lng,
+            this.location.from.address,
+            this.location.to.lat,
+            this.location.to.lng,
+            this.location.to.address
+        ).subscribe(data => {
             this.loader.dismiss();
         }, error => {
             this.loader.dismiss();
