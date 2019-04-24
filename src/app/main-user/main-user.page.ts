@@ -5,9 +5,10 @@ import {User} from '../@core/models/user';
 import {AuthService} from '../@core/services/auth.service';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
 import {Markers} from '../@core/models/markers';
-import {OrderRepositoryService} from '../@core/repositories/order/order-repository.service';
 import {ToModalPage} from '../modals/order/location/to/to-modal.page';
 import {YaHelper} from '../@core/helpers/yandex-geocoder.helper';
+import {ActiveModalPage} from '../modals/order/active/active-modal.page';
+import {OrderService} from '../@core/services/order.service';
 
 
 @Component({
@@ -45,7 +46,7 @@ export class MainUserPage implements OnInit {
         private service: AuthService,
         public modalController: ModalController,
         public loadingController: LoadingController,
-        public order: OrderRepositoryService,
+        public orderService: OrderService,
         private yaHelper: YaHelper
     ) {
         this.user = this.service.getCurrentUser;
@@ -201,7 +202,7 @@ export class MainUserPage implements OnInit {
 
     onSubmit() {
         this.presentLoading('Оформление заказа...', 0, 'crescent');
-        this.order.createOrder(
+        this.orderService.createOrder(
             this.location.from.lat,
             this.location.from.lng,
             this.location.from.address,
@@ -228,5 +229,24 @@ export class MainUserPage implements OnInit {
     }
 
     ngOnInit() {
+        this.orderService.getActiveOrder().subscribe( res => {
+            if(res) {
+                this.orderActiveModalPresent(res);
+            }
+        })
+    }
+
+    async orderActiveModalPresent(res: Object) {
+        this.toModal = await this.modalController.create({
+            component: ActiveModalPage,
+            componentProps: { activeOrder: res }
+        });
+        await this.toModal.present();
+        const {data} = await this.toModal.onDidDismiss();
+        if (data.result !== 'cancel') {
+            console.log(data);
+        } else {
+            console.log('Cancelled order! ' + data);
+        }
     }
 }

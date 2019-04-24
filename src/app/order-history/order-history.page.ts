@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {OrderRepositoryService} from '../@core/repositories/order/order-repository.service';
+import {OrderService} from '../@core/services/order.service';
+
 @Component({
     selector: 'order-history',
     templateUrl: './order-history.page.html',
@@ -8,11 +9,11 @@ import {OrderRepositoryService} from '../@core/repositories/order/order-reposito
 export class OrderHistoryPage implements OnInit {
     public orders: any;
 
-    constructor(private repository: OrderRepositoryService) {
+    constructor(private orderService: OrderService) {
         this.orders = null;
     }
     ngOnInit() {
-        this.repository.getOrders()
+        this.orderService.getOrders()
             .subscribe(data => {
                 this.orders = data;
             });
