@@ -210,6 +210,7 @@ export class MainUserPage implements OnInit {
             this.location.to.lng,
             this.location.to.address
         ).subscribe(data => {
+            this.orderActiveModalPresent(data);
             this.loader.dismiss();
         }, error => {
             this.loader.dismiss();
@@ -233,10 +234,10 @@ export class MainUserPage implements OnInit {
             if(res) {
                 this.orderActiveModalPresent(res);
             }
-        })
+        });
     }
 
-    async orderActiveModalPresent(res: Object) {
+    async orderActiveModalPresent(res: any) {
         this.toModal = await this.modalController.create({
             component: ActiveModalPage,
             componentProps: { activeOrder: res }
@@ -244,9 +245,15 @@ export class MainUserPage implements OnInit {
         await this.toModal.present();
         const {data} = await this.toModal.onDidDismiss();
         if (data.result !== 'cancel') {
-            console.log(data);
+            if (data.result.orderId) {
+                this.orderService.orderCanceled(data.result.orderId).subscribe(data => {
+                    if (data) {
+                        alert('Заказ успешно отменен!');
+                    }
+                });
+            }
         } else {
-            console.log('Cancelled order! ' + data);
+            console.log('Cancelled order!' + data);
         }
     }
 }

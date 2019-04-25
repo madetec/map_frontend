@@ -11,6 +11,10 @@ export class OrderService {
     ) {
     }
 
+    orderCanceled(orderId) {
+        return this.http.patch <any>('http://api.telecom-car.uz/user/order/' + orderId + '/cancel', {});
+    }
+
     getActiveOrder() {
         return this.http.get <any>('http://api.telecom-car.uz/user/order/active');
     }
