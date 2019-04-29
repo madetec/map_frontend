@@ -23,7 +23,15 @@
   <div id="panTo" class="cbutton cbutton--effect-novak" (click)="onPanTo()">
     <ion-icon icon="icon-only" name="navigate"></ion-icon>
   </div>
-  <div class="map-order-from">
+
+  <div class="toButton" [ngClass]="{'hide': markers.pinB}">
+    <ion-item lines="full">
+      <ion-icon slot="start" name="pin"></ion-icon>
+      <ion-label (click)="onModal()">{{location.to.address}}</ion-label>
+    </ion-item>
+  </div>
+
+  <div class="map-order-from animated" [ngClass]="{'hide': !markers.pinB, 'slideInUp': markers.pinB}">
     <ion-item>
       <ion-icon slot="start" color="warning" name="pin"></ion-icon>
       <ion-label>{{location.from.address}}</ion-label>
@@ -38,7 +46,7 @@
       </ion-buttons>
     </ion-item>
     <ion-item>
-      <button [disabled]="!markers.pinB" shape="round" class="order-accept btn" (click)="onSubmit()" expand="block"
+      <button [disabled]="!markers.pinB" shape="round" class="btn btn-orange" (click)="onSubmit()" expand="block"
               fill="clear">Подтвердить локацию
       </button>
     </ion-item>

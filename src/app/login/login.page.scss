@@ -46,46 +46,13 @@
             .native-input {
                 font-size: 16px;
                 color: #378ADB!important;
-                box-shadow: #378ADB,10px;
+                box-shadow: #378ADB, 10px;
                 opacity: 0.5;
                 &:focus {
                     opacity: 1;
                 }
             }
         }
-        .btn {
-            background: linear-gradient(#378ADB, #61A8FB);
-            -webkit-box-shadow: 0px 7px 15px 0px rgba(137,180,231,1);
-            -moz-box-shadow: 0px 7px 15px 0px rgba(137,180,231,1);
-            box-shadow: 0px 7px 15px 0px rgba(137,180,231,1);
-            width: 100%;
-            font-size: 14px;
-            font-family: "Roboto", "Helvetica Neue", sans-serif;
-            letter-spacing: 1px;
-            transition: .2s;
-            &:focus, &:active, &:link, &:visited, .activated {
-                outline: none !important;
-                color: white !important;
-                border-color: transparent !important;
-            }
-
-            &:active{
-                background: linear-gradient(#378ADB, #61A8FB);
-                -webkit-box-shadow: 0px 2px 5px 0px rgba(137,180,231,1);
-                -moz-box-shadow: 0px 2px 5px 0px rgba(137,180,231,1);
-                box-shadow: 0px 2px 5px 0px rgba(137,180,231,1);
-                transition: .2s;
-            }
-
-            &:disabled{
-                background: linear-gradient(#aaaaaa, #d4d1ce) !important;
-                -webkit-box-shadow: none!important;
-                -moz-box-shadow: none!important;
-                box-shadow: none!important;
-            }
-        }
-
-
     }
 
     footer {

@@ -7,7 +7,7 @@ import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {FcmService} from './@core/services/fcm.service';
 import {Router} from '@angular/router';
 import {AuthService} from './@core/services/auth.service';
-import {Network} from '@ionic-native/network/ngx';
+import {ConnectionStatus, NetworkService} from './@core/services/network.service';
 
 @Component({
   selector: 'app-root',
@@ -28,13 +28,9 @@ export class AppComponent {
         private statusBar: StatusBar,
         private fcm: FcmService,
         private router: Router,
-        private authService: AuthService,
-        private network: Network
+        private authService: AuthService
     ) {
         this.initializeApp();
-        if (!navigator.onLine) {
-            this.router.navigate(['/error']);
-        }
     }
 
     initializeApp() {
@@ -44,9 +40,6 @@ export class AppComponent {
             this.statusBar.backgroundColorByHexString('#f6f6f6');
             this.splashScreen.hide();
             this.fcm.getToken();
-        });
-        window.addEventListener('offline', () => {
-            this.router.navigate(['/error']);
         });
     }
 

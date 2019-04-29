@@ -9,7 +9,7 @@ import {AuthService} from '../../../../@core/services/auth.service';
 })
 export class ToModalPage implements OnInit {
     @Input() value: number;
-    private addresses: any;
+    public addresses: any;
 
     constructor(
         navParams: NavParams,
