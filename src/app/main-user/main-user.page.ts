@@ -226,7 +226,8 @@ export class MainUserPage implements OnInit {
             message: text,
             translucent: true
         });
-        return await this.loader.present();
+        await this.loader.present();
+        // return await this.loader.present();
     }
 
     ngOnInit() {
