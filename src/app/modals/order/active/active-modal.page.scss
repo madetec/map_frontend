@@ -1,16 +1,20 @@
 ion-card {
+  & img{
+    max-width: 100px!important;
+    margin: 0 auto;
+  }
+  box-shadow: none;
+  border: none;
   & > ion-buttons {
     position: absolute;
     right: 0;
     top: 10px;
   }
   & > ion-card-content {
-    & > ion-buttons {
-      margin: 0 auto;
-      ion-button {
-        margin: 15px auto 0 auto;
-        width: 100%;
-      }
+    padding: 0!important;
+    .btn{
+      margin: 30px auto 20px auto;
+      width: 90%;
     }
   }
 }

@@ -72,6 +72,7 @@ export class MainUserPage implements OnInit {
         await this.toModal.present();
         const {data} = await this.toModal.onDidDismiss();
         if (data.result !== 'cancel') {
+
             this.location.to.address = data.result.GeoObject.name;
             let latLng = data.result.GeoObject.Point.pos;
             if (!this.markers.pinB) {
@@ -127,13 +128,13 @@ export class MainUserPage implements OnInit {
         if (!this.markers.pinB) {
             const position = event.target.getCenter();
             marker.setLatLng(position);
-            this.clearAddress();
         }
     }
 
     onMoveEnd(event) {
         if (!this.markers.pinB) {
             const position = event.target.getCenter();
+            this.clearAddress();
             this.updateAddress(position.lng, position.lat);
         }
     }
@@ -201,7 +202,7 @@ export class MainUserPage implements OnInit {
     }
 
     onSubmit() {
-        this.presentLoading('Оформление заказа...', 0, 'crescent');
+        this.presentLoading('Оформление заказа...', 3000, 'crescent');
         this.orderService.createOrder(
             this.location.from.lat,
             this.location.from.lng,
@@ -229,10 +230,13 @@ export class MainUserPage implements OnInit {
         await this.loader.present();
         // return await this.loader.present();
     }
+    ionViewWillLeave() {
+        this.toModal.dismiss();
+    }
 
     ngOnInit() {
         this.orderService.getActiveOrder().subscribe( res => {
-            if(res) {
+            if (res) {
                 this.orderActiveModalPresent(res);
             }
         });
@@ -241,7 +245,8 @@ export class MainUserPage implements OnInit {
     async orderActiveModalPresent(res: any) {
         this.toModal = await this.modalController.create({
             component: ActiveModalPage,
-            componentProps: { activeOrder: res }
+            componentProps: {activeOrder: res},
+            backdropDismiss: false
         });
         await this.toModal.present();
         const {data} = await this.toModal.onDidDismiss();
@@ -249,7 +254,7 @@ export class MainUserPage implements OnInit {
             if (data.result.orderId) {
                 this.orderService.orderCanceled(data.result.orderId).subscribe(data => {
                     if (data) {
-                        alert('Заказ успешно отменен!');
+                        this.presentLoading('Заказ успешно отменен!', 3000, 'dots');
                     }
                 });
             }

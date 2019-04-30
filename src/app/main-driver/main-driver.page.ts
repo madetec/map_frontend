@@ -61,6 +61,10 @@ export class MainDriverPage implements OnInit {
     }, 3000);
   }
 
+  onSubmit() {
+
+  }
+
   ionViewWillEnter() {
     this.menuCtrl.enable(true);
   }
