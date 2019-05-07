@@ -97,7 +97,7 @@ export class MainDriverPage implements OnInit {
   }
 
   onModal() {
-      this.toModalPresent();
+    this.toModalPresent();
   }
 
   loadMap() {
@@ -211,7 +211,7 @@ export class MainDriverPage implements OnInit {
           this.location.to.lng,
           this.location.to.address
       ).subscribe(data => {
-          this.orderActiveModalPresent(data);
+        //   this.orderActiveModalPresent(data);
           this.loader.dismiss();
       }, error => {
           this.loader.dismiss();
@@ -235,31 +235,31 @@ export class MainDriverPage implements OnInit {
   }
 
   ngOnInit() {
-      this.orderService.getActiveOrder().subscribe( res => {
-          if (res) {
-              this.orderActiveModalPresent(res);
-          }
-      });
+    //   this.orderService.getActiveOrder().subscribe( res => {
+    //       if (res) {
+    //           this.orderActiveModalPresent(res);
+    //       }
+    //   });
   }
 
-  async orderActiveModalPresent(res: any) {
-      this.toModal = await this.modalController.create({
-          component: ActiveModalPage,
-          componentProps: {activeOrder: res},
-          backdropDismiss: false
-      });
-      await this.toModal.present();
-      const {data} = await this.toModal.onDidDismiss();
-      if (data.result !== 'cancel') {
-          if (data.result.orderId) {
-              this.orderService.orderCanceled(data.result.orderId).subscribe(data => {
-                  if (data) {
-                      this.presentLoading('Заказ успешно отменен!', 3000, 'dots');
-                  }
-              });
-          }
-      } else {
-          console.log('Cancelled order!' + data);
-      }
-  }
+//   async orderActiveModalPresent(res: any) {
+//       this.toModal = await this.modalController.create({
+//           component: ActiveModalPage,
+//           componentProps: {activeOrder: res},
+//           backdropDismiss: false
+//       });
+//       await this.toModal.present();
+//       const {data} = await this.toModal.onDidDismiss();
+//       if (data.result !== 'cancel') {
+//           if (data.result.orderId) {
+//               this.orderService.orderCanceled(data.result.orderId).subscribe(data => {
+//                   if (data) {
+//                       this.presentLoading('Заказ успешно отменен!', 3000, 'dots');
+//                   }
+//               });
+//           }
+//       } else {
+//           console.log('Cancelled order!' + data);
+//       }
+//   }
 }
