@@ -3,11 +3,14 @@ import {User} from '../models/user';
 import {map} from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
+import {BehaviorSubject} from 'rxjs';
 
 @Injectable()
 export class AuthService {
+    // new
+    authState = new BehaviorSubject(false);
+    // old
     public user: User;
-
     public firebaseToken;
     public text: any;
     onLoginIncorrect = new EventEmitter<string>();
@@ -85,6 +88,7 @@ export class AuthService {
     logout() {
         localStorage.removeItem('currentUser');
         this.user = new User();
+        this.router.navigateByUrl('/login');
     }
 
     getTextCurrentLocation(geocode) {
@@ -120,9 +124,9 @@ export class AuthService {
     redirect() {
         if (this.user) {
             if (this.user.role === 'user') {
-                this.router.navigate(['/main-user']);
+                this.router.navigate(['/____main-user']);
             } else if (this.user.role === 'driver') {
-                this.router.navigate(['/main-driver']);
+                this.router.navigate(['/____main-driver']);
             }
         }
     }

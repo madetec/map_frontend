@@ -1,11 +1,33 @@
 import {Injectable} from '@angular/core';
+import {map} from 'rxjs/operators';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable()
 export class YaHelper {
-    constructor() {
+    constructor(private http: HttpClient) {
     }
 
-    public getAddress(data: any) {
+    getTextCurrentLocation(geocode) {
+        if (Array.isArray(geocode)) {
+            geocode = geocode.join();
+        } else if (typeof geocode === 'string') {
+            geocode = geocode.split(/ /g).join('+');
+        }
+        return this.http.get<any>('https://geocode-maps.yandex.ru/1.x/', {
+            params: {
+                apiKey: '28dabf92-4d44-4291-a67b-ebee0a411fb2',
+                format: 'json',
+                geocode: geocode
+            }
+        }).pipe(map(data => {
+            if (data) {
+                return data.response;
+            }
+            return null;
+        }));
+    }
+
+    getAddress(data: any) {
         let latlng = data.GeoObjectCollection
             .featureMember[0]
             .GeoObject

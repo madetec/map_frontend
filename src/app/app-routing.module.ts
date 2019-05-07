@@ -1,5 +1,6 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {AuthenticationGuardService} from './@core/guards/authentication-guard.service';
 
 const routes: Routes = [
   {
@@ -13,14 +14,15 @@ const routes: Routes = [
   },
   { path: 'login', loadChildren: './login/login.module#LoginPageModule' },
   { path: 'reset-pass', loadChildren: './reset-pass/reset-pass.module#ResetPassPageModule' },
-  { path: 'main-driver', loadChildren: './main-driver/main-driver.module#MainDriverPageModule' },
-  { path: 'main-user', loadChildren: './main-user/main-user.module#MainUserPageModule' },
-  { path: 'profile', loadChildren: './profile/profile.module#ProfilePageModule' },
-  { path: 'order-history', loadChildren: './order-history/order-history.module#OrderHistoryPageModule' },
   { path: 'error', loadChildren: './error/error.module#ErrorPageModule' },
   { path: 'to-modal', loadChildren: './modals/order/location/to/to-modal.module#ToModalModule' },
   { path: 'active-modal', loadChildren: './modals/order/active/active-modal.module#ActiveModalModule' },
   { path: 'wait-modal', loadChildren: './modals/order/wait/wait-modal.module#WaitModalModule' },
+  {
+    path: 'user',
+    canActivate: [AuthenticationGuardService],
+    loadChildren: './user/user-routing.module#UserRoutingModule'
+  },
 ];
 
 @NgModule({

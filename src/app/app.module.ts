@@ -28,6 +28,7 @@ import {ToModalModule} from './modals/order/location/to/to-modal.module';
 import {ActiveModalModule} from './modals/order/active/active-modal.module';
 import {WaitModalModule} from './modals/order/wait/wait-modal.module';
 import {YaHelper} from './@core/helpers/yandex-geocoder.helper';
+import {IonicStorageModule} from '@ionic/storage';
 
 registerLocaleData(localeRu);
 
@@ -46,6 +47,7 @@ const config = {
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
+    IonicStorageModule.forRoot(),
     AppRoutingModule,
       HttpClientModule,
       AngularFireModule.initializeApp(config),

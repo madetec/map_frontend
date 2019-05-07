@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {MenuController, Platform} from '@ionic/angular';
-import {AuthService} from '../@core/services/auth.service';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {Router} from '@angular/router';
 import {Network} from '@ionic-native/network/ngx';
+import {AuthenticationService} from '../@core/services/authentication.service';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +17,7 @@ export class LoginPage implements OnInit {
     errMsg: string;
     disabled: boolean = false;
     constructor(
-        private authService: AuthService,
+        private authenticationService: AuthenticationService,
         private formBuilder: FormBuilder,
         private router: Router,
         private menuCtrl: MenuController,
@@ -32,7 +32,7 @@ export class LoginPage implements OnInit {
           username: [''],
           password: ['']
       });
-      this.authService.onLoginIncorrect.subscribe(res => {
+      this.authenticationService.onLoginIncorrect.subscribe(res => {
           this.hasError = true;
           this.errMsg = 'Неверный логин или пароль';
           this.disabled = false;
@@ -44,21 +44,26 @@ export class LoginPage implements OnInit {
             this.errMsg = 'Поля не должны быть пустыми';
         } else {
             this.disabled = true;
-            this.authService.login(
+            this.authenticationService.login(
                 this.signInForm.controls.username.value,
-                this.signInForm.controls.password.value)
-                .subscribe(res => {
-                    this.disabled = false;
-                    this.authService.getUserRole().subscribe(res => {
-                        if (this.isSmartPhone()) {
-                            this.authService.setFirebaseToken();
-                        }
-                        this.authService.getProfile().subscribe(res => {
-                            localStorage.setItem('currentUser', JSON.stringify(this.authService.user));
-                            this.authService.redirect();
-                        });
-                    });
-                });
+                this.signInForm.controls.password.value
+            );
+            this.disabled = false;
+            // this.authService.login(
+            //     this.signInForm.controls.username.value,
+            //     this.signInForm.controls.password.value)
+            //     .subscribe(res => {
+            //         this.disabled = false;
+            //         this.authService.getUserRole().subscribe(res => {
+            //             if (this.isSmartPhone()) {
+            //                 this.authService.setFirebaseToken();
+            //             }
+            //             this.authService.getProfile().subscribe(res => {
+            //                 localStorage.setItem('currentUser', JSON.stringify(this.authService.user));
+            //                 this.authService.redirect();
+            //             });
+            //         });
+            //     });
         }
     }
 
@@ -67,7 +72,6 @@ export class LoginPage implements OnInit {
     }
 
     ionViewWillEnter() {
-        this.authService.redirect();
         this.menuCtrl.enable(false);
         this.signInForm.reset();
     }

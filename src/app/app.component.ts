@@ -7,7 +7,7 @@ import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {FcmService} from './@core/services/fcm.service';
 import {Router} from '@angular/router';
 import {AuthService} from './@core/services/auth.service';
-import {ConnectionStatus, NetworkService} from './@core/services/network.service';
+import {AuthenticationService} from './@core/services/authentication.service';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +20,6 @@ export class AppComponent {
         role: null
     };
     public appPages: any;
-    public onlineOffline: boolean = navigator.onLine;
 
     constructor(
         private platform: Platform,
@@ -28,7 +27,8 @@ export class AppComponent {
         private statusBar: StatusBar,
         private fcm: FcmService,
         private router: Router,
-        private authService: AuthService
+        private authService: AuthService,
+        private authenticationService: AuthenticationService
     ) {
         this.initializeApp();
     }
@@ -40,6 +40,13 @@ export class AppComponent {
             this.statusBar.backgroundColorByHexString('#f6f6f6');
             this.splashScreen.hide();
             this.fcm.getToken();
+            this.authenticationService.authenticationState.subscribe(state => {
+                if (state) {
+                    this.authenticationService.routingByRole();
+                } else {
+                    this.router.navigate(['login']);
+                }
+            });
         });
     }
 
@@ -47,17 +54,17 @@ export class AppComponent {
         this.appPages = [
             {
                 title: 'Главная',
-                url: '/main-user',
+                url: '/user',
                 icon: 'pin'
             },
             {
                 title: 'Профиль',
-                url: '/profile',
+                url: '/user/profile',
                 icon: 'contact'
             },
             {
                 title: 'История поездок',
-                url: '/order-history',
+                url: '/user/order-history',
                 icon: 'filing'
             },
             {
@@ -74,7 +81,6 @@ export class AppComponent {
     }
 
     logout() {
-        this.authService.logout();
-        this.router.navigateByUrl('/login');
+        this.authenticationService.logout();
     }
 }

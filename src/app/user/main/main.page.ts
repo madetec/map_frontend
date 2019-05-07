@@ -1,22 +1,22 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import {LoadingController, MenuController, ModalController, Platform} from '@ionic/angular';
 import * as L from 'leaflet/dist/leaflet.js';
-import {User} from '../@core/models/user';
-import {AuthService} from '../@core/services/auth.service';
+import {User} from '../../@core/models/user';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
-import {Markers} from '../@core/models/markers';
-import {ToModalPage} from '../modals/order/location/to/to-modal.page';
-import {YaHelper} from '../@core/helpers/yandex-geocoder.helper';
-import {ActiveModalPage} from '../modals/order/active/active-modal.page';
-import {OrderService} from '../@core/services/order.service';
+import {Markers} from '../../@core/models/markers';
+import {ToModalPage} from '../../modals/order/location/to/to-modal.page';
+import {YaHelper} from '../../@core/helpers/yandex-geocoder.helper';
+import {ActiveModalPage} from '../../modals/order/active/active-modal.page';
+import {OrderService} from '../../@core/services/order.service';
+import {Storage} from '@ionic/storage';
 
 
 @Component({
-  selector: 'app-main-user',
-  templateUrl: './main-user.page.html',
-    styleUrls: ['./main-user.page.scss']
+    selector: 'app-main',
+    templateUrl: './main.page.html',
+    styleUrls: ['./main.page.scss']
 })
-export class MainUserPage implements OnInit {
+export class MainPage {
     @ViewChild('map') mapContainer: ElementRef;
     markers: Markers = new Markers();
     user: User;
@@ -43,13 +43,17 @@ export class MainUserPage implements OnInit {
         private geolocation: Geolocation,
         private menuCtrl: MenuController,
         private platform: Platform,
-        private service: AuthService,
         public modalController: ModalController,
         public loadingController: LoadingController,
         public orderService: OrderService,
-        private yaHelper: YaHelper
+        private yaHelper: YaHelper,
+        private storage: Storage
     ) {
-        this.user = this.service.getCurrentUser;
+        this.storage.get('current user').then(res => {
+            if (res) {
+                this.user = res;
+            }
+        });
         this.location.to.address = 'Куда?';
         this.location.lat = 41.310387;
         this.location.lng = 69.274695;
@@ -58,6 +62,14 @@ export class MainUserPage implements OnInit {
     }
 
     ionViewWillEnter() {
+        try {
+            this.orderService.getActiveOrder().subscribe(res => {
+                if (res) {
+                    this.orderActiveModalPresent(res);
+                }
+            });
+        } catch (e) {
+        }
         this.menuCtrl.enable(true);
         this.loadMap();
         this.updateUserLocation();
@@ -74,7 +86,7 @@ export class MainUserPage implements OnInit {
         if (data.result !== 'cancel') {
 
             this.location.to.address = data.result.GeoObject.name;
-            let latLng = data.result.GeoObject.Point.pos;
+            const latLng = data.result.GeoObject.Point.pos;
             if (!this.markers.pinB) {
                 this.markers.setPinBLatLng(latLng);
                 this.markers.pinB.addTo(this.map);
@@ -183,7 +195,7 @@ export class MainUserPage implements OnInit {
     }
 
     updateAddress(lng, lat) {
-        const data = this.service.getTextCurrentLocation([lng, lat]);
+        const data = this.yaHelper.getTextCurrentLocation([lng, lat]);
         data.subscribe(res => {
             if (res) {
                 this.location.from = this.yaHelper.getAddress(res);
@@ -212,14 +224,10 @@ export class MainUserPage implements OnInit {
             this.location.to.address
         ).subscribe(data => {
             this.orderActiveModalPresent(data);
-            this.loader.dismiss();
         }, error => {
-            this.loader.dismiss();
-            this.presentLoading(error, 3000, 'dots');
+            // this.presentLoading(error, 3000, 'dots');
         });
     }
-
-
     async presentLoading(text, duration = 0, spinner = null) {
         this.loader = await this.loadingController.create({
             spinner: spinner,
@@ -230,15 +238,9 @@ export class MainUserPage implements OnInit {
         return await this.loader.present();
     }
     ionViewWillLeave() {
-        this.toModal.dismiss();
-    }
-
-    ngOnInit() {
-        this.orderService.getActiveOrder().subscribe( res => {
-            if (res) {
-                this.orderActiveModalPresent(res);
-            }
-        });
+        if (this.toModal) {
+            this.toModal.dismiss();
+        }
     }
 
     async orderActiveModalPresent(res: any) {

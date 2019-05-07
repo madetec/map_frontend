@@ -5,19 +5,14 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { AuthGuard } from '../@core/guards/auth.guard';
-import { Role } from '../@core/models/role';
-import { MainUserPage } from './main-user.page';
+import { MainPage } from './main.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: MainUserPage,
-    canActivate: [AuthGuard],
-    data: { roles: [Role.User] }
+    component: MainPage
   }
 ];
-
 
 @NgModule({
   imports: [
@@ -26,6 +21,6 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [MainUserPage]
+  declarations: [MainPage]
 })
-export class MainUserPageModule {}
+export class MainPageModule {}
