@@ -7,14 +7,17 @@
       Telecom Car
     </ion-title>
     <ion-buttons slot="end">
-      <ion-toggle></ion-toggle>
+      <label class="switch">
+        <input type="checkbox" class="switch-input">
+        <span class="switch-label" data-on="Свободен" data-off="Занят"></span>
+        <span class="switch-handle"></span>
+      </label>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <!--create a element for map. #Map - identifier -->
-  <div #Map class="map"></div>
+  <div id="map" class="map"></div>
    <div class="doll">
       <div class="map-current-location">
           <ion-icon slot="icon-only" name="pin"></ion-icon>

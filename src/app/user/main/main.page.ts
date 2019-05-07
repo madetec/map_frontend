@@ -235,7 +235,8 @@ export class MainPage {
             message: text,
             translucent: true
         });
-        return await this.loader.present();
+        await this.loader.present();
+        // return await this.loader.present();
     }
     ionViewWillLeave() {
         if (this.toModal) {
