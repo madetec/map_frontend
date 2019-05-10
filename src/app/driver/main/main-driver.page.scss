@@ -68,7 +68,7 @@
     vertical-align: top;
     width: 88px;
     height: 31px;
-    padding: 3px;
+    padding: 0;
     background-color: white;
     border-radius: 18px;
     /* box-shadow: inset 0 -1px white, inset 0 1px 1px rgba(0, 0, 0, 0.05); */
@@ -115,13 +115,13 @@
   }
   .switch-label:before {
     content: attr(data-off);
-    right: 16px;
+    right: 20px;
     color: #ffffff;
     /* text-shadow: 0 1px rgba(255, 255, 255, 0.5); */
   }
   .switch-label:after {
     content: attr(data-on);
-    left: 4px;
+    left: 10px;
     color: white;
     /* text-shadow: 0 1px rgba(0, 0, 0, 0.2); */
     opacity: 0;
@@ -139,10 +139,10 @@
   
   .switch-handle {
     position: absolute;
-    top: 4px;
-    left: 5px;
-    width: 28px;
-    height: 28px;
+    top: 3px;
+    left: 3px;
+    width: 25px;
+    height: 25px;
     background: white;
     border-radius: 14px;
     /* box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2); */
@@ -154,6 +154,6 @@
   }
   
   .switch-input:checked ~ .switch-handle {
-    left: 55px;
+    left: 60px;
     /* box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.2); */
   }

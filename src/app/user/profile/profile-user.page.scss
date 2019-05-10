@@ -1,0 +1,12 @@
+ion-item {
+  --background: none;
+}
+ion-content {
+  --offset-top: -50px!important;
+}
+ion-note[slot=start] {
+  margin-right: 0;
+  ion-icon {
+    font-size: 20px;
+  }
+}

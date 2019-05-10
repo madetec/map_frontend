@@ -11,33 +11,6 @@ export class User {
     role: string;
     roleName: string;
 
-    constructor(data = null) {
-        // if (data) {
-        //     this.setAuthData(
-        //         data.username,
-        //         data.access_token,
-        //         data.expires_in,
-        //         data.token_type,
-        //         data.scope,
-        //         data.refresh_token
-        //     );
-        //     this.setProfile(
-        //         data.profile.name,
-        //         data.profile.last_name,
-        //         data.profile.father_name,
-        //         data.profile.subdivision,
-        //         data.profile.position,
-        //         data.profile.main_phone,
-        //         data.profile.main_address,
-        //         data.profile.phones,
-        //         data.profile.addresses,
-        //         data.profile.status
-        //     );
-        //     this.setRole(data.role, data.roleName);
-        // }
-    }
-
-
     public setAuthData(username, access_token, expires_in, token_type, scope, refresh_token) {
         this.username = username;
         this.access_token = access_token;

@@ -1,24 +1,23 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {LoadingController, MenuController, ModalController, Platform} from '@ionic/angular';
 import * as L from 'leaflet/dist/leaflet.js';
-import {User} from '../@core/models/user';
-import {AuthService} from '../@core/services/auth.service';
+import {User} from '../../@core/models/user';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
-import {Markers} from '../@core/models/markers';
-import {ToModalPage} from '../modals/order/location/to/to-modal.page';
-import {YaHelper} from '../@core/helpers/yandex-geocoder.helper';
-import {ActiveModalPage} from '../modals/order/active/active-modal.page';
-import {OrderService} from '../@core/services/order.service';
+import {Markers} from '../../@core/models/markers';
+import {ToModalPage} from '../../modals/order/location/to/to-modal.page';
+import {YaHelper} from '../../@core/helpers/yandex-geocoder.helper';
+import {OrderService} from '../../@core/services/order.service';
 
 
 @Component({
-  selector: 'app-main-driver',
+    selector: 'main-driver',
   templateUrl: './main-driver.page.html',
   styleUrls: ['./main-driver.page.scss'],
 })
 export class MainDriverPage implements OnInit {
   @ViewChild('map') mapContainer: ElementRef;
   markers: Markers = new Markers();
+    status = false;
   user: User;
   map: L;
   toModal: any;
@@ -43,13 +42,11 @@ export class MainDriverPage implements OnInit {
       private geolocation: Geolocation,
       private menuCtrl: MenuController,
       private platform: Platform,
-      private service: AuthService,
       public modalController: ModalController,
       public loadingController: LoadingController,
       public orderService: OrderService,
       private yaHelper: YaHelper
   ) {
-      this.user = this.service.getCurrentUser;
       this.location.to.address = 'Куда?';
       this.location.lat = 41.310387;
       this.location.lng = 69.274695;
@@ -74,7 +71,7 @@ export class MainDriverPage implements OnInit {
       if (data.result !== 'cancel') {
 
           this.location.to.address = data.result.GeoObject.name;
-          let latLng = data.result.GeoObject.Point.pos;
+          const latLng = data.result.GeoObject.Point.pos;
           if (!this.markers.pinB) {
               this.markers.setPinBLatLng(latLng);
               this.markers.pinB.addTo(this.map);
@@ -117,8 +114,8 @@ export class MainDriverPage implements OnInit {
       this.markers.setPinALatLng([this.location.lat, this.location.lng]);
       this.markers.pinA.addTo(this.map);
 
-      this.markers.setPinUserLatLng([this.location.lat, this.location.lng]);
-      this.markers.pinUser.addTo(this.map);
+      this.markers.setPinDriverLatLng([this.location.lat, this.location.lng]);
+      this.markers.pinDriver.addTo(this.map);
 
       this.map.on('move', (e) => this.onMove(e, this.markers.pinA));
       this.map.on('moveend', (e) => this.onMoveEnd(e));
@@ -183,7 +180,7 @@ export class MainDriverPage implements OnInit {
   }
 
   updateAddress(lng, lat) {
-      const data = this.service.getTextCurrentLocation([lng, lat]);
+      const data = this.yaHelper.getTextCurrentLocation([lng, lat]);
       data.subscribe(res => {
           if (res) {
               this.location.from = this.yaHelper.getAddress(res);

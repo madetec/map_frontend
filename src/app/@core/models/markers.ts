@@ -48,4 +48,8 @@ export class Markers {
     setPinUserLatLng(latLng: number[]) {
         this.pinUser = L.marker(latLng, {icon: this.iconUser});
     }
+
+    setPinDriverLatLng(latLng: number[]) {
+        this.pinDriver = L.marker(latLng, {icon: this.iconDriver});
+    }
 }

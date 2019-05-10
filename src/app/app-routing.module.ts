@@ -21,7 +21,14 @@ const routes: Routes = [
   {
     path: 'user',
     canActivate: [AuthenticationGuardService],
+    data: {role: 'user'},
     loadChildren: './user/user-routing.module#UserRoutingModule'
+  },
+  {
+    path: 'driver',
+    canActivate: [AuthenticationGuardService],
+    data: {role: 'driver'},
+    loadChildren: './driver/driver-routing.module#DriverRoutingModule'
   },
 ];
 

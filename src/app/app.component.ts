@@ -3,8 +3,6 @@ import {Component} from '@angular/core';
 import {Platform} from '@ionic/angular';
 import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
-
-import {FcmService} from './@core/services/fcm.service';
 import {Router} from '@angular/router';
 import {AuthService} from './@core/services/auth.service';
 import {AuthenticationService} from './@core/services/authentication.service';
@@ -25,7 +23,6 @@ export class AppComponent {
         private platform: Platform,
         private splashScreen: SplashScreen,
         private statusBar: StatusBar,
-        private fcm: FcmService,
         private router: Router,
         private authService: AuthService,
         private authenticationService: AuthenticationService
@@ -35,13 +32,18 @@ export class AppComponent {
 
     initializeApp() {
         this.platform.ready().then(() => {
-            this.initPages();
-            this.statusBar.styleDefault();
-            this.statusBar.backgroundColorByHexString('#f6f6f6');
+            this.configureStatusBar();
             this.splashScreen.hide();
-            this.fcm.getToken();
             this.authenticationService.authenticationState.subscribe(state => {
                 if (state) {
+                    this.appPages = this.authenticationService.initMenuByRole();
+                    this.authenticationService.getCurrentUser().subscribe(user => {
+                        if (user) {
+                            this.currentUser.name = `${user.profile.last_name} ${user.profile.name}`;
+                            this.currentUser.phone = user.profile.main_phone;
+                            this.currentUser.role = user.roleName;
+                        }
+                    });
                     this.authenticationService.routingByRole();
                 } else {
                     this.router.navigate(['login']);
@@ -50,34 +52,9 @@ export class AppComponent {
         });
     }
 
-    initPages() {
-        this.appPages = [
-            {
-                title: 'Главная',
-                url: '/user',
-                icon: 'pin'
-            },
-            {
-                title: 'Профиль',
-                url: '/user/profile',
-                icon: 'contact'
-            },
-            {
-                title: 'История поездок',
-                url: '/user/order-history',
-                icon: 'filing'
-            },
-            {
-                title: 'Оповещания',
-                url: '/alert',
-                icon: 'notifications-outline'
-            },
-            {
-                title: 'Поддержка',
-                url: '/help',
-                icon: 'help-circle-outline'
-            }
-        ];
+    configureStatusBar() {
+        this.statusBar.styleDefault();
+        this.statusBar.backgroundColorByHexString('#f6f6f6');
     }
 
     logout() {

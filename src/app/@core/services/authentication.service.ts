@@ -15,6 +15,8 @@ export class AuthenticationService {
     authenticationState = new BehaviorSubject(false);
     currentUser: BehaviorSubject<User> = new BehaviorSubject(null);
     onLoginIncorrect = new EventEmitter<string>();
+    currentMenu = new BehaviorSubject(null);
+
     constructor(
         private http: HttpClient,
         private storage: Storage,
@@ -48,34 +50,44 @@ export class AuthenticationService {
                     response.refresh_token
                 );
                 this.currentUser.next(user);
-                this.storage.set(CURRENT_USER, this.currentUser.getValue()).then(res => {
-                    if (res) {
-                        this.authenticationState.next(true);
-                        this.getRole();
-                        this.getProfile();
-                    }
+                return this.storage.set(CURRENT_USER, this.currentUser.value).then(() => {
+                    this.getRole();
+                    this.getProfile();
                 });
             }
         });
     }
 
     getRole() {
-        return this.http.get<any>('http://api.telecom-car.uz/user/role')
+        const user = this.currentUser.getValue();
+        const options = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `${user.token_type} ${user.access_token}`
+            }
+        };
+        return this.http.get<any>('http://api.telecom-car.uz/user/role', options)
             .subscribe(data => {
                 if (data && data.role) {
-                    const user = this.currentUser.getValue();
                     user.setRole(data.role, data.name);
+                    this.currentMenu.next(data.role);
                     this.currentUser.next(user);
-                    return this.storage.set(CURRENT_USER, this.currentUser.getValue());
+                    return this.storage.set(CURRENT_USER, this.currentUser.value);
                 }
             });
     }
 
     getProfile() {
-        return this.http.get<any>('http://api.telecom-car.uz/user/profile')
+        const user = this.currentUser.getValue();
+        const options = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `${user.token_type} ${user.access_token}`
+            }
+        };
+        return this.http.get<any>('http://api.telecom-car.uz/user/profile', options)
             .subscribe(data => {
                 if (data.name) {
-                    const user = this.currentUser.getValue();
                     user.setProfile(
                         data.name,
                         data.last_name,
@@ -89,7 +101,9 @@ export class AuthenticationService {
                         data.status
                     );
                     this.currentUser.next(user);
-                    return this.storage.set(CURRENT_USER, this.currentUser.getValue());
+                    return this.storage.set(CURRENT_USER, this.currentUser.value).then(() => {
+                        this.authenticationState.next(true);
+                    });
                 }
             });
     }
@@ -97,6 +111,7 @@ export class AuthenticationService {
     logout() {
         return this.storage.remove(CURRENT_USER).then(() => {
             this.currentUser.next(null);
+            this.currentMenu.next(null);
             this.authenticationState.next(false);
         });
     }
@@ -108,31 +123,133 @@ export class AuthenticationService {
     checkToken() {
         return this.storage.get(CURRENT_USER).then(res => {
             if (res) {
+                this.currentMenu.next(res.role);
+                this.currentUser.next(res);
                 this.authenticationState.next(true);
             }
         });
     }
 
+    initMenuByRole() {
+        if (this.isUser(this.currentMenu.value)) {
+            return this.userMenu();
+        } else if (this.isDriver(this.currentMenu.value)) {
+            return this.driverMenu();
+        }
+    }
+
     routingByRole() {
-        this.getCurrentUser().subscribe(user => {
-            if (user) {
-                if (user.role === 'user') {
+        return this.storage.get(CURRENT_USER).then(res => {
+            if (res) {
+                if (this.isUser(res.role)) {
                     this.router.navigate(['user']);
-                }
-            } else {
-                this.storage.get(CURRENT_USER).then(res => {
-                    if (res) {
-                        if (res.role === 'user') {
-                            this.router.navigate(['user', 'main']);
+                } else if (res.role === 'driver') {
+                    this.router.navigate(['driver']);
+                } else {
+                    this.logout();
                         }
                     }
-                });
-            }
         });
+
     }
 
     getCurrentUser() {
         return this.currentUser.asObservable();
     }
 
+    refreshToken() {
+        this.getCurrentUser().subscribe(user => {
+            if (!user) {
+                this.storage.get(CURRENT_USER).then(res => {
+                    this.currentUser.next(res);
+                });
+            }
+        });
+        const user = this.currentUser.getValue();
+        const data = {
+            grant_type: 'refresh_token',
+            refresh_token: user.refresh_token,
+            client_id: 'testclient',
+            client_secret: 'testpass'
+        };
+        const url = 'http://api.telecom-car.uz/oauth2/token';
+        const options = {headers: {'Content-Type': 'application/json'}};
+        return this.http.post<any>(url, data, options).subscribe(response => {
+            if (response.access_token) {
+                user.access_token = response.access_token;
+                user.expires_in = response.expires_in;
+                this.currentUser.next(user);
+                return this.storage.set(CURRENT_USER, this.currentUser.value);
+            }
+        });
+    }
+
+    private userMenu(): object[] {
+
+        return [
+            {
+                title: 'Главная',
+                url: '/user',
+                icon: 'pin'
+            },
+            {
+                title: 'Профиль',
+                url: '/user/profile',
+                icon: 'contact'
+            },
+            {
+                title: 'История поездок',
+                url: '/user/order',
+                icon: 'filing'
+            },
+            {
+                title: 'Оповещания',
+                url: '/alert',
+                icon: 'notifications-outline'
+            },
+            {
+                title: 'Поддержка',
+                url: '/help',
+                icon: 'help-circle-outline'
+            }
+        ];
+    }
+
+    private driverMenu(): object[] {
+        return [
+            {
+                title: 'Главная',
+                url: '/driver',
+                icon: 'pin'
+            },
+            {
+                title: 'Профиль',
+                url: '/driver/profile',
+                icon: 'contact'
+            },
+            {
+                title: 'История поездок',
+                url: '/driver/order',
+                icon: 'filing'
+            },
+            {
+                title: 'Оповещания',
+                url: '/driver/alert',
+                icon: 'notifications-outline'
+            },
+            {
+                title: 'Поддержка',
+                url: '/help',
+                icon: 'help-circle-outline'
+            }
+        ];
+    }
+
+    private isUser(role: string): boolean {
+        return role === 'user';
+    }
+
+    private isDriver(role: string): boolean {
+        return role === 'driver';
+    }
 }

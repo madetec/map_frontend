@@ -9,15 +9,10 @@ import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
 
 import {JwtInterceptor} from './@core/helpers/jwt.interceptor';
-import {ErrorInterceptor} from './@core/helpers/error.interceptor';
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
 
 import {Device} from '@ionic-native/device/ngx';
-import {AngularFireModule} from 'angularfire2';
-import {AngularFirestoreModule} from 'angularfire2/firestore';
-import {Firebase} from '@ionic-native/firebase/ngx';
-import {FcmService} from './@core/services/fcm.service';
 
 import {Network} from '@ionic-native/network/ngx';
 
@@ -29,6 +24,8 @@ import {ActiveModalModule} from './modals/order/active/active-modal.module';
 import {WaitModalModule} from './modals/order/wait/wait-modal.module';
 import {YaHelper} from './@core/helpers/yandex-geocoder.helper';
 import {IonicStorageModule} from '@ionic/storage';
+import {IConfig, NgxMaskModule} from 'ngx-mask';
+import {ErrorInterceptor} from './@core/helpers/error.interceptor';
 
 registerLocaleData(localeRu);
 
@@ -49,23 +46,20 @@ const config = {
     IonicModule.forRoot(),
     IonicStorageModule.forRoot(),
     AppRoutingModule,
-      HttpClientModule,
-      AngularFireModule.initializeApp(config),
-      AngularFirestoreModule,
+    HttpClientModule,
     ToModalModule,
     ActiveModalModule,
-    WaitModalModule
+    WaitModalModule,
+    NgxMaskModule.forRoot()
   ],
   providers: [
     StatusBar,
     SplashScreen,
     Geolocation,
-      Firebase,
-      Device,
-      FcmService,
-      Network,
-      AuthService,
-      YaHelper,
+    Device,
+    Network,
+    AuthService,
+    YaHelper,
     {provide: LOCALE_ID, useValue: 'ru'},
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

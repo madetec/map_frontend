@@ -4,8 +4,9 @@
       <ion-header>
         <ion-toolbar>
           <ion-card-header>
-            <ion-card-title>{{currentUser.name}}</ion-card-title>
-            <ion-card-subtitle>{{currentUser.phone}}</ion-card-subtitle>
+            <ion-card-title>{{currentUser.name}} </ion-card-title>
+            <ion-card-subtitle>{{currentUser.role}}</ion-card-subtitle>
+            <ion-card-subtitle>+998 {{currentUser.phone | mask: '(00) 000-00-00'}}</ion-card-subtitle>
           </ion-card-header>
         </ion-toolbar>
       </ion-header>

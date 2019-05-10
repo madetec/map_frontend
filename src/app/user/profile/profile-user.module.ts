@@ -3,12 +3,12 @@ import {CommonModule} from '@angular/common';
 import {RouterModule, Routes} from '@angular/router';
 
 import {IonicModule} from '@ionic/angular';
-import {ProfilePage} from './profile.page';
+import {ProfileUserPage} from './profile-user.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: ProfilePage
+    component: ProfileUserPage
   }
 ];
 
@@ -19,6 +19,6 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [ProfilePage]
+  declarations: [ProfileUserPage]
 })
-export class ProfilePageModule {}
+export class ProfileUserPageModule {}

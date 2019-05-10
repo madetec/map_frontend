@@ -49,22 +49,11 @@ export class LoginPage implements OnInit {
                 this.signInForm.controls.password.value
             );
             this.disabled = false;
-            // this.authService.login(
-            //     this.signInForm.controls.username.value,
-            //     this.signInForm.controls.password.value)
-            //     .subscribe(res => {
-            //         this.disabled = false;
-            //         this.authService.getUserRole().subscribe(res => {
-            //             if (this.isSmartPhone()) {
-            //                 this.authService.setFirebaseToken();
-            //             }
-            //             this.authService.getProfile().subscribe(res => {
-            //                 localStorage.setItem('currentUser', JSON.stringify(this.authService.user));
-            //                 this.authService.redirect();
-            //             });
-            //         });
-            //     });
         }
+    }
+
+    logout() {
+        this.authenticationService.logout();
     }
 
     isEmpty(username, password) {

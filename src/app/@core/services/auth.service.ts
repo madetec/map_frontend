@@ -20,7 +20,6 @@ export class AuthService {
       private router: Router
   ) {
       if (localStorage.getItem('currentUser')) {
-          this.user = new User(JSON.parse(localStorage.getItem('currentUser')));
       } else {
           this.user = new User();
       }

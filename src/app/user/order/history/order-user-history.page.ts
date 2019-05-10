@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {OrderService} from '../../@core/services/order.service';
+import {OrderService} from '../../../@core/services/order.service';
 
 @Component({
-    selector: 'order-history',
-    templateUrl: './order-history.page.html',
-    styleUrls: ['./order-history.page.scss']
+    selector: 'order-user-history',
+    templateUrl: './order-user-history.page.html',
+    styleUrls: ['./order-user-history.page.scss']
 })
-export class OrderHistoryPage implements OnInit {
+export class OrderUserHistoryPage implements OnInit {
     public orders: any;
 
     constructor(private orderService: OrderService) {

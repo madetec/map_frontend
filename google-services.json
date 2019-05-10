@@ -13,7 +13,12 @@
           "package_name": "com.uztelecom.telecom_car"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "515812942516-4gu6lg8ivihrr5g9o8pscl3b81n8j8ce.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBxqSDi3fW_U-W1RzgxpJaeUrP6CeMKok4"
@@ -25,6 +30,13 @@
             {
               "client_id": "515812942516-4gu6lg8ivihrr5g9o8pscl3b81n8j8ce.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "515812942516-r652oehpaq2al580b159a1r0lf2kdm15.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.uztelecom.telecom-car"
+              }
             }
           ]
         }

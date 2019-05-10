@@ -3,12 +3,12 @@ import {CommonModule} from '@angular/common';
 import {RouterModule, Routes} from '@angular/router';
 
 import {IonicModule} from '@ionic/angular';
-import {OrderHistoryPage} from './order-history.page';
+import {OrderDriverHistoryPage} from './order-driver-history.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: OrderHistoryPage
+    component: OrderDriverHistoryPage
   }
 ];
 
@@ -19,6 +19,6 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-    declarations: [OrderHistoryPage],
+    declarations: [OrderDriverHistoryPage],
 })
-export class OrderHistoryPageModule {}
+export class OrderDriverHistoryPageModule {}

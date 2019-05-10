@@ -1,0 +1,21 @@
+<ion-header class="main-header">
+  <ion-toolbar class="main-toolbar">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Telecom Car
+    </ion-title>
+    <ion-buttons slot="end">
+      <label class="switch">
+        <input type="checkbox" [checked]="status" class="switch-input">
+        <span class="switch-label" data-on="Свободен" data-off="Занят"></span>
+        <span class="switch-handle"></span>
+      </label>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div id="map" class="map"></div>
+</ion-content>

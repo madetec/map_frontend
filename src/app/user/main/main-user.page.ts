@@ -1,4 +1,4 @@
-import {Component, ElementRef, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {LoadingController, MenuController, ModalController, Platform} from '@ionic/angular';
 import * as L from 'leaflet/dist/leaflet.js';
 import {User} from '../../@core/models/user';
@@ -8,15 +8,14 @@ import {ToModalPage} from '../../modals/order/location/to/to-modal.page';
 import {YaHelper} from '../../@core/helpers/yandex-geocoder.helper';
 import {ActiveModalPage} from '../../modals/order/active/active-modal.page';
 import {OrderService} from '../../@core/services/order.service';
-import {Storage} from '@ionic/storage';
 
 
 @Component({
-    selector: 'app-main',
-    templateUrl: './main.page.html',
-    styleUrls: ['./main.page.scss']
+    selector: 'main-user',
+    templateUrl: './main-user.page.html',
+    styleUrls: ['./main-user.page.scss']
 })
-export class MainPage {
+export class MainUserPage implements OnInit {
     @ViewChild('map') mapContainer: ElementRef;
     markers: Markers = new Markers();
     user: User;
@@ -46,14 +45,8 @@ export class MainPage {
         public modalController: ModalController,
         public loadingController: LoadingController,
         public orderService: OrderService,
-        private yaHelper: YaHelper,
-        private storage: Storage
+        private yaHelper: YaHelper
     ) {
-        this.storage.get('current user').then(res => {
-            if (res) {
-                this.user = res;
-            }
-        });
         this.location.to.address = 'Куда?';
         this.location.lat = 41.310387;
         this.location.lng = 69.274695;
@@ -61,7 +54,7 @@ export class MainPage {
         this.location.from.lng = 69.274695;
     }
 
-    ionViewWillEnter() {
+    ngOnInit(): void {
         try {
             this.orderService.getActiveOrder().subscribe(res => {
                 if (res) {
@@ -70,6 +63,9 @@ export class MainPage {
             });
         } catch (e) {
         }
+    }
+
+    ionViewWillEnter() {
         this.menuCtrl.enable(true);
         this.loadMap();
         this.updateUserLocation();
@@ -256,7 +252,7 @@ export class MainPage {
             if (data.result.orderId) {
                 this.orderService.orderCanceled(data.result.orderId).subscribe(data => {
                     if (data) {
-                        this.presentLoading('Заказ успешно отменен!', 3000, 'dots');
+                        this.presentLoading('Заказ отменен!', 3000, 'dots');
                     }
                 });
             }

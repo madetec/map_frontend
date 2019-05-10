@@ -7,9 +7,9 @@ const routes: Routes = [
     redirectTo: 'main',
     pathMatch: 'full'
   },
-  { path: 'main', loadChildren: './main/main.module#MainPageModule' },
-  { path: 'profile', loadChildren: './profile/profile.module#ProfilePageModule' },
-  { path: 'order-history', loadChildren: './order-history/order-history.module#OrderHistoryPageModule' },
+  { path: 'main', loadChildren: './main/main-user.module#MainUserPageModule' },
+  { path: 'profile', loadChildren: './profile/profile-user.module#ProfileUserPageModule' },
+  { path: 'order', loadChildren: './order/history/order-user-history.module#OrderUserHistoryPageModule' },
 ];
 
 @NgModule({
