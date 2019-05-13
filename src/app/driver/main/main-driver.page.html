@@ -8,7 +8,7 @@
     </ion-title>
     <ion-buttons slot="end">
       <label class="switch">
-        <input type="checkbox" [checked]="status" class="switch-input">
+        <input type="checkbox" (click)="changeStatus()" [checked]="status" class="switch-input">
         <span class="switch-label" data-on="Свободен" data-off="Занят"></span>
         <span class="switch-handle"></span>
       </label>

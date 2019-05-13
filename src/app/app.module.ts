@@ -24,8 +24,10 @@ import {ActiveModalModule} from './modals/order/active/active-modal.module';
 import {WaitModalModule} from './modals/order/wait/wait-modal.module';
 import {YaHelper} from './@core/helpers/yandex-geocoder.helper';
 import {IonicStorageModule} from '@ionic/storage';
-import {IConfig, NgxMaskModule} from 'ngx-mask';
+import {NgxMaskModule} from 'ngx-mask';
 import {ErrorInterceptor} from './@core/helpers/error.interceptor';
+import {FCM} from '@ionic-native/fcm/ngx';
+import {NotificationService} from './@core/services/notification.service';
 
 registerLocaleData(localeRu);
 
@@ -60,6 +62,8 @@ const config = {
     Network,
     AuthService,
     YaHelper,
+    FCM,
+    NotificationService,
     {provide: LOCALE_ID, useValue: 'ru'},
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

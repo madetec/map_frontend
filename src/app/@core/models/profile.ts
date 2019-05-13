@@ -8,5 +8,8 @@ export class Profile {
     main_address: string;
     phones: number[];
     addresses: string[];
-    status: object;
+    status: {
+        code: number,
+        name: string
+    };
 }

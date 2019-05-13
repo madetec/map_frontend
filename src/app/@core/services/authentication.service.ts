@@ -5,6 +5,7 @@ import {HttpClient} from '@angular/common/http';
 import {Storage} from '@ionic/storage';
 import {Router} from '@angular/router';
 import {User} from '../models/user';
+import {Device} from '@ionic-native/device/ngx';
 
 const CURRENT_USER = 'current user';
 
@@ -21,6 +22,7 @@ export class AuthenticationService {
         private http: HttpClient,
         private storage: Storage,
         private platform: Platform,
+        private device: Device,
         private router: Router
     ) {
         this.platform.ready().then(() => {
@@ -204,7 +206,7 @@ export class AuthenticationService {
             },
             {
                 title: 'Оповещания',
-                url: '/alert',
+                url: '/user/notification',
                 icon: 'notifications-outline'
             },
             {
@@ -234,7 +236,7 @@ export class AuthenticationService {
             },
             {
                 title: 'Оповещания',
-                url: '/driver/alert',
+                url: '/driver/notification',
                 icon: 'notifications-outline'
             },
             {
@@ -251,5 +253,14 @@ export class AuthenticationService {
 
     private isDriver(role: string): boolean {
         return role === 'driver';
+    }
+
+    setFirebaseToken(token) {
+        return this.http.post<any>('http://api.telecom-car.uz/device/add', {
+            uid: this.device.uuid,
+            firebase_token: token,
+            name: this.device.platform
+        }).subscribe(() => {
+        });
     }
 }

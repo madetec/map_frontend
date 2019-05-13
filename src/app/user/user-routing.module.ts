@@ -10,6 +10,7 @@ const routes: Routes = [
   { path: 'main', loadChildren: './main/main-user.module#MainUserPageModule' },
   { path: 'profile', loadChildren: './profile/profile-user.module#ProfileUserPageModule' },
   { path: 'order', loadChildren: './order/history/order-user-history.module#OrderUserHistoryPageModule' },
+  { path: 'notification', loadChildren: './notification/notification-user.module#NotificationUserPageModule' },
 ];
 
 @NgModule({

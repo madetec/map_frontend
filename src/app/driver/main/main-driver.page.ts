@@ -1,12 +1,12 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {LoadingController, MenuController, ModalController, Platform} from '@ionic/angular';
+import {Component, ElementRef, ViewChild} from '@angular/core';
+import {MenuController, Platform} from '@ionic/angular';
 import * as L from 'leaflet/dist/leaflet.js';
-import {User} from '../../@core/models/user';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
 import {Markers} from '../../@core/models/markers';
-import {ToModalPage} from '../../modals/order/location/to/to-modal.page';
 import {YaHelper} from '../../@core/helpers/yandex-geocoder.helper';
-import {OrderService} from '../../@core/services/order.service';
+import {Storage} from '@ionic/storage';
+import {DriverService} from '../../@core/services/driver.service';
+import {MapService} from '../../@core/services/map.service';
 
 
 @Component({
@@ -14,249 +14,87 @@ import {OrderService} from '../../@core/services/order.service';
   templateUrl: './main-driver.page.html',
   styleUrls: ['./main-driver.page.scss'],
 })
-export class MainDriverPage implements OnInit {
+export class MainDriverPage {
   @ViewChild('map') mapContainer: ElementRef;
-  markers: Markers = new Markers();
-    status = false;
-  user: User;
   map: L;
-  toModal: any;
-  loader: any;
-
   location = {
       lat: 0,
       lng: 0,
-      from: {
-          lat: 0,
-          lng: 0,
-          address: ''
-      },
-      to: {
-          lat: 0,
-          lng: 0,
-          address: ''
-      }
   };
-
+    status = false;
   constructor(
       private geolocation: Geolocation,
       private menuCtrl: MenuController,
       private platform: Platform,
-      public modalController: ModalController,
-      public loadingController: LoadingController,
-      public orderService: OrderService,
-      private yaHelper: YaHelper
+      private yaHelper: YaHelper,
+      private storage: Storage,
+      private driverService: DriverService,
+      private mapService: MapService
   ) {
-      this.location.to.address = 'Куда?';
       this.location.lat = 41.310387;
       this.location.lng = 69.274695;
-      this.location.from.lat = 41.310387;
-      this.location.from.lng = 69.274695;
   }
 
-  ionViewWillEnter() {
+    ionViewWillEnter() {
       this.menuCtrl.enable(true);
       this.loadMap();
-      this.updateUserLocation();
-      setInterval(this.updateUserLocation, 1000);
-      this.updateAddress(this.location.from.lng, this.location.from.lat);
-  }
-  async toModalPresent() {
-      this.toModal = await this.modalController.create({
-          component: ToModalPage,
-          componentProps: {value: 123}
-      });
-      await this.toModal.present();
-      const {data} = await this.toModal.onDidDismiss();
-      if (data.result !== 'cancel') {
+        this.initStatus();
+        // this.updateDriverLocation();
+        // setInterval(this.updateDriverLocation, 1000);
+    }
 
-          this.location.to.address = data.result.GeoObject.name;
-          const latLng = data.result.GeoObject.Point.pos;
-          if (!this.markers.pinB) {
-              this.markers.setPinBLatLng(latLng);
-              this.markers.pinB.addTo(this.map);
-          } else {
-              this.markers.pinB.setLatLng({lat: latLng[0], lng: latLng[1]});
-          }
+    // setDriverLocation(lat: number, lng: number) {
+    //     this.location.lat = lat;
+    //     this.location.lng = lng;
+    //     this.markers.pinDriver.setLatLng({
+    //         lat: this.location.lat,
+    //         lng: this.location.lng
+    //     });
+    //     this.map.panTo([
+    //         this.location.lat,
+    //         this.location.lng
+    //     ]);
+    // }
 
-          const bounds = new L.LatLngBounds([
-              [this.location.from.lat, this.location.from.lng],
-              [latLng[0], latLng[1]],
-          ]);
-          this.map.fitBounds(bounds);
-          const zoom = this.map.getBoundsZoom(bounds);
-          this.map.setZoom(zoom - 1);
+    // updateDriverLocation() {
+    //     try {
+    //         this.geolocation.getCurrentPosition()
+    //             .then((position) => this.setDriverLocation(position.coords.latitude, position.coords.longitude));
+    //     } catch (e) {
+    //     }
+    // }
 
-          this.location.to.lat = latLng[0];
-          this.location.to.lng = latLng[1];
-      }
+    loadMap() {
+        this.map = this.mapService.createMap(this.location.lat, this.location.lng, 15);
+        this.map = this.mapService.addDriverMarker(this.location.lat, this.location.lng);
+        // this.map = L.map('map', {
+        //     center: [this.location.lat, this.location.lng],
+        //     zoom: 15,
+        //     zoomControl: false
+        // });
+        //
+        // L.tileLayer('https://map.uztelecom.uz/hot/{z}/{x}/{y}.png', {
+        //     attributions: 'https://telecom-car.uz',
+        //     maxZoom: 18
+        // }).addTo(this.map);
 
-  }
+        // this.markers.setPinDriverLatLng([this.location.lat, this.location.lng]);
+        // this.markers.pinDriver.addTo(this.map);
+    }
 
-  onModal() {
-    this.toModalPresent();
-  }
+    initStatus() {
+        this.driverService.getCurrentStatus().subscribe(res => {
+            this.status = res;
+        });
+    }
 
-  loadMap() {
-      this.map = L.map('map', {
-          center: [
-              this.location.lat,
-              this.location.lng
-          ],
-          zoom: 15,
-          zoomControl: false
-      });
-      L.tileLayer('https://map.uztelecom.uz/hot/{z}/{x}/{y}.png', {
-          attributions: 'https://telecom-car.uz',
-          maxZoom: 18
-      }).addTo(this.map);
-
-      this.markers.setPinALatLng([this.location.lat, this.location.lng]);
-      this.markers.pinA.addTo(this.map);
-
-      this.markers.setPinDriverLatLng([this.location.lat, this.location.lng]);
-      this.markers.pinDriver.addTo(this.map);
-
-      this.map.on('move', (e) => this.onMove(e, this.markers.pinA));
-      this.map.on('moveend', (e) => this.onMoveEnd(e));
-  }
-
-  onMove(event, marker) {
-      if (!this.markers.pinB) {
-          const position = event.target.getCenter();
-          marker.setLatLng(position);
-      }
-  }
-
-  onMoveEnd(event) {
-      if (!this.markers.pinB) {
-          const position = event.target.getCenter();
-          this.clearAddress();
-          this.updateAddress(position.lng, position.lat);
-      }
-  }
-
-  onPanTo() {
-      this.map.panTo([
-          this.location.lat,
-          this.location.lng
-      ]);
-      if (!this.markers.pinB) {
-          this.updateAddress(this.location.lng, this.location.lat);
-      }
-      setTimeout(function () {
-          (document).getElementById('panTo')
-              .classList.add('cbutton--click');
-      }, 150);
-      setTimeout(function () {
-          (document).getElementById('panTo')
-              .classList.remove('cbutton--click');
-      }, 700);
-  }
-
-  setUserLocation(lat: number, lng: number) {
-      this.location.lat = lat;
-      this.location.lng = lng;
-      this.markers.pinUser.setLatLng({
-          lat: this.location.lat,
-          lng: this.location.lng
-      });
-      this.markers.pinA.setLatLng({
-          lat: this.location.lat,
-          lng: this.location.lng
-      });
-      this.map.panTo([
-          this.location.lat,
-          this.location.lng
-      ]);
-  }
-
-  updateUserLocation() {
-      try {
-          this.geolocation.getCurrentPosition()
-              .then((position) => this.setUserLocation(position.coords.latitude, position.coords.longitude));
-      } catch (e) {
-      }
-  }
-
-  updateAddress(lng, lat) {
-      const data = this.yaHelper.getTextCurrentLocation([lng, lat]);
-      data.subscribe(res => {
-          if (res) {
-              this.location.from = this.yaHelper.getAddress(res);
-          }
-      });
-  }
-
-  onClearTo() {
-      this.map.removeLayer(this.markers.pinB);
-      this.markers.pinB = null;
-      this.location.to.address = 'Куда?';
-  }
-
-  clearAddress() {
-      this.location.from.address = '';
-  }
-
-  onSubmit() {
-      this.presentLoading('Оформление заказа...', 3000, 'crescent');
-      this.orderService.createOrder(
-          this.location.from.lat,
-          this.location.from.lng,
-          this.location.from.address,
-          this.location.to.lat,
-          this.location.to.lng,
-          this.location.to.address
-      ).subscribe(data => {
-        //   this.orderActiveModalPresent(data);
-          this.loader.dismiss();
-      }, error => {
-          this.loader.dismiss();
-          this.presentLoading(error, 3000, 'dots');
-      });
-  }
-
-
-  async presentLoading(text, duration = 0, spinner = null) {
-      this.loader = await this.loadingController.create({
-          spinner: spinner,
-          duration: duration,
-          message: text,
-          translucent: true
-      });
-      await this.loader.present();
-      // return await this.loader.present();
-  }
-  ionViewWillLeave() {
-      this.toModal.dismiss();
-  }
-
-  ngOnInit() {
-    //   this.orderService.getActiveOrder().subscribe( res => {
-    //       if (res) {
-    //           this.orderActiveModalPresent(res);
-    //       }
-    //   });
-  }
-
-//   async orderActiveModalPresent(res: any) {
-//       this.toModal = await this.modalController.create({
-//           component: ActiveModalPage,
-//           componentProps: {activeOrder: res},
-//           backdropDismiss: false
-//       });
-//       await this.toModal.present();
-//       const {data} = await this.toModal.onDidDismiss();
-//       if (data.result !== 'cancel') {
-//           if (data.result.orderId) {
-//               this.orderService.orderCanceled(data.result.orderId).subscribe(data => {
-//                   if (data) {
-//                       this.presentLoading('Заказ успешно отменен!', 3000, 'dots');
-//                   }
-//               });
-//           }
-//       } else {
-//           console.log('Cancelled order!' + data);
-//       }
-//   }
+    changeStatus(): void {
+        if (this.status) {
+            this.driverService.busy();
+            this.initStatus();
+        } else {
+            this.driverService.active();
+            this.initStatus();
+        }
+    }
 }

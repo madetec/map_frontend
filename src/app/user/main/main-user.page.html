@@ -20,7 +20,7 @@
     <h2 class="animated" [ngClass]="{'fadeInUp': location.from.address}">
       {{location.from.address}}</h2>
   </div>
-  <div id="panTo" class="cbutton cbutton--effect-novak" (click)="onPanTo()">
+  <div id="panTo" [ngClass]="{'panToTop': markers.pinB}" class="cbutton cbutton--effect-novak" (click)="onPanTo()">
     <ion-icon icon="icon-only" name="navigate"></ion-icon>
   </div>
 

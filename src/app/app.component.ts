@@ -4,8 +4,9 @@ import {Platform} from '@ionic/angular';
 import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {Router} from '@angular/router';
-import {AuthService} from './@core/services/auth.service';
 import {AuthenticationService} from './@core/services/authentication.service';
+import {FCM} from '@ionic-native/fcm/ngx';
+import {json} from '@angular-devkit/core';
 
 @Component({
   selector: 'app-root',
@@ -24,8 +25,8 @@ export class AppComponent {
         private splashScreen: SplashScreen,
         private statusBar: StatusBar,
         private router: Router,
-        private authService: AuthService,
-        private authenticationService: AuthenticationService
+        private authenticationService: AuthenticationService,
+        private fcm: FCM,
     ) {
         this.initializeApp();
     }
@@ -34,6 +35,9 @@ export class AppComponent {
         this.platform.ready().then(() => {
             this.configureStatusBar();
             this.splashScreen.hide();
+            this.fcm.onNotification().subscribe(data => {
+                alert(JSON.stringify(data));
+            });
             this.authenticationService.authenticationState.subscribe(state => {
                 if (state) {
                     this.appPages = this.authenticationService.initMenuByRole();
@@ -43,6 +47,11 @@ export class AppComponent {
                             this.currentUser.phone = user.profile.main_phone;
                             this.currentUser.role = user.roleName;
                         }
+                        this.fcm.getToken().then(token => {
+                            if (token) {
+                                this.authenticationService.setFirebaseToken(token);
+                            }
+                        });
                     });
                     this.authenticationService.routingByRole();
                 } else {

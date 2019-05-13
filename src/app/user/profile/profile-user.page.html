@@ -29,7 +29,7 @@
         </ion-item>
         <ion-item>
             <ion-note slot="start"><ion-icon name="call"></ion-icon></ion-note>
-            <ion-label>{{user.profile.main_phone}}</ion-label>
+            <ion-label>{{user.profile.main_phone | mask: '(00) 000-00-00'}}</ion-label>
         </ion-item>
         <ion-item>
             <ion-note slot="start"><ion-icon name="pin"></ion-icon></ion-note>
