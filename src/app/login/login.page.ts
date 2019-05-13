@@ -27,14 +27,13 @@ export class LoginPage implements OnInit {
     }
 
   ngOnInit() {
-
       this.signInForm = this.formBuilder.group({
           username: [''],
           password: ['']
       });
       this.authenticationService.onLoginIncorrect.subscribe(res => {
           this.hasError = true;
-          this.errMsg = 'Неверный логин или пароль';
+          this.errMsg = res;
           this.disabled = false;
       });
   }
@@ -44,16 +43,14 @@ export class LoginPage implements OnInit {
             this.errMsg = 'Поля не должны быть пустыми';
         } else {
             this.disabled = true;
-            this.authenticationService.login(
+            const response = this.authenticationService.login(
                 this.signInForm.controls.username.value,
                 this.signInForm.controls.password.value
             );
-            this.disabled = false;
+            if (response.closed) {
+                this.disabled = false;
+            }
         }
-    }
-
-    logout() {
-        this.authenticationService.logout();
     }
 
     isEmpty(username, password) {
@@ -63,6 +60,9 @@ export class LoginPage implements OnInit {
     ionViewWillEnter() {
         this.menuCtrl.enable(false);
         this.signInForm.reset();
+    }
+    ionViewWillLeave() {
+        this.disabled = false;
     }
 
     isSmartPhone() {

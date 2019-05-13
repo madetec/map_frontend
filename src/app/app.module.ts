@@ -18,7 +18,6 @@ import {Network} from '@ionic-native/network/ngx';
 
 import localeRu from '@angular/common/locales/ru';
 import {registerLocaleData} from '@angular/common';
-import {AuthService} from './@core/services/auth.service';
 import {ToModalModule} from './modals/order/location/to/to-modal.module';
 import {ActiveModalModule} from './modals/order/active/active-modal.module';
 import {WaitModalModule} from './modals/order/wait/wait-modal.module';
@@ -28,6 +27,7 @@ import {NgxMaskModule} from 'ngx-mask';
 import {ErrorInterceptor} from './@core/helpers/error.interceptor';
 import {FCM} from '@ionic-native/fcm/ngx';
 import {NotificationService} from './@core/services/notification.service';
+import {NetworkService} from './@core/services/network.service';
 
 registerLocaleData(localeRu);
 
@@ -60,10 +60,10 @@ const config = {
     Geolocation,
     Device,
     Network,
-    AuthService,
     YaHelper,
     FCM,
     NotificationService,
+    NetworkService,
     {provide: LOCALE_ID, useValue: 'ru'},
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

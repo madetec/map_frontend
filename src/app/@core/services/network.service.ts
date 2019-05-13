@@ -38,10 +38,10 @@ export class NetworkService {
 
     private async updateNetworkStatus(status: ConnectionStatus) {
         this.status.next(status);
-        const connection = status === ConnectionStatus.Offline ? 'Offline' : 'Online';
+        const connection = status === ConnectionStatus.Offline ? 'Нет подключения к интернету!!!' : 'Подключено к интернету!';
         const toast = this.toastCtrl.create({
-            message: `Network: ${connection}`,
-            duration: 5000,
+            message: `${connection}`,
+            duration: 10000,
             position: 'bottom'
         });
         toast.then(toast => toast.present());

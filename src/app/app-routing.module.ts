@@ -8,10 +8,6 @@ const routes: Routes = [
     redirectTo: 'login',
     pathMatch: 'full'
   },
-  {
-    path: 'list',
-    loadChildren: './list/list.module#ListPageModule'
-  },
   { path: 'login', loadChildren: './login/login.module#LoginPageModule' },
   { path: 'reset-pass', loadChildren: './reset-pass/reset-pass.module#ResetPassPageModule' },
   { path: 'error', loadChildren: './error/error.module#ErrorPageModule' },

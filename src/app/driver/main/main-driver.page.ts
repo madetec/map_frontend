@@ -2,7 +2,6 @@ import {Component, ElementRef, ViewChild} from '@angular/core';
 import {MenuController, Platform} from '@ionic/angular';
 import * as L from 'leaflet/dist/leaflet.js';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
-import {Markers} from '../../@core/models/markers';
 import {YaHelper} from '../../@core/helpers/yandex-geocoder.helper';
 import {Storage} from '@ionic/storage';
 import {DriverService} from '../../@core/services/driver.service';
@@ -16,12 +15,22 @@ import {MapService} from '../../@core/services/map.service';
 })
 export class MainDriverPage {
   @ViewChild('map') mapContainer: ElementRef;
-  map: L;
-  location = {
-      lat: 0,
-      lng: 0,
-  };
+
+      map: L;
+      location = {
+          lat: 0,
+          lng: 0,
+      };
     status = false;
+    slideConfig = {
+        spaceBetween: 10,
+        slidesPerView: 2,
+        centeredSlides: true,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+    };
   constructor(
       private geolocation: Geolocation,
       private menuCtrl: MenuController,

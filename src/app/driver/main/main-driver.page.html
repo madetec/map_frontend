@@ -3,9 +3,7 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>
-      Telecom Car
-    </ion-title>
+    <ion-title>Telecom Car</ion-title>
     <ion-buttons slot="end">
       <label class="switch">
         <input type="checkbox" (click)="changeStatus()" [checked]="status" class="switch-input">
@@ -18,4 +16,61 @@
 
 <ion-content>
   <div id="map" class="map"></div>
+
+  <ion-slides [options]="slideConfig">
+    <ion-slide>
+      <ion-card>
+        <ion-card-header>
+          <ion-card-subtitle>Новый заказ</ion-card-subtitle>
+          <ion-card-title>От Мирханов Зиёдилла</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum, praesentium, sed! Accusamus ad, atque
+          cupiditate
+          <hr>
+          <ion-buttons>
+            <ion-button class="btn btn-blue">
+              Принять
+            </ion-button>
+          </ion-buttons>
+        </ion-card-content>
+      </ion-card>
+    </ion-slide>
+    <ion-slide>
+      <ion-card>
+        <ion-card-header>
+          <ion-card-subtitle>Новый заказ</ion-card-subtitle>
+          <ion-card-title>От Мирханов Зиёдилла</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum, praesentium, sed! Accusamus ad, atque
+          cupiditate
+          <hr>
+          <ion-buttons>
+            <ion-button class="btn btn-blue">
+              Принять
+            </ion-button>
+          </ion-buttons>
+        </ion-card-content>
+      </ion-card>
+    </ion-slide>
+    <ion-slide>
+      <ion-card>
+        <ion-card-header>
+          <ion-card-subtitle>Новый заказ</ion-card-subtitle>
+          <ion-card-title>От Мирханов Зиёдилла</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum, praesentium, sed! Accusamus ad, atque
+          cupiditate
+          <hr>
+          <ion-buttons>
+            <ion-button class="btn btn-blue">
+              Принять
+            </ion-button>
+          </ion-buttons>
+        </ion-card-content>
+      </ion-card>
+    </ion-slide>
+  </ion-slides>
 </ion-content>

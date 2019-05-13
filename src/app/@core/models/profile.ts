@@ -1,4 +1,5 @@
 export class Profile {
+    user_id: number;
     name: string;
     last_name: string;
     father_name: string;

@@ -8,6 +8,7 @@ import {ToModalPage} from '../../modals/order/location/to/to-modal.page';
 import {YaHelper} from '../../@core/helpers/yandex-geocoder.helper';
 import {ActiveModalPage} from '../../modals/order/active/active-modal.page';
 import {OrderService} from '../../@core/services/order.service';
+import {AuthenticationService} from '../../@core/services/authentication.service';
 
 
 @Component({
@@ -16,6 +17,7 @@ import {OrderService} from '../../@core/services/order.service';
     styleUrls: ['./main-user.page.scss']
 })
 export class MainUserPage implements OnInit {
+    ws;
     @ViewChild('map') mapContainer: ElementRef;
     markers: Markers = new Markers();
     user: User;
@@ -45,13 +47,20 @@ export class MainUserPage implements OnInit {
         public modalController: ModalController,
         public loadingController: LoadingController,
         public orderService: OrderService,
-        private yaHelper: YaHelper
+        private yaHelper: YaHelper,
+        private authService: AuthenticationService
     ) {
         this.location.to.address = 'Куда?';
         this.location.lat = 41.310387;
         this.location.lng = 69.274695;
         this.location.from.lat = 41.310387;
         this.location.from.lng = 69.274695;
+        authService.getCurrentUser().subscribe(user => {
+            if (user) {
+                this.user = user;
+            }
+        });
+        this.ws = new WebSocket(`wss://telecom-car.uz/ws?user_id=${this.user.profile.user_id}&lat=${this.location.lat}&lng=${this.location.lng}`);
     }
 
     ngOnInit(): void {
@@ -63,13 +72,13 @@ export class MainUserPage implements OnInit {
             });
         } catch (e) {
         }
+        setInterval(this.updateUserLocation, 1000);
     }
 
     ionViewWillEnter() {
         this.menuCtrl.enable(true);
         this.loadMap();
         this.updateUserLocation();
-        setInterval(this.updateUserLocation, 1000);
         this.updateAddress(this.location.from.lng, this.location.from.lat);
     }
     async toModalPresent() {
@@ -166,6 +175,7 @@ export class MainUserPage implements OnInit {
     }
 
     setUserLocation(lat: number, lng: number) {
+        this.ws.send(this.prepareWsMessage('coordinates', {'lat': lat, 'lng': lng}));
         this.location.lat = lat;
         this.location.lng = lng;
         this.markers.pinUser.setLatLng({
@@ -197,6 +207,7 @@ export class MainUserPage implements OnInit {
                 this.location.from = this.yaHelper.getAddress(res);
             }
         });
+
     }
 
     onClearTo() {
@@ -259,5 +270,13 @@ export class MainUserPage implements OnInit {
         } else {
             console.log('Cancelled order!' + data);
         }
+    }
+
+
+    prepareWsMessage(actionName, sendData) {
+        return JSON.stringify({
+            action: actionName,
+            data: sendData
+        });
     }
 }

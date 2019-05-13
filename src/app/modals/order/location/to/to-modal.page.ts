@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ModalController, NavParams} from '@ionic/angular';
-import {AuthService} from '../../../../@core/services/auth.service';
+import {YaHelper} from '../../../../@core/helpers/yandex-geocoder.helper';
 
 @Component({
     selector: 'to-modal-page',
@@ -14,7 +14,7 @@ export class ToModalPage implements OnInit {
     constructor(
         navParams: NavParams,
         private modalCtrl: ModalController,
-        private service: AuthService) {
+        private service: YaHelper) {
     }
 
     onDismiss(data) {

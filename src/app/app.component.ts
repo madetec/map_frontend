@@ -6,7 +6,7 @@ import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {Router} from '@angular/router';
 import {AuthenticationService} from './@core/services/authentication.service';
 import {FCM} from '@ionic-native/fcm/ngx';
-import {json} from '@angular-devkit/core';
+import {NetworkService} from './@core/services/network.service';
 
 @Component({
   selector: 'app-root',
@@ -27,6 +27,7 @@ export class AppComponent {
         private router: Router,
         private authenticationService: AuthenticationService,
         private fcm: FCM,
+        private network: NetworkService
     ) {
         this.initializeApp();
     }
@@ -35,9 +36,7 @@ export class AppComponent {
         this.platform.ready().then(() => {
             this.configureStatusBar();
             this.splashScreen.hide();
-            this.fcm.onNotification().subscribe(data => {
-                alert(JSON.stringify(data));
-            });
+            this.network.onNetworkChange().subscribe();
             this.authenticationService.authenticationState.subscribe(state => {
                 if (state) {
                     this.appPages = this.authenticationService.initMenuByRole();
@@ -47,6 +46,13 @@ export class AppComponent {
                             this.currentUser.phone = user.profile.main_phone;
                             this.currentUser.role = user.roleName;
                         }
+                        this.fcm.onNotification().subscribe(data => {
+                            if (data.wasTapped) {
+                                this.router.navigate([user.role, 'notification']);
+                            } else {
+                                this.router.navigate([user.role, 'notification']);
+                            }
+                        });
                         this.fcm.getToken().then(token => {
                             if (token) {
                                 this.authenticationService.setFirebaseToken(token);

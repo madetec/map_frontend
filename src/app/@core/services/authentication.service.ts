@@ -100,7 +100,8 @@ export class AuthenticationService {
                         data.main_address,
                         data.phones,
                         data.addresses,
-                        data.status
+                        data.status,
+                        data.user_id
                     );
                     this.currentUser.next(user);
                     return this.storage.set(CURRENT_USER, this.currentUser.value).then(() => {

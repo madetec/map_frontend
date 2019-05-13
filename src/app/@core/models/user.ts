@@ -35,7 +35,8 @@ export class User {
         main_address,
         phones,
         addresses,
-        status) {
+        status,
+        user_id) {
         this.profile.name = name;
         this.profile.last_name = last_name;
         this.profile.father_name = father_name;
@@ -46,5 +47,6 @@ export class User {
         this.profile.phones = phones;
         this.profile.addresses = addresses;
         this.profile.status = status;
+        this.profile.user_id = user_id;
     }
 }

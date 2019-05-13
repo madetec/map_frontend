@@ -15,16 +15,18 @@ export class ErrorInterceptor implements HttpInterceptor {
 
             if (this.isUnauthorized(err.status) || this.isForbidden(err.status)) {
                 if (this.isOauth(err.url)) {
-                    this.authService.onLoginIncorrect.emit(err.message);
+                    this.authService.onLoginIncorrect.emit('Неверный логин или пароль');
                 } else if (this.isTokenExpired(err.error.message)) {
                     this.authService.refreshToken();
                 } else {
                     this.authService.logout();
+                    this.authService.onLoginIncorrect.emit(err.error.message);
                 }
             }
 
             if (this.isInvalidRefreshToken(err.error.message)) {
                 this.authService.logout();
+                this.authService.onLoginIncorrect.emit(err.error.message);
             }
             return throwError(err);
         }));
