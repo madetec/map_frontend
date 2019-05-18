@@ -1,14 +1,19 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import { EventEmitter, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 
 @Injectable({
     providedIn: 'root'
 })
 export class OrderService {
+
+    driverOrders = [];
+    public driverOrdersEmitter$: EventEmitter<any>;
+
     constructor(
         private http: HttpClient
     ) {
+        this.driverOrdersEmitter$ = new EventEmitter();
     }
 
     orderCanceled(orderId) {
@@ -33,5 +38,14 @@ export class OrderService {
             to_address: to_address
         };
         return this.http.post <any>('http://api.telecom-car.uz/user/order', data);
+    }
+
+    getDriverOrders() {
+        return this.driverOrders;
+    }
+
+    newDriverOrder(id: number) {
+        this.driverOrders.push(id);
+        this.driverOrdersEmitter$.emit(this.driverOrders);
     }
 }

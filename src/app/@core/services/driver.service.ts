@@ -68,4 +68,5 @@ export class DriverService {
     isStatusBusy(statusCode): boolean {
         return statusCode === 15;
     }
+
 }

@@ -7,6 +7,7 @@ import {Router} from '@angular/router';
 import {AuthenticationService} from './@core/services/authentication.service';
 import {FCM} from '@ionic-native/fcm/ngx';
 import {NetworkService} from './@core/services/network.service';
+import { OrderService } from './@core/services/order.service';
 
 @Component({
   selector: 'app-root',
@@ -27,7 +28,8 @@ export class AppComponent {
         private router: Router,
         private authenticationService: AuthenticationService,
         private fcm: FCM,
-        private network: NetworkService
+        private network: NetworkService,
+        private orderService: OrderService
     ) {
         this.initializeApp();
     }
@@ -48,9 +50,13 @@ export class AppComponent {
                         }
                         this.fcm.onNotification().subscribe(data => {
                             if (data.wasTapped) {
-                                this.router.navigate([user.role, 'notification']);
+                                // data.data = {
+                                //     order_id: 1,
+                                //     type: 'new_order'
+                                // };
+                                this.onNotification(data.data);
                             } else {
-                                this.router.navigate([user.role, 'notification']);
+                                this.onNotification(data.data);
                             }
                         });
                         this.fcm.getToken().then(token => {
@@ -65,6 +71,22 @@ export class AppComponent {
                 }
             });
         });
+    }
+
+    onNotification(notif: any) {
+        if ( notif.type === 'completed_order' ) {
+            // do something
+        } else if ( notif.type === 'cancel_order' ) {
+            // do something
+        } else if ( notif.type === 'take_order' ) {
+            // do something
+        } else if ( notif.type === 'driver_is_waiting' ) {
+            // do something
+        } else if ( notif.type === 'started_order' ) {
+            // do something
+        } else if ( notif.type === 'new_order' ) {
+            this.orderService.newDriverOrder(notif.order_id);
+        }
     }
 
     configureStatusBar() {
