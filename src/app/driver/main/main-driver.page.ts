@@ -20,7 +20,7 @@ export class MainDriverPage implements OnInit {
     };
     status = false;
     slideConfig = {
-        spaceBetween: 10,
+        spaceBetween: 5,
         slidesPerView: 2,
         centeredSlides: true,
         navigation: {
@@ -44,6 +44,7 @@ export class MainDriverPage implements OnInit {
         this.ordersList = this.orderService.getDriverOrders();
         this.orderService.driverOrdersEmitter$.subscribe(res => {
             this.ordersList = res;
+            console.log(this.ordersList);
         });
     }
 

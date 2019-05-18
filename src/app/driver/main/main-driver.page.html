@@ -18,6 +18,7 @@
   <div id="map" class="map"></div>
 
   <ion-slides [options]="slideConfig">
+    <!-- <ion-slide *ngFor="let order of ordersList"> -->
     <ion-slide>
       <ion-card>
         <ion-card-header>
@@ -25,12 +26,15 @@
           <ion-card-title>От Мирханов Зиёдилла</ion-card-title>
         </ion-card-header>
         <ion-card-content>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum, praesentium, sed! Accusamus ad, atque
-          cupiditate
-          <hr>
+          <div class="map-current-location">
+            <ion-icon slot="icon-only" name="pin"></ion-icon>
+          </div>
+          <div class="map-order-from">
+            <ion-icon slot="icon-only" name="compass"></ion-icon>
+          </div>
           <ion-buttons>
-            <ion-button class="btn btn-blue">Принять</ion-button>
-            <ion-button class="btn btn-red">Принять</ion-button>
+            <ion-button shape="round" class="button accept" expand="block" fill="clear">Принять</ion-button>
+            <ion-button shape="round" class="button reject" expand="block" fill="clear">Отклонить</ion-button>
           </ion-buttons>
         </ion-card-content>
       </ion-card>
@@ -42,13 +46,15 @@
           <ion-card-title>От Мирханов Зиёдилла</ion-card-title>
         </ion-card-header>
         <ion-card-content>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum, praesentium, sed! Accusamus ad, atque
-          cupiditate
-          <hr>
+          <div class="map-current-location">
+            <ion-icon slot="icon-only" name="pin"></ion-icon>
+          </div>
+          <div class="map-order-from">
+            <ion-icon slot="icon-only" name="compass"></ion-icon>
+          </div>
           <ion-buttons>
-            <ion-button class="btn btn-blue">
-              Принять
-            </ion-button>
+            <ion-button shape="round" class="button accept" expand="block" fill="clear">Принять</ion-button>
+            <ion-button shape="round" class="button reject" expand="block" fill="clear">Отклонить</ion-button>
           </ion-buttons>
         </ion-card-content>
       </ion-card>
@@ -60,13 +66,15 @@
           <ion-card-title>От Мирханов Зиёдилла</ion-card-title>
         </ion-card-header>
         <ion-card-content>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum, praesentium, sed! Accusamus ad, atque
-          cupiditate
-          <hr>
+          <div class="map-current-location">
+            <ion-icon slot="icon-only" name="pin"></ion-icon>
+          </div>
+          <div class="map-order-from">
+            <ion-icon slot="icon-only" name="compass"></ion-icon>
+          </div>
           <ion-buttons>
-            <ion-button class="btn btn-blue">
-              Принять
-            </ion-button>
+            <ion-button shape="round" class="button accept" expand="block" fill="clear">Принять</ion-button>
+            <ion-button shape="round" class="button reject" expand="block" fill="clear">Отклонить</ion-button>
           </ion-buttons>
         </ion-card-content>
       </ion-card>

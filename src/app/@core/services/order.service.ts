@@ -28,6 +28,10 @@ export class OrderService {
         return this.http.get <any>('http://api.telecom-car.uz/user/order');
     }
 
+    getOrder(id: number) {
+        return this.http.get <any>(`http://api.telecom-car.uz/user/order/${id}`);
+    }
+
     createOrder(from_lat: number, from_lng: number, from_address: string, to_lat: number, to_lng: number, to_address: string) {
         const data = {
             from_lat: from_lat,
@@ -45,7 +49,9 @@ export class OrderService {
     }
 
     newDriverOrder(id: number) {
-        this.driverOrders.push(id);
-        this.driverOrdersEmitter$.emit(this.driverOrders);
+        this.getOrder(id).subscribe(data => {
+            this.driverOrders.push(data);
+            this.driverOrdersEmitter$.emit(this.driverOrders);
+        });
     }
 }
