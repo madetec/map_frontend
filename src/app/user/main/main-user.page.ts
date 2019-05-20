@@ -231,6 +231,7 @@ export class MainUserPage implements OnInit {
             this.location.to.address
         ).subscribe(data => {
             this.orderActiveModalPresent(data);
+            console.log(data);
         }, error => {
             // this.presentLoading(error, 3000, 'dots');
         });

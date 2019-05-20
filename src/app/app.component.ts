@@ -50,10 +50,7 @@ export class AppComponent {
                         }
                         this.fcm.onNotification().subscribe(data => {
                             if (data.wasTapped) {
-                                // data.data = {
-                                //     order_id: 1,
-                                //     type: 'new_order'
-                                // };
+                                alert(data);
                                 this.onNotification(data.data);
                             } else {
                                 this.onNotification(data.data);
@@ -75,15 +72,15 @@ export class AppComponent {
 
     onNotification(notif: any) {
         if ( notif.type === 'completed_order' ) {
-            // do something
+            alert(notif);
         } else if ( notif.type === 'cancel_order' ) {
-            // do something
+            alert(notif);
         } else if ( notif.type === 'take_order' ) {
-            // do something
+            alert(notif);
         } else if ( notif.type === 'driver_is_waiting' ) {
-            // do something
+            alert(notif);
         } else if ( notif.type === 'started_order' ) {
-            // do something
+            alert(notif);
         } else if ( notif.type === 'new_order' ) {
             this.orderService.newDriverOrder(notif.order_id);
         }

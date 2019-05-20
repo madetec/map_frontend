@@ -41,10 +41,11 @@ export class MainDriverPage implements OnInit {
     }
 
     ngOnInit() {
+        // this.orderService.newDriverOrder(71);
+        // this.orderService.newDriverOrder(72);
         this.ordersList = this.orderService.getDriverOrders();
         this.orderService.driverOrdersEmitter$.subscribe(res => {
             this.ordersList = res;
-            console.log(this.ordersList);
         });
     }
 
@@ -73,5 +74,17 @@ export class MainDriverPage implements OnInit {
             this.driverService.active();
             this.initStatus();
         }
+    }
+
+    takeOrder(orderId: number) {
+        this.orderService.takeDriverOrder(orderId).subscribe( res => {
+            console.log(res);
+        });
+    }
+
+    cancelOrder(orderId: number) {
+        this.orderService.cancelDriverOrder(orderId).subscribe( res => {
+            console.log(res);
+        });
     }
 }

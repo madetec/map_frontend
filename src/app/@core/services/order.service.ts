@@ -28,8 +28,8 @@ export class OrderService {
         return this.http.get <any>('http://api.telecom-car.uz/user/order');
     }
 
-    getOrder(id: number) {
-        return this.http.get <any>(`http://api.telecom-car.uz/user/order/${id}`);
+    getDriverOrder(id: number) {
+        return this.http.get <any>(`http://api.telecom-car.uz/driver/order/${id}`);
     }
 
     createOrder(from_lat: number, from_lng: number, from_address: string, to_lat: number, to_lng: number, to_address: string) {
@@ -49,9 +49,17 @@ export class OrderService {
     }
 
     newDriverOrder(id: number) {
-        this.getOrder(id).subscribe(data => {
+        this.getDriverOrder(id).subscribe(data => {
             this.driverOrders.push(data);
             this.driverOrdersEmitter$.emit(this.driverOrders);
         });
+    }
+
+    takeDriverOrder(orderId: number) {
+        return this.http.patch <any>('http://api.telecom-car.uz/driver/order/' + orderId + '/take', {});
+    }
+
+    cancelDriverOrder(orderId: number) {
+        return this.http.patch <any>('http://api.telecom-car.uz/driver/order/' + orderId + '/cancel', {});
     }
 }
