@@ -49,11 +49,11 @@ export class AppComponent {
                             this.currentUser.role = user.roleName;
                         }
                         this.fcm.onNotification().subscribe(data => {
+                            alert(JSON.stringify(data));
                             if (data.wasTapped) {
-                                alert(data);
-                                this.onNotification(data.data);
+                                this.onNotification(data);
                             } else {
-                                this.onNotification(data.data);
+                                this.onNotification(data);
                             }
                         });
                         this.fcm.getToken().then(token => {
@@ -71,19 +71,21 @@ export class AppComponent {
     }
 
     onNotification(notif: any) {
-        if ( notif.type === 'completed_order' ) {
-            alert(notif);
-        } else if ( notif.type === 'cancel_order' ) {
-            alert(notif);
-        } else if ( notif.type === 'take_order' ) {
-            alert(notif);
-        } else if ( notif.type === 'driver_is_waiting' ) {
-            alert(notif);
-        } else if ( notif.type === 'started_order' ) {
-            alert(notif);
-        } else if ( notif.type === 'new_order' ) {
-            this.orderService.newDriverOrder(notif.order_id);
-        }
+        const json = JSON.stringify(notif);
+        alert(json);
+        // if ( notif.type === 'completed_order' ) {
+        //     alert(notif);
+        // } else if ( notif.type === 'cancel_order' ) {
+        //     alert(notif);
+        // } else if ( notif.type === 'take_order' ) {
+        //     alert(notif);
+        // } else if ( notif.type === 'driver_is_waiting' ) {
+        //     alert(notif);
+        // } else if ( notif.type === 'started_order' ) {
+        //     alert(notif);
+        // } else if ( notif.type === 'new_order' ) {
+        //     this.orderService.newDriverOrder(notif.order_id);
+        // }
     }
 
     configureStatusBar() {
