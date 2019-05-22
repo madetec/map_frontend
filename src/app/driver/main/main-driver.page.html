@@ -16,47 +16,33 @@
 
 <ion-content>
   <div id="map" class="map"></div>
-
-  <ion-slides [options]="slideConfig" class="orders">
-    <ion-slide *ngFor="let order of ordersList">
-      <ion-card>
-        <ion-card-header>
-          <ion-card-subtitle>{{order.status.name}}</ion-card-subtitle>
-          <ion-card-title>{{order.user.name}}</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <div class="map-order-from">
-            <ion-icon slot="icon-only" name="pin"></ion-icon> {{order.from.address}}
-          </div>
-          <div class="map-order-to">
-            <ion-icon slot="icon-only" name="compass"></ion-icon> {{order.to.address}}
-          </div>
-          <ion-buttons>
-            <ion-button shape="round" class="button accept" expand="block" fill="clear" (click)="takeOrder(order.id)">Принять</ion-button>
-            <ion-button shape="round" class="button reject" expand="block" fill="clear" (click)="cancelOrder(order.id)">Отклонить</ion-button>
-          </ion-buttons>
-        </ion-card-content>
-      </ion-card>
-    </ion-slide>
-    <ion-slide>
-      <ion-card>
-        <ion-card-header>
-          <ion-card-subtitle>Новый заказ</ion-card-subtitle>
-          <ion-card-title>От Мирханов Зиёдилла</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <div class="map-order-from">
-            <ion-icon slot="icon-only" name="pin"></ion-icon> Otkuda
-          </div>
-          <div class="map-order-to">
-            <ion-icon slot="icon-only" name="compass"></ion-icon> Kuda
-          </div>
-          <ion-buttons>
-            <ion-button shape="round" class="button accept" expand="block" fill="clear">Принять</ion-button>
-            <ion-button shape="round" class="button reject" expand="block" fill="clear">Отклонить</ion-button>
-          </ion-buttons>
-        </ion-card-content>
-      </ion-card>
-    </ion-slide>
-  </ion-slides>
+  <ng-container *ngIf="ordersList.length > 0">
+    <ion-slides #slider [options]="slideConfig" class="orders" (ionSlidesDidLoad)="slideLoaded()" (ionSlideDidChange)="slideChanged()">
+      <ion-slide *ngFor="let order of ordersList">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-subtitle>{{order.status.name}}</ion-card-subtitle>
+            <ion-card-title>{{order.user.name}}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="map-order-from">
+              <ion-icon slot="icon-only" name="pin"></ion-icon> {{order.from.address}}
+            </div>
+            <div class="map-order-to">
+              <ion-icon slot="icon-only" name="compass"></ion-icon> {{order.to.address}}
+            </div>
+            <ion-buttons>
+              <ion-button shape="round" class="button accept" expand="block" fill="clear" (click)="takeOrder(order.id)">Принять</ion-button>
+              <ion-button shape="round" class="button reject" expand="block" fill="clear" (click)="cancelOrder(order.id)">Отклонить</ion-button>
+            </ion-buttons>
+          </ion-card-content>
+        </ion-card>
+      </ion-slide>
+    </ion-slides>
+  </ng-container>
+  <ng-container *ngIf="ordersList.length == 0">
+    <div class="ordersNotFound">
+      <p>U vas poka netu zakazov</p>
+    </div>
+  </ng-container>
 </ion-content>

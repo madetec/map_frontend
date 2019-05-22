@@ -50,8 +50,10 @@ export class OrderService {
 
     newDriverOrder(id: number) {
         this.getDriverOrder(id).subscribe(data => {
-            this.driverOrders.push(data);
-            this.driverOrdersEmitter$.emit(this.driverOrders);
+            if(data.status.name == 'Новый заказ') {
+                this.driverOrders.push(data);
+                this.driverOrdersEmitter$.emit(this.driverOrders);
+            }
         });
     }
 

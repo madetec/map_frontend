@@ -3,7 +3,7 @@
     <name>TelecomCar</name>
     <description>some description</description>
     <author email="feedback@madetec.uz" href="https://madetec.uz/">Madetec team</author>
-    <content original-src="index.html" src="http://192.168.157.156:8100" />
+    <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -97,5 +97,4 @@
     <plugin name="cordova-plugin-fcm-with-dependecy-updated" spec="2.4.0" />
     <engine name="ios" spec="4.5.5" />
     <engine name="android" spec="7.1.4" />
-    <allow-navigation href="http://192.168.157.156:8100" sessionid="73931a73" />
 </widget>

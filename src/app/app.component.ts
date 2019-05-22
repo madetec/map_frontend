@@ -1,12 +1,12 @@
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
 
-import {Platform} from '@ionic/angular';
-import {SplashScreen} from '@ionic-native/splash-screen/ngx';
-import {StatusBar} from '@ionic-native/status-bar/ngx';
-import {Router} from '@angular/router';
-import {AuthenticationService} from './@core/services/authentication.service';
-import {FCM} from '@ionic-native/fcm/ngx';
-import {NetworkService} from './@core/services/network.service';
+import { Platform } from '@ionic/angular';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { Router } from '@angular/router';
+import { AuthenticationService } from './@core/services/authentication.service';
+import { FCM } from '@ionic-native/fcm/ngx';
+import { NetworkService } from './@core/services/network.service';
 import { OrderService } from './@core/services/order.service';
 
 @Component({
@@ -49,7 +49,6 @@ export class AppComponent {
                             this.currentUser.role = user.roleName;
                         }
                         this.fcm.onNotification().subscribe(data => {
-                            alert(JSON.stringify(data));
                             if (data.wasTapped) {
                                 this.onNotification(data);
                             } else {
@@ -71,21 +70,21 @@ export class AppComponent {
     }
 
     onNotification(notif: any) {
-        const json = JSON.stringify(notif);
-        alert(json);
-        // if ( notif.type === 'completed_order' ) {
-        //     alert(notif);
-        // } else if ( notif.type === 'cancel_order' ) {
-        //     alert(notif);
-        // } else if ( notif.type === 'take_order' ) {
-        //     alert(notif);
-        // } else if ( notif.type === 'driver_is_waiting' ) {
-        //     alert(notif);
-        // } else if ( notif.type === 'started_order' ) {
-        //     alert(notif);
-        // } else if ( notif.type === 'new_order' ) {
-        //     this.orderService.newDriverOrder(notif.order_id);
-        // }
+        alert(JSON.stringify(notif));
+        if ( notif.type === 'completed_order' ) {
+            alert(JSON.stringify(notif));
+        } else if ( notif.type === 'cancel_order' ) {
+            alert(JSON.stringify(notif));
+        } else if ( notif.type === 'take_order' ) {
+            alert(JSON.stringify(notif));
+            // водитель в пути to user
+        } else if ( notif.type === 'driver_is_waiting' ) {
+            alert(JSON.stringify(notif));
+        } else if ( notif.type === 'started_order' ) {
+            alert(JSON.stringify(notif));
+        } else if ( notif.type === 'new_order' ) {
+            this.orderService.newDriverOrder(notif.id);
+        }
     }
 
     configureStatusBar() {

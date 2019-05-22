@@ -31,4 +31,14 @@ export class MapService {
         this.markers.pinDriver.addTo(this.map);
         return this.map;
     }
+
+    setPinAMarker(lat, lng) {
+        if (!this.markers.pinA) {
+            this.markers.setPinALatLng([lat, lng]);
+            this.markers.pinA.addTo(this.map);
+        } else {
+            this.markers.pinA.setLatLng({lat: lat, lng: lng});
+        }
+        return this.map;
+    }
 }
