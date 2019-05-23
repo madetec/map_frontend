@@ -50,7 +50,7 @@ export class OrderService {
 
     newDriverOrder(id: number) {
         this.getDriverOrder(id).subscribe(data => {
-            if(data.status.name == 'Новый заказ') {
+            if(data.status.code == 10) {
                 this.driverOrders.push(data);
                 this.driverOrdersEmitter$.emit(this.driverOrders);
             }
@@ -59,6 +59,14 @@ export class OrderService {
 
     takeDriverOrder(orderId: number) {
         return this.http.patch <any>('http://api.telecom-car.uz/driver/order/' + orderId + '/take', {});
+    }
+
+    startedDriverOrder(orderId: number) {
+        return this.http.patch <any>('http://api.telecom-car.uz/driver/order/' + orderId + '/started', {});
+    }
+
+    completedDriverOrder(orderId: number) {
+        return this.http.patch <any>('http://api.telecom-car.uz/driver/order/' + orderId + '/completed', {});
     }
 
     cancelDriverOrder(orderId: number) {

@@ -26,9 +26,13 @@ export class MapService {
         return this.map;
     }
 
-    addDriverMarker(lat, lng) {
-        this.markers.setPinDriverLatLng([lat, lng]);
-        this.markers.pinDriver.addTo(this.map);
+    setDriverMarker(lat, lng) {
+        if (!this.markers.pinDriver) {
+            this.markers.setPinDriverLatLng([lat, lng]);
+            this.markers.pinDriver.addTo(this.map);
+        } else {
+            this.markers.pinDriver.setLatLng({lat: lat, lng: lng});
+        }
         return this.map;
     }
 
@@ -38,6 +42,16 @@ export class MapService {
             this.markers.pinA.addTo(this.map);
         } else {
             this.markers.pinA.setLatLng({lat: lat, lng: lng});
+        }
+        return this.map;
+    }
+
+    setPinBMarker(lat, lng) {
+        if (!this.markers.pinB) {
+            this.markers.setPinBLatLng([lat, lng]);
+            this.markers.pinB.addTo(this.map);
+        } else {
+            this.markers.pinB.setLatLng({lat: lat, lng: lng});
         }
         return this.map;
     }

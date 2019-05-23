@@ -32,6 +32,8 @@ export class MainDriverPage implements OnInit {
         },
     };
     ordersList: any[];
+    isDriverFree: boolean = true;
+    activeOrder: any;
 
     constructor(
         private menuCtrl: MenuController,
@@ -44,13 +46,20 @@ export class MainDriverPage implements OnInit {
     }
 
     ngOnInit() {
-        // this.orderService.newDriverOrder(72);
-        // this.orderService.newDriverOrder(76);
-        // this.orderService.newDriverOrder(77);
         this.ordersList = this.orderService.getDriverOrders();
         this.orderService.driverOrdersEmitter$.subscribe(res => {
             this.ordersList = res;
         });
+        // this.orderService.getDriverOrder(89).subscribe( res => {
+        //     console.log(res);
+        //     this.isDriverFree = false;
+        //     this.activeOrder = res;
+        //     if(this.activeOrder.status.code === 45){
+        //         this.setCurrentOrderRoute(this.activeOrder.from.lat, this.activeOrder.from.lng);
+        //     } else if(this.activeOrder.status.code === 55) {
+        //         this.setActiveOrderRoute(this.activeOrder.from, this.activeOrder.to)
+        //     }
+        // });
     }
 
     ionViewWillEnter() {
@@ -61,7 +70,7 @@ export class MainDriverPage implements OnInit {
 
     loadMap() {
         this.map = this.mapService.createMap(this.location.lat, this.location.lng, 14);
-        this.map = this.mapService.addDriverMarker(this.location.lat, this.location.lng);
+        this.map = this.mapService.setDriverMarker(this.location.lat, this.location.lng);
         this.routerControl = L.Routing.control({
             fitSelectedRoutes: true,
             routeWhileDragging: false
@@ -83,7 +92,14 @@ export class MainDriverPage implements OnInit {
 
     setCurrentOrderRoute(lat, lng) {
         this.routerControl.spliceWaypoints(this.routerControl.getWaypoints().length - 1, 1, L.latLng(lat, lng));
-        this.mapService.setPinAMarker(lat, lng);
+        this.map = this.mapService.setPinAMarker(lat, lng);
+    }
+
+    setActiveOrderRoute(from, to) {
+        this.routerControl.spliceWaypoints(0, 1, L.latLng(from.lat, from.lng));
+        this.routerControl.spliceWaypoints(this.routerControl.getWaypoints().length - 1, 1, L.latLng(to.lat, to.lng));
+        this.map = this.mapService.setPinAMarker(from.lat, from.lng);
+        this.map = this.mapService.setPinBMarker(to.lat, to.lng);
     }
 
     initStatus() {
@@ -104,10 +120,27 @@ export class MainDriverPage implements OnInit {
 
     takeOrder(orderId: number) {
         this.orderService.takeDriverOrder(orderId).subscribe( res => {
-            console.log(res);
+            this.isDriverFree = false;
+            this.activeOrder = res;
+            this.setCurrentOrderRoute(this.activeOrder.from.lat, this.activeOrder.from.lng);
         });
     }
 
+    startedOrder(orderId: number) {
+        this.orderService.startedDriverOrder(orderId).subscribe( res => {
+            this.activeOrder = res;
+            this.setActiveOrderRoute(this.activeOrder.from, this.activeOrder.to);
+        });
+    }
+
+    completedOrder(orderId: number) {
+        this.orderService.completedDriverOrder(orderId).subscribe( res => {
+            this.isDriverFree = true;
+            this.activeOrder = undefined;
+            console.log(res);
+        });
+    }
+    
     cancelOrder(orderId: number) {
         this.orderService.cancelDriverOrder(orderId).subscribe( res => {
             console.log(res);
