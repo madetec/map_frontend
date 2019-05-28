@@ -42,11 +42,11 @@
     }
 }
 .map-order-from{
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    display: flex;
+    // position: absolute;
+    // bottom: 0;
+    // right: 0;
+    // left: 0;
+    // display: flex;
     flex-grow: 1;
     flex-direction: column;
     z-index: 2;
@@ -94,41 +94,52 @@
 }
 
 ion-card{
-    position: absolute;
-    width: 90%;
-    height: 55%;
-    bottom: 0;
-    right: 0;
-    top: 10%;
-    left: 0;
-    margin: 0 auto;
-    z-index: 3;
     --background: #fff;
-    overflow: scroll;
-    ion-card-content{
-        ion-button{
-            margin: 0 auto;
-        }
-    }
 }
 
 .order {
     position: absolute;
-    size: 50%;
     left: 15px;
     right: 15px;
     bottom: 15px;
-    padding: 10px;
-    background-color: #fff;
+    // padding: 10px;
+    // background-color: #fff;
     border-radius: 5px;
     z-index: 3;
         ion-card-header {
           padding: 10px;
           padding-bottom: 5px;
+        //   background-color: #fff;
+            h5 {
+                position: absolute;
+                margin: 0;
+                top:8px;
+                text-transform: none;
+                font-size: 14px;
+                color: black;
+                font-weight: 600;
+            }
+            h3 {
+                position: absolute;
+                margin: 0;
+                top:0;
+                font-size: 22px;
+                color: black;
+                bottom: -19px;
+                margin-left: 110px;
+                font-weight: 700;
+            }
+            p {
+                margin-top: 40px;
+                font-size: 14px;
+                color: black;
+                font-weight: 400;
+            }
         }
         ion-card-content {
           padding: 15px 10px;
           padding-top: 0;
+        //   background-color: #fff;
         }
         .map-order-from {
           background-color: #fff;
@@ -155,6 +166,7 @@ ion-card{
         .button {
           display: inline-block;
           height: 40px;
+          width: 100%;
           padding: 0 10px;
           font-size: 13px;
           line-height: 40px;
