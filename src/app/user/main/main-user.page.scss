@@ -111,3 +111,14 @@ ion-card{
         }
     }
 }
+
+.order {
+    position: absolute;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    z-index: 3;
+}

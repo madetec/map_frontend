@@ -16,39 +16,62 @@
 
 <ion-content>
   <div id="map" class="map"></div>
-  <div class="map-current-location">
-    <h2 class="animated" [ngClass]="{'fadeInUp': location.from.address}">
-      {{location.from.address}}</h2>
-  </div>
-  <div id="panTo" [ngClass]="{'panToTop': markers.pinB}" class="cbutton cbutton--effect-novak" (click)="onPanTo()">
-    <ion-icon icon="icon-only" name="navigate"></ion-icon>
-  </div>
+  
+  <!-- Oddiy -->
+  <ng-container *ngIf="currentStatus === 0">
+    <div class="map-current-location">
+      <h2 class="animated" [ngClass]="{'fadeInUp': location.from.address}">
+        {{location.from.address}}</h2>
+    </div>
+    <div id="panTo" [ngClass]="{'panToTop': markers.pinB}" class="cbutton cbutton--effect-novak" (click)="onPanTo()">
+      <ion-icon icon="icon-only" name="navigate"></ion-icon>
+    </div>
 
-  <div class="toButton" [ngClass]="{'hide': markers.pinB}">
-    <ion-item lines="full">
-      <ion-icon slot="start" name="pin"></ion-icon>
-      <ion-label (click)="onModal()">{{location.to.address}}</ion-label>
-    </ion-item>
-  </div>
+    <div class="toButton" [ngClass]="{'hide': markers.pinB}">
+      <ion-item lines="full">
+        <ion-icon slot="start" name="pin"></ion-icon>
+        <ion-label (click)="onModal()">{{location.to.address}}</ion-label>
+      </ion-item>
+    </div>
 
-  <div class="map-order-from animated" [ngClass]="{'hide': !markers.pinB, 'slideInUp': markers.pinB}">
-    <ion-item>
-      <ion-icon slot="start" color="warning" name="pin"></ion-icon>
-      <ion-label>{{location.from.address}}</ion-label>
-    </ion-item>
-    <ion-item lines="full">
-      <ion-icon slot="start" name="pin"></ion-icon>
-      <ion-label (click)="onModal()">{{location.to.address}}</ion-label>
-      <ion-buttons slot="end">
-        <ion-button [disabled]="!markers.pinB" (click)="onClearTo()">
-          <ion-icon slot="icon-only" name="close"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-    </ion-item>
-    <ion-item>
-      <button [disabled]="!markers.pinB" shape="round" class="btn btn-orange" (click)="onSubmit()" expand="block"
-              fill="clear">Подтвердить локацию
-      </button>
-    </ion-item>
-  </div>
+    <div class="map-order-from animated" [ngClass]="{'hide': !markers.pinB, 'slideInUp': markers.pinB}">
+      <ion-item>
+        <ion-icon slot="start" color="warning" name="pin"></ion-icon>
+        <ion-label>{{location.from.address}}</ion-label>
+      </ion-item>
+      <ion-item lines="full">
+        <ion-icon slot="start" name="pin"></ion-icon>
+        <ion-label (click)="onModal()">{{location.to.address}}</ion-label>
+        <ion-buttons slot="end">
+          <ion-button [disabled]="!markers.pinB" (click)="onClearTo()">
+            <ion-icon slot="icon-only" name="close"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+      <ion-item>
+        <button [disabled]="!markers.pinB" shape="round" class="btn btn-orange" (click)="onSubmit()" expand="block"
+          fill="clear">Подтвердить локацию
+        </button>
+      </ion-item>
+    </div>
+  </ng-container>
+
+  <!-- Aktivniy zakaz -->
+  <ng-container *ngIf="currentStatus === 10">
+    <div class="order">
+      Active order
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="currentStatus === 45">
+    <div class="order">
+      Voditel v puti
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="currentStatus === 50">
+    <div class="order">
+      Voditel ojidaet vas
+    </div>
+  </ng-container>
 </ion-content>
