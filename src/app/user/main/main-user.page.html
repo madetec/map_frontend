@@ -61,19 +61,19 @@
     <div class="order">
         <ion-card>
             <ion-card-header>
-              <ion-card-subtitle>{{order.status.name}}</ion-card-subtitle>
-              <ion-card-title>{{order.user.name}}</ion-card-title>
+              <ion-card-subtitle>Status name</ion-card-subtitle>
+              <ion-card-title>User name</ion-card-title>
             </ion-card-header>
             <ion-card-content>
               <div class="map-order-from">
-                <ion-icon slot="icon-only" name="pin"></ion-icon> {{order.from.address}}
+                <ion-icon slot="icon-only" name="pin"></ion-icon> from address
               </div>
               <div class="map-order-to">
-                <ion-icon slot="icon-only" name="compass"></ion-icon> {{order.to.address}}
+                <ion-icon slot="icon-only" name="compass"></ion-icon> to address
               </div>
               <ion-buttons>
-                <ion-button shape="round" class="button accept" expand="block" fill="clear" (click)="takeOrder(order.id)">Принять</ion-button>
-                <ion-button shape="round" class="button reject" expand="block" fill="clear" (click)="cancelOrder(order.id)">Отклонить</ion-button>
+                <ion-button shape="round" class="button accept" expand="block" fill="clear">Поехали</ion-button>
+                <ion-button shape="round" class="button reject" expand="block" fill="clear">Отменить</ion-button>
               </ion-buttons>
             </ion-card-content>
           </ion-card>
