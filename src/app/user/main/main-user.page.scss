@@ -114,6 +114,7 @@ ion-card{
 
 .order {
     position: absolute;
+    size: 50%;
     left: 15px;
     right: 15px;
     bottom: 15px;
@@ -121,16 +122,61 @@ ion-card{
     background-color: #fff;
     border-radius: 5px;
     z-index: 3;
-}
-ng-container {
-    ion-item {
-        .search {
-            display: block;
-            position: absolute;
-            top: 20px;
-            left: 10px;
-            right: 10px;
-
+        ion-card-header {
+          padding: 10px;
+          padding-bottom: 5px;
         }
-    }
-}
+        ion-card-content {
+          padding: 15px 10px;
+          padding-top: 0;
+        }
+        .map-order-from {
+          background-color: #fff;
+          border-radius: 5px;
+          padding: 10px 0;
+          ion-icon {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 5px;
+          }
+        }
+        
+        .map-order-to {
+          background-color: #fff;
+          padding: 10px 0;
+          ion-icon {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 5px;
+            color: #DC5529;
+          }
+        }
+        
+        .button {
+          display: inline-block;
+          height: 40px;
+          padding: 0 10px;
+          font-size: 13px;
+          line-height: 40px;
+          text-transform: uppercase;
+          color: #fff;
+          border-radius: 24px;
+        }
+        
+        .reject {
+          background: linear-gradient(#DC5529, #F9AE95);
+          box-shadow: 0 6px 8px #EA805E;
+        }
+        
+        .accept {
+          background: linear-gradient(#378ADB, #61A8FB);
+          box-shadow: 0 6px 8px #89B4E7;
+        }
+      }
+      
+      .active-order {
+        .button {
+          display: block;
+          width: 100%;
+        }
+      }
