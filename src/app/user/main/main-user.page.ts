@@ -24,7 +24,7 @@ export class MainUserPage implements OnInit {
     map: L;
     toModal: any;
     loader: any;
-    currentStatus = 10;
+    currentStatus = 50;
 
     location = {
         lat: 0,
