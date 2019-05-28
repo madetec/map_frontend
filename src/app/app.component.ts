@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { Platform } from '@ionic/angular';
+import { Platform, ToastController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Router } from '@angular/router';
@@ -29,9 +29,34 @@ export class AppComponent {
         private authenticationService: AuthenticationService,
         private fcm: FCM,
         private network: NetworkService,
-        private orderService: OrderService
+        private orderService: OrderService,
+        public toastController: ToastController
     ) {
         this.initializeApp();
+    }
+
+    async presentToastWithOptions(header: string, message: string) {
+        const toast = await this.toastController.create({
+          header: header,
+          message: message,
+        //   buttons: [
+        //     {
+        //       side: 'start',
+        //       icon: 'star',
+        //       text: 'Favorite',
+        //       handler: () => {
+        //         console.log('Favorite clicked');
+        //       }
+        //     }, {
+        //       text: 'Done',
+        //       role: 'cancel',
+        //       handler: () => {
+        //         console.log('Cancel clicked');
+        //       }
+        //     }
+        //   ]
+        });
+        toast.present();
     }
 
     initializeApp() {
@@ -72,16 +97,20 @@ export class AppComponent {
     onNotification(notif: any) {
         alert(JSON.stringify(notif));
         if ( notif.type === 'completed_order' ) {
-            alert(JSON.stringify(notif));
+            // Поездка завершена
+            this.orderService.userOrderNotif(notif);
         } else if ( notif.type === 'cancel_order' ) {
-            alert(JSON.stringify(notif));
+            // Поездка отменена
+            this.orderService.userOrderNotif(notif);
         } else if ( notif.type === 'take_order' ) {
-            alert(JSON.stringify(notif));
             // водитель в пути to user
+            this.orderService.userOrderNotif(notif);
         } else if ( notif.type === 'driver_is_waiting' ) {
-            alert(JSON.stringify(notif));
+            // водитель вас ждет
+            this.orderService.userOrderNotif(notif);
         } else if ( notif.type === 'started_order' ) {
-            alert(JSON.stringify(notif));
+            // Начало поездки
+            this.orderService.userOrderNotif(notif);
         } else if ( notif.type === 'new_order' ) {
             this.orderService.newDriverOrder(notif.id);
         }

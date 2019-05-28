@@ -9,11 +9,13 @@ export class OrderService {
 
     driverOrders = [];
     public driverOrdersEmitter$: EventEmitter<any>;
+    public userOrderEmitter$: EventEmitter<any>;
 
     constructor(
         private http: HttpClient
     ) {
         this.driverOrdersEmitter$ = new EventEmitter();
+        this.userOrderEmitter$ = new EventEmitter();
     }
 
     orderCanceled(orderId) {
@@ -71,5 +73,9 @@ export class OrderService {
 
     cancelDriverOrder(orderId: number) {
         return this.http.patch <any>('http://api.telecom-car.uz/driver/order/' + orderId + '/cancel', {});
+    }
+
+    userOrderNotif(order: any) {
+        this.userOrderEmitter$.emit(order);
     }
 }

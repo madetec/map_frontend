@@ -1,6 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {ModalController, NavParams} from '@ionic/angular';
-import {YaHelper} from '../../../../@core/helpers/yandex-geocoder.helper';
+import { Component, Input, OnInit } from '@angular/core';
+import { ModalController, NavParams } from '@ionic/angular';
+import { YaHelper } from '../../../../@core/helpers/yandex-geocoder.helper';
 
 @Component({
     selector: 'to-modal-page',

@@ -50,16 +50,6 @@ export class MainDriverPage implements OnInit {
         this.orderService.driverOrdersEmitter$.subscribe(res => {
             this.ordersList = res;
         });
-        // this.orderService.getDriverOrder(89).subscribe( res => {
-        //     console.log(res);
-        //     this.isDriverFree = false;
-        //     this.activeOrder = res;
-        //     if(this.activeOrder.status.code === 45){
-        //         this.setCurrentOrderRoute(this.activeOrder.from.lat, this.activeOrder.from.lng);
-        //     } else if(this.activeOrder.status.code === 55) {
-        //         this.setActiveOrderRoute(this.activeOrder.from, this.activeOrder.to)
-        //     }
-        // });
     }
 
     ionViewWillEnter() {

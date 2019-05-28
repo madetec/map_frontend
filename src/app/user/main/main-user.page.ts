@@ -81,6 +81,7 @@ export class MainUserPage implements OnInit {
         this.updateUserLocation();
         this.updateAddress(this.location.from.lng, this.location.from.lat);
     }
+    
     async toModalPresent() {
         this.toModal = await this.modalController.create({
             component: ToModalPage,
