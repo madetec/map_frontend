@@ -58,8 +58,11 @@
 
   <!-- Aktivniy zakaz -->
   <ng-container *ngIf="currentStatus === 10">
+      <ion-item class="search">
+          <ion-textarea placeholder="Поиск"><ion-icon slot="icon-only" name="pin"></ion-icon></ion-textarea>
+      </ion-item>
     <div class="order">
-      Active order
+         
     </div>
   </ng-container>
 
