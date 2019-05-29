@@ -95,25 +95,26 @@ export class AppComponent {
     }
 
     onNotification(notif: any) {
-        alert(JSON.stringify(notif));
-        if ( notif.type === 'completed_order' ) {
-            // Поездка завершена
-            this.orderService.userOrderNotif(notif);
-        } else if ( notif.type === 'cancel_order' ) {
-            // Поездка отменена
-            this.orderService.userOrderNotif(notif);
-        } else if ( notif.type === 'take_order' ) {
-            // водитель в пути to user
-            this.orderService.userOrderNotif(notif);
-        } else if ( notif.type === 'driver_is_waiting' ) {
-            // водитель вас ждет
-            this.orderService.userOrderNotif(notif);
-        } else if ( notif.type === 'started_order' ) {
-            // Начало поездки
-            this.orderService.userOrderNotif(notif);
-        } else if ( notif.type === 'new_order' ) {
+        if (notif.type === 'new_order') {
             this.orderService.newDriverOrder(notif.id);
+        } else {
+            this.orderService.userOrderNotif(notif);
         }
+        // if ( notif.type === 'completed_order' ) {
+        //     // Поездка завершена
+        // } else if ( notif.type === 'cancel_order' ) {
+        //     // Поездка отменена
+        //     this.orderService.userOrderNotif(notif);
+        // } else if ( notif.type === 'take_order' ) {
+        //     // водитель в пути to user
+        //     this.orderService.userOrderNotif(notif);
+        // } else if ( notif.type === 'driver_is_waiting' ) {
+        //     // водитель вас ждет
+        //     this.orderService.userOrderNotif(notif);
+        // } else if ( notif.type === 'started_order' ) {
+        //     // Начало поездки
+        //     this.orderService.userOrderNotif(notif);
+        // }
     }
 
     configureStatusBar() {

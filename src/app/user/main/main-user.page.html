@@ -16,7 +16,7 @@
 
 <ion-content>
   <div id="map" class="map"></div>
-  
+
   <!-- Oddiy -->
   <ng-container *ngIf="currentStatus === 0">
     <div class="map-current-location">
@@ -33,8 +33,7 @@
         <ion-label (click)="onModal()">{{location.to.address}}</ion-label>
       </ion-item>
     </div>
-
-    <div class="map-order-from animated" [ngClass]="{'hide': !markers.pinB, 'slideInUp': markers.pinB}">
+    <div class="map-order-b animated" [ngClass]="{'hide': !markers.pinB, 'slideInUp': markers.pinB}">
       <ion-item>
         <ion-icon slot="start" color="warning" name="pin"></ion-icon>
         <ion-label>{{location.from.address}}</ion-label>
@@ -59,70 +58,86 @@
   <!-- Aktivniy zakaz -->
   <ng-container *ngIf="currentStatus === 10">
     <div class="order">
-        <ion-card>
-            <ion-card-header>
-              <ion-card-subtitle><h5>Статус заказа:</h5><h3>Активный</h3></ion-card-subtitle>
-              <ion-card-title><p>Ищем свободную машину, ожидайте...</p></ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              <div class="map-order-from">
-                <ion-icon slot="icon-only" name="pin"></ion-icon> Улица Нуронийлар
-              </div>
-              <div class="map-order-to">
-                <ion-icon slot="icon-only" name="compass"></ion-icon> метро Чиланзар
-              </div>
-              <ion-buttons>
-                <ion-button shape="round" class="button accept" expand="block" fill="clear">Отменить</ion-button>
-                <!-- <ion-button shape="round" class="button reject" expand="block" fill="clear">Отменить</ion-button> -->
-              </ion-buttons>
-            </ion-card-content>
-          </ion-card>
+      <ion-card>
+        <ion-card-header>
+          <ion-card-subtitle>
+            <h5>Статус заказа:</h5>
+            <h3>{{currentOrder.status.name}}</h3>
+          </ion-card-subtitle>
+          <ion-card-title>
+            <p>Ищем свободную машину, ожидайте...</p>
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="map-order-from">
+            <ion-icon slot="icon-only" name="pin"></ion-icon> {{currentOrder.from.address}}
+          </div>
+          <div class="map-order-to">
+            <ion-icon slot="icon-only" name="compass"></ion-icon> {{currentOrder.to.address}}
+          </div>
+          <ion-buttons>
+            <ion-button shape="round" class="button accept" expand="block" fill="clear"
+              (click)="cancelOrder(currentOrder.id)">Отменить</ion-button>
+          </ion-buttons>
+        </ion-card-content>
+      </ion-card>
     </div>
   </ng-container>
 
   <ng-container *ngIf="currentStatus === 45">
     <div class="order">
-        <ion-card>
-            <ion-card-header>
-              <ion-card-subtitle><h5>Статус заказа:</h5><h3>Принят</h3></ion-card-subtitle>
-              <ion-card-title><p>Водитель в пути...</p></ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              <div class="map-order-from">
-                <ion-icon slot="icon-only" name="pin"></ion-icon> Улица Нуронийлар
-              </div>
-              <div class="map-order-to">
-                <ion-icon slot="icon-only" name="compass"></ion-icon> метро Чиланзар
-              </div>
-              <ion-buttons>
-                <ion-button shape="round" class="button accept" expand="block" fill="clear">Отменить</ion-button>
-                <!-- <ion-button shape="round" class="button reject" expand="block" fill="clear">Отменить</ion-button> -->
-              </ion-buttons>
-            </ion-card-content>
-          </ion-card>
+      <ion-card>
+        <ion-card-header>
+          <ion-card-subtitle>
+            <h5>Статус заказа:</h5>
+            <h3>{{currentOrder.status.name}}</h3>
+          </ion-card-subtitle>
+          <ion-card-title>
+            <p>Водитель в пути...</p>
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="map-order-from">
+            <ion-icon slot="icon-only" name="pin"></ion-icon> {{currentOrder.from.address}}
+          </div>
+          <div class="map-order-to">
+            <ion-icon slot="icon-only" name="compass"></ion-icon> {{currentOrder.to.address}}
+          </div>
+          <ion-buttons>
+            <ion-button shape="round" class="button accept" expand="block" fill="clear" 
+            (click)="cancelOrder(currentOrder.id)">Отменить</ion-button>
+            </ion-buttons>
+        </ion-card-content>
+      </ion-card>
     </div>
   </ng-container>
 
   <ng-container *ngIf="currentStatus === 50">
     <div class="order">
-        <ion-card>
-            <ion-card-header>
-              <ion-card-subtitle><h5>Статус заказа:</h5><h3>Принят</h3></ion-card-subtitle>
-              <ion-card-title><p>Водитель на месте...</p></ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              <div class="map-order-from">
-                <ion-icon slot="icon-only" name="pin"></ion-icon> Улица Нуронийлар
-              </div>
-              <div class="map-order-to">
-                <ion-icon slot="icon-only" name="compass"></ion-icon> метро Чиланзар
-              </div>
-              <ion-buttons>
-                <ion-button shape="round" class="button accept" expand="block" fill="clear">Поехали</ion-button>
-                <!-- <ion-button shape="round" class="button reject" expand="block" fill="clear">Отменить</ion-button> -->
-              </ion-buttons>
-            </ion-card-content>
-          </ion-card>
+      <ion-card>
+        <ion-card-header>
+          <ion-card-subtitle>
+            <h5>Статус заказа:</h5>
+            <h3>{{currentOrder.status.name}}</h3>
+          </ion-card-subtitle>
+          <ion-card-title>
+            <p>Водитель на месте...</p>
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="map-order-from">
+            <ion-icon slot="icon-only" name="pin"></ion-icon> {{currentOrder.from.address}}
+          </div>
+          <div class="map-order-to">
+            <ion-icon slot="icon-only" name="compass"></ion-icon> {{currentOrder.to.address}}
+          </div>
+          <ion-buttons>
+            <ion-button shape="round" class="button accept" expand="block" fill="clear"
+            (click)="cancelOrder(currentOrder.id)">Отменить</ion-button>
+          </ion-buttons>
+        </ion-card-content>
+      </ion-card>
     </div>
   </ng-container>
+
 </ion-content>

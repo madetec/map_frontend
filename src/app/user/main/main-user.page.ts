@@ -6,7 +6,6 @@ import {Geolocation} from '@ionic-native/geolocation/ngx';
 import {Markers} from '../../@core/models/markers';
 import {ToModalPage} from '../../modals/order/location/to/to-modal.page';
 import {YaHelper} from '../../@core/helpers/yandex-geocoder.helper';
-import {ActiveModalPage} from '../../modals/order/active/active-modal.page';
 import {OrderService} from '../../@core/services/order.service';
 import {AuthenticationService} from '../../@core/services/authentication.service';
 
@@ -24,7 +23,8 @@ export class MainUserPage implements OnInit {
     map: L;
     toModal: any;
     loader: any;
-    currentStatus = 50;
+    currentStatus = 0;
+    currentOrder;
 
     location = {
         lat: 0,
@@ -44,7 +44,6 @@ export class MainUserPage implements OnInit {
     constructor(
         private geolocation: Geolocation,
         private menuCtrl: MenuController,
-        private platform: Platform,
         public modalController: ModalController,
         public loadingController: LoadingController,
         public orderService: OrderService,
@@ -61,6 +60,9 @@ export class MainUserPage implements OnInit {
                 this.user = user;
             }
         });
+        this.orderService.userOrderEmitter$.subscribe(data => {
+            alert(JSON.stringify(data));
+        });
         this.ws = new WebSocket(`wss://telecom-car.uz/ws?user_id=${this.user.profile.user_id}&lat=${this.location.lat}&lng=${this.location.lng}`);
     }
 
@@ -68,7 +70,8 @@ export class MainUserPage implements OnInit {
         try {
             this.orderService.getActiveOrder().subscribe(res => {
                 if (res) {
-                    this.orderActiveModalPresent(res);
+                    this.currentStatus = res.status.code;
+                    this.currentOrder = res;
                 }
             });
         } catch (e) {
@@ -82,7 +85,7 @@ export class MainUserPage implements OnInit {
         this.updateUserLocation();
         this.updateAddress(this.location.from.lng, this.location.from.lat);
     }
-    
+
     async toModalPresent() {
         this.toModal = await this.modalController.create({
             component: ToModalPage,
@@ -232,12 +235,13 @@ export class MainUserPage implements OnInit {
             this.location.to.lng,
             this.location.to.address
         ).subscribe(data => {
-            this.orderActiveModalPresent(data);
-            console.log(data);
+            this.currentStatus = data.status.code;
+            this.currentOrder = data;
         }, error => {
             // this.presentLoading(error, 3000, 'dots');
         });
     }
+
     async presentLoading(text, duration = 0, spinner = null) {
         this.loader = await this.loadingController.create({
             spinner: spinner,
@@ -246,40 +250,26 @@ export class MainUserPage implements OnInit {
             translucent: true
         });
         await this.loader.present();
-        // return await this.loader.present();
     }
+
     ionViewWillLeave() {
         if (this.toModal) {
             this.toModal.dismiss();
         }
     }
 
-    async orderActiveModalPresent(res: any) {
-        this.toModal = await this.modalController.create({
-            component: ActiveModalPage,
-            componentProps: {activeOrder: res},
-            backdropDismiss: false
-        });
-        await this.toModal.present();
-        const {data} = await this.toModal.onDidDismiss();
-        if (data.result !== 'cancel') {
-            if (data.result.orderId) {
-                this.orderService.orderCanceled(data.result.orderId).subscribe(data => {
-                    if (data) {
-                        this.presentLoading('Заказ отменен!', 3000, 'dots');
-                    }
-                });
-            }
-        } else {
-            console.log('Cancelled order!' + data);
-        }
-    }
-
-
     prepareWsMessage(actionName, sendData) {
         return JSON.stringify({
             action: actionName,
             data: sendData
+        });
+    }
+
+    cancelOrder(orderId: number) {
+        this.orderService.orderCanceled(orderId).subscribe(data => {
+            if (data) {
+                this.presentLoading('Заказ отменен!', 3000, 'dots');
+            }
         });
     }
 }
