@@ -1,20 +1,25 @@
-import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { MenuController, IonSlides } from '@ionic/angular';
 import * as L from 'leaflet/dist/leaflet.js';
 import 'leaflet-routing-machine';
 import { DriverService } from '../../@core/services/driver.service';
 import { MapService } from '../../@core/services/map.service';
 import { OrderService } from 'src/app/@core/services/order.service';
+import {
+    BackgroundGeolocation,
+    BackgroundGeolocationConfig,
+    BackgroundGeolocationResponse,
+    BackgroundGeolocationEvents
+} from '@ionic-native/background-geolocation/ngx';
 
 @Component({
     selector: 'main-driver',
     templateUrl: './main-driver.page.html',
     styleUrls: ['./main-driver.page.scss'],
 })
-export class MainDriverPage implements OnInit {
+export class MainDriverPage implements OnInit, OnDestroy {
     @ViewChild('map') mapContainer: ElementRef;
     @ViewChild('slider') sliderContainer: IonSlides;
-
     map: L;
     routerControl: any;
     location = {
@@ -39,7 +44,8 @@ export class MainDriverPage implements OnInit {
         private menuCtrl: MenuController,
         private driverService: DriverService,
         private orderService: OrderService,
-        private mapService: MapService
+        private mapService: MapService,
+        private backgroundGeolocation: BackgroundGeolocation
     ) {
         this.location.lat = 41.310387;
         this.location.lng = 69.274695;
@@ -50,6 +56,25 @@ export class MainDriverPage implements OnInit {
         this.orderService.driverOrdersEmitter$.subscribe(res => {
             this.ordersList = res;
         });
+        const config: BackgroundGeolocationConfig = {
+            desiredAccuracy: 10,
+            stationaryRadius: 20,
+            distanceFilter: 30,
+            debug: true, //  enable this hear sounds for background-geolocation life-cycle.
+            stopOnTerminate: false // enable this to clear background location settings when the app terminates
+        };
+
+        this.backgroundGeolocation.configure(config).then(() => {
+            this.backgroundGeolocation
+                .on(BackgroundGeolocationEvents.location)
+                .subscribe((location: BackgroundGeolocationResponse) => {
+                    this.mapService.markers.pinDriver.move([location.latitude, location.longitude]);
+                    alert(JSON.stringify(location));
+                });
+        });
+        this.backgroundGeolocation.start();
+
+
     }
 
     ionViewWillEnter() {
@@ -62,10 +87,10 @@ export class MainDriverPage implements OnInit {
         this.map = this.mapService.createMap(this.location.lat, this.location.lng, 14);
         this.map = this.mapService.setDriverMarker(this.location.lat, this.location.lng);
         this.routerControl = L.Routing.control({
-            fitSelectedRoutes: true,
-            routeWhileDragging: false
-        })
-        .addTo(this.map);
+                fitSelectedRoutes: true,
+                routeWhileDragging: false
+            })
+            .addTo(this.map);
         this.routerControl.hide();
         this.routerControl.spliceWaypoints(0, 1, L.latLng(this.location.lat, this.location.lng));
     }
@@ -109,7 +134,7 @@ export class MainDriverPage implements OnInit {
     }
 
     takeOrder(orderId: number) {
-        this.orderService.takeDriverOrder(orderId).subscribe( res => {
+        this.orderService.takeDriverOrder(orderId).subscribe(res => {
             this.isDriverFree = false;
             this.activeOrder = res;
             this.setCurrentOrderRoute(this.activeOrder.from.lat, this.activeOrder.from.lng);
@@ -117,23 +142,29 @@ export class MainDriverPage implements OnInit {
     }
 
     startedOrder(orderId: number) {
-        this.orderService.startedDriverOrder(orderId).subscribe( res => {
+        this.orderService.startedDriverOrder(orderId).subscribe(res => {
             this.activeOrder = res;
             this.setActiveOrderRoute(this.activeOrder.from, this.activeOrder.to);
         });
     }
 
     completedOrder(orderId: number) {
-        this.orderService.completedDriverOrder(orderId).subscribe( res => {
+        this.orderService.completedDriverOrder(orderId).subscribe(res => {
             this.isDriverFree = true;
             this.activeOrder = undefined;
             console.log(res);
         });
     }
-    
+
     cancelOrder(orderId: number) {
-        this.orderService.cancelDriverOrder(orderId).subscribe( res => {
+        this.orderService.cancelDriverOrder(orderId).subscribe(res => {
             console.log(res);
         });
     }
+
+    ngOnDestroy() {
+        this.backgroundGeolocation.finish();
+        this.backgroundGeolocation.stop();
+    }
+
 }

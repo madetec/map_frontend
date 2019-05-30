@@ -61,9 +61,13 @@ export class MainUserPage implements OnInit {
             }
         });
         this.orderService.userOrderEmitter$.subscribe(data => {
-            alert(JSON.stringify(data));
+            if ( data.type === 'take_order' ) {
+                this.currentStatus = 45;
+               } else if ( data.type === 'started_order' ) {
+                this.currentStatus = 50;
+               }
         });
-        this.ws = new WebSocket(`wss://telecom-car.uz/ws?user_id=${this.user.profile.user_id}&lat=${this.location.lat}&lng=${this.location.lng}`);
+        this.ws = new WebSocket (`wss://telecom-car.uz/ws?user_id=${this.user.profile.user_id}&lat=${this.location.lat}&lng=${this.location.lng}`);
     }
 
     ngOnInit(): void {
