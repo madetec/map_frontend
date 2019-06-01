@@ -61,13 +61,15 @@ export class MainUserPage implements OnInit {
             }
         });
         this.orderService.userOrderEmitter$.subscribe(data => {
+            // alert(JSON.stringify(data));
+            console.log(data);
             if ( data.type === 'take_order' ) {
                 this.currentStatus = 45;
-               } else if ( data.type === 'started_order' ) {
+            } else if ( data.type === 'started_order' ) {
                 this.currentStatus = 50;
-               }
+            }
         });
-        this.ws = new WebSocket (`wss://telecom-car.uz/ws?user_id=${this.user.profile.user_id}&lat=${this.location.lat}&lng=${this.location.lng}`);
+        this.ws = new WebSocket(`wss://telecom-car.uz/ws?user_id=${this.user.profile.user_id}&lat=${this.location.lat}&lng=${this.location.lng}`);
     }
 
     ngOnInit(): void {
@@ -273,6 +275,7 @@ export class MainUserPage implements OnInit {
         this.orderService.orderCanceled(orderId).subscribe(data => {
             if (data) {
                 this.presentLoading('Заказ отменен!', 3000, 'dots');
+                this.currentStatus = 0;
             }
         });
     }
