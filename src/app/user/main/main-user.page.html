@@ -18,7 +18,7 @@
   <div id="map" class="map"></div>
 
   <!-- Oddiy -->
-  <ng-container *ngIf="currentStatus === 0">
+  <ng-container *ngIf="currentStatus === 0 || currentStatus === 25">
     <div class="map-current-location">
       <h2 class="animated" [ngClass]="{'fadeInUp': location.from.address}">
         {{location.from.address}}</h2>

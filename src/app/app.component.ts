@@ -38,23 +38,7 @@ export class AppComponent {
     async presentToastWithOptions(header: string, message: string) {
         const toast = await this.toastController.create({
           header: header,
-          message: message,
-        //   buttons: [
-        //     {
-        //       side: 'start',
-        //       icon: 'star',
-        //       text: 'Favorite',
-        //       handler: () => {
-        //         console.log('Favorite clicked');
-        //       }
-        //     }, {
-        //       text: 'Done',
-        //       role: 'cancel',
-        //       handler: () => {
-        //         console.log('Cancel clicked');
-        //       }
-        //     }
-        //   ]
+          message: message, 
         });
         toast.present();
     }

@@ -23,7 +23,7 @@ export class MainUserPage implements OnInit {
     map: L;
     toModal: any;
     loader: any;
-    currentStatus = 0;
+    currentStatus;
     currentOrder;
 
     location = {
@@ -50,6 +50,7 @@ export class MainUserPage implements OnInit {
         private yaHelper: YaHelper,
         private authService: AuthenticationService
     ) {
+        this.currentStatus = 0;
         this.location.to.address = 'Куда?';
         this.location.lat = 41.310387;
         this.location.lng = 69.274695;
@@ -61,7 +62,6 @@ export class MainUserPage implements OnInit {
             }
         });
         this.orderService.userOrderEmitter$.subscribe(data => {
-            // alert(JSON.stringify(data));
             console.log(data);
             if ( data.type === 'take_order' ) {
                 this.currentStatus = 45;
@@ -75,9 +75,16 @@ export class MainUserPage implements OnInit {
     ngOnInit(): void {
         try {
             this.orderService.getActiveOrder().subscribe(res => {
+                alert(JSON.stringify(res));
                 if (res) {
-                    this.currentStatus = res.status.code;
-                    this.currentOrder = res;
+                    if ( this.currentStatus === 25) {
+                        this.presentLoading(res.status.name, 2000, 'crescent');
+                        this.currentStatus = 0;
+                        this.currentOrder = undefined;
+                    } else {
+                        this.currentStatus = res.status.code;
+                        this.currentOrder = res;
+                    }
                 }
             });
         } catch (e) {
@@ -241,6 +248,7 @@ export class MainUserPage implements OnInit {
             this.location.to.lng,
             this.location.to.address
         ).subscribe(data => {
+            alert(JSON.stringify(data));
             this.currentStatus = data.status.code;
             this.currentOrder = data;
         }, error => {

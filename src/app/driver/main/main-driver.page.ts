@@ -49,6 +49,7 @@ export class MainDriverPage implements OnInit {
         this.ordersList = this.orderService.getDriverOrders();
         this.orderService.driverOrdersEmitter$.subscribe(res => {
             this.ordersList = res;
+            console.log(res);
         });
     }
 
