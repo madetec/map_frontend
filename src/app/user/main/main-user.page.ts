@@ -9,7 +9,6 @@ import {YaHelper} from '../../@core/helpers/yandex-geocoder.helper';
 import {OrderService} from '../../@core/services/order.service';
 import {AuthenticationService} from '../../@core/services/authentication.service';
 
-
 @Component({
     selector: 'main-user',
     templateUrl: './main-user.page.html',
@@ -25,6 +24,7 @@ export class MainUserPage implements OnInit {
     loader: any;
     currentStatus;
     currentOrder;
+    currentOrderMsg;
 
     location = {
         lat: 0,
@@ -62,20 +62,26 @@ export class MainUserPage implements OnInit {
             }
         });
         this.orderService.userOrderEmitter$.subscribe(data => {
-            console.log(data);
+            alert(JSON.stringify(data));
             if ( data.type === 'take_order' ) {
                 this.currentStatus = 45;
-            } else if ( data.type === 'started_order' ) {
+            } else if ( data.type === 'driver_is_waiting' ) {
                 this.currentStatus = 50;
+            } else if ( data.type === 'started_order' ) {
+                this.currentStatus = 55;
+            } else if (data.type === 'completed_order') {
+                this.presentLoading(this.currentOrderMsg.title, 2000, 'crescent');
+                this.currentStatus = 0;
             }
+            // this.currentOrderMsg.title = data.title;
+            this.currentOrderMsg = data.body;
         });
-        this.ws = new WebSocket(`wss://telecom-car.uz/ws?user_id=${this.user.profile.user_id}&lat=${this.location.lat}&lng=${this.location.lng}`);
+        this.ws = new WebSocket( `wss://telecom-car.uz/ws?user_id=${this.user.profile.user_id}&lat=${this.location.lat}&lng=${this.location.lng}`);
     }
 
     ngOnInit(): void {
         try {
             this.orderService.getActiveOrder().subscribe(res => {
-                alert(JSON.stringify(res));
                 if (res) {
                     if ( this.currentStatus === 25) {
                         this.presentLoading(res.status.name, 2000, 'crescent');
@@ -248,7 +254,6 @@ export class MainUserPage implements OnInit {
             this.location.to.lng,
             this.location.to.address
         ).subscribe(data => {
-            alert(JSON.stringify(data));
             this.currentStatus = data.status.code;
             this.currentOrder = data;
         }, error => {

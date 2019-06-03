@@ -47,6 +47,7 @@
     "leaflet-routing-machine": "^3.2.12",
     "ngx-mask": "^7.9.9",
     "rxjs": "~6.3.3",
+    "socket.io-client": "^2.2.0",
     "zone.js": "~0.8.29"
   },
   "devDependencies": {

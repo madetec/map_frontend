@@ -5,6 +5,8 @@ import 'leaflet-routing-machine';
 import { DriverService } from '../../@core/services/driver.service';
 import { MapService } from '../../@core/services/map.service';
 import { OrderService } from 'src/app/@core/services/order.service';
+import { User } from 'src/app/@core/models/user';
+import { AuthenticationService } from 'src/app/@core/services/authentication.service';
 
 @Component({
     selector: 'main-driver',
@@ -16,6 +18,8 @@ export class MainDriverPage implements OnInit {
     @ViewChild('slider') sliderContainer: IonSlides;
 
     map: L;
+    socket: any;
+    user: User;
     routerControl: any;
     location = {
         lat: 0,
@@ -39,8 +43,14 @@ export class MainDriverPage implements OnInit {
         private menuCtrl: MenuController,
         private driverService: DriverService,
         private orderService: OrderService,
-        private mapService: MapService
+        private mapService: MapService,
+        private authService: AuthenticationService
     ) {
+        authService.getCurrentUser().subscribe(user => {
+            if (user) {
+                this.user = user;
+            }
+        });
         this.location.lat = 41.310387;
         this.location.lng = 69.274695;
     }
@@ -117,6 +127,13 @@ export class MainDriverPage implements OnInit {
         });
     }
 
+    waitingOrder(orderId: number) {
+        this.orderService.waitingDriverOrder(orderId).subscribe( res => {
+            this.activeOrder = res;
+            this.setActiveOrderRoute(this.activeOrder.from, this.activeOrder.to);
+        });
+    }
+
     startedOrder(orderId: number) {
         this.orderService.startedDriverOrder(orderId).subscribe( res => {
             this.activeOrder = res;
@@ -128,6 +145,7 @@ export class MainDriverPage implements OnInit {
         this.orderService.completedDriverOrder(orderId).subscribe( res => {
             this.isDriverFree = true;
             this.activeOrder = undefined;
+            this.orderService.removeDriverOrder(orderId);
             console.log(res);
         });
     }

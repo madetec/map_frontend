@@ -89,11 +89,10 @@
       <ion-card>
         <ion-card-header>
           <ion-card-subtitle>
-            <h5>Статус заказа:</h5>
-            <h3>{{currentOrder.status.name}}</h3>
+            <h5>Водитель в пути</h5>
           </ion-card-subtitle>
           <ion-card-title>
-            <p>Водитель в пути...</p>
+            <p>{{ currentOrderMsg }}</p>
           </ion-card-title>
         </ion-card-header>
         <ion-card-content>
@@ -104,9 +103,9 @@
             <ion-icon slot="icon-only" name="compass"></ion-icon> {{currentOrder.to.address}}
           </div>
           <ion-buttons>
-            <ion-button shape="round" class="button accept" expand="block" fill="clear" 
+            <ion-button shape="round" class="button accept" expand="block" fill="clear"
             (click)="cancelOrder(currentOrder.id)">Отменить</ion-button>
-            </ion-buttons>
+          </ion-buttons>
         </ion-card-content>
       </ion-card>
     </div>
@@ -117,11 +116,37 @@
       <ion-card>
         <ion-card-header>
           <ion-card-subtitle>
-            <h5>Статус заказа:</h5>
-            <h3>{{currentOrder.status.name}}</h3>
+            <h5>Водитель приехал и ожидает</h5>
           </ion-card-subtitle>
           <ion-card-title>
-            <p>Водитель на месте...</p>
+            <p>{{ currentOrderMsg }}</p>
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="map-order-from">
+            <ion-icon slot="icon-only" name="pin"></ion-icon> {{currentOrder.from.address}}
+          </div>
+          <div class="map-order-to">
+            <ion-icon slot="icon-only" name="compass"></ion-icon> {{currentOrder.to.address}}
+          </div>
+          <ion-buttons>
+            <ion-button shape="round" class="button accept" expand="block" fill="clear"
+            (click)="cancelOrder(currentOrder.id)">Отменить</ion-button>
+          </ion-buttons>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="currentStatus === 55">
+    <div class="order">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-subtitle>
+            <h5>Водитель начал выполнение заказа</h5>
+          </ion-card-subtitle>
+          <ion-card-title>
+            <p>{{ currentOrderMsg }}</p>
           </ion-card-title>
         </ion-card-header>
         <ion-card-content>

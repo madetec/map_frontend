@@ -59,8 +59,24 @@ export class OrderService {
         });
     }
 
+    removeDriverOrder(id: number) {
+        this.driverOrders.filter( order => {
+            return order.id === id;
+        });
+        for (let i = 0; i < this.driverOrders.length; i++) {
+            let obj = this.driverOrders[i];
+            if (obj.id === id) {
+                this.driverOrders.splice(i, 1);
+            }
+        }
+    }
+
     takeDriverOrder(orderId: number) {
         return this.http.patch <any>('http://api.telecom-car.uz/driver/order/' + orderId + '/take', {});
+    }
+
+    waitingDriverOrder(orderId: number) {
+        return this.http.patch <any>('http://api.telecom-car.uz/driver/order/' + orderId + '/waiting', {});
     }
 
     startedDriverOrder(orderId: number) {

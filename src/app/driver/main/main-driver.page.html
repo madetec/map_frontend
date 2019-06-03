@@ -60,7 +60,8 @@
             <ion-icon slot="icon-only" name="compass"></ion-icon> {{activeOrder.to.address}}
           </div>
           <ion-buttons>
-            <ion-button *ngIf="activeOrder.status.code === 45" shape="round" class="button accept" expand="block" fill="clear" (click)="startedOrder(activeOrder.id)">Начать поездку</ion-button>
+            <ion-button *ngIf="activeOrder.status.code === 45" shape="round" class="button accept" expand="block" fill="clear" (click)="waitingOrder(activeOrder.id)">На месте</ion-button>
+            <ion-button *ngIf="activeOrder.status.code === 50" shape="round" class="button accept" expand="block" fill="clear" (click)="startedOrder(activeOrder.id)">Начать поездку</ion-button>
             <ion-button *ngIf="activeOrder.status.code === 55" shape="round" class="button reject" expand="block" fill="clear" (click)="completedOrder(activeOrder.id)">Завершить поездку</ion-button>
           </ion-buttons>
         </ion-card-content>
