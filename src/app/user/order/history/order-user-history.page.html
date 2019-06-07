@@ -11,15 +11,42 @@
 <ion-content>
     <ion-card *ngFor="let order of orders; let i = index">
         <ion-card-header>
-            <ion-card-subtitle>{{order.status.name}}</ion-card-subtitle>
+            <ion-card-subtitle [attr.color]="order.status.code === 25 ? 'primary' : 'medium'">
+                <ion-icon [attr.name]="order.status.code === 25 ? 'checkmark' : 'close'"></ion-icon>
+                {{order.status.name}}
+            </ion-card-subtitle>
             <ion-card-title>{{order.created_at * 1000 | date:'d MMMM, в HH:mm'}}</ion-card-title>
         </ion-card-header>
         <ion-card-content>
-            <ion-icon name="pin" slot="start" color="danger"></ion-icon>
-            {{order.from.address}}
-            <br>
-            <ion-icon name="pin" slot="start" color="primary"></ion-icon>
-            {{order.to.address}}
+            <ion-item>
+                <ion-label>
+                    <h3>{{order.from.address}}</h3>
+                </ion-label>
+                <ion-icon name="pin" color="danger" slot="start"></ion-icon>
+            </ion-item>
+            <ion-item>
+                <ion-label>
+                    <h3> {{order.to.address}}</h3>
+                </ion-label>
+                <ion-icon name="pin" color="primary" slot="start"></ion-icon>
+            </ion-item>
+            <div *ngIf="order.driver">
+                <ion-item>
+                    <ion-label>
+                        <h3>{{order.driver.name}}</h3>
+                    </ion-label>
+                    <ion-icon name="person" slot="start"></ion-icon>
+                </ion-item>
+                <ion-item>
+                    <ion-label>
+                        <h3>
+                            {{order.driver.car.model}}
+                            {{order.driver.car.number}} цвет: {{order.driver.car.color.name}}
+                        </h3>
+                    </ion-label>
+                    <ion-icon name="logo-model-s" slot="start"></ion-icon>
+                </ion-item>
+            </div>
         </ion-card-content>
     </ion-card>
 </ion-content>
