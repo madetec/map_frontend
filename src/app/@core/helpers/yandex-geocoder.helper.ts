@@ -12,6 +12,11 @@ export class YaHelper {
             geocode = geocode.join();
         } else if (typeof geocode === 'string') {
             geocode = geocode.split(/ /g).join('+');
+            if (/[а-яА-ЯЁё]/.test(geocode)) {
+                geocode = 'Узбекистан,' + geocode;
+            } else {
+                geocode = 'Uzbekistan,' + geocode;
+            }
         }
         return this.http.get<any>('https://geocode-maps.yandex.ru/1.x/', {
             params: {

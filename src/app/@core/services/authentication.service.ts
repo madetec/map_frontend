@@ -25,9 +25,10 @@ export class AuthenticationService {
         private device: Device,
         private router: Router
     ) {
-        this.platform.ready().then(() => {
-            this.checkToken();
-        });
+        this.checkToken();
+        // this.platform.ready().then(() => {
+        //     this.checkToken();
+        // });
     }
 
     login(username: string, password: string) {

@@ -1,13 +1,14 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 
-import { Platform, ToastController } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { Router } from '@angular/router';
-import { AuthenticationService } from './@core/services/authentication.service';
-import { FCM } from '@ionic-native/fcm/ngx';
-import { NetworkService } from './@core/services/network.service';
-import { OrderService } from './@core/services/order.service';
+import {Platform, ToastController} from '@ionic/angular';
+import {SplashScreen} from '@ionic-native/splash-screen/ngx';
+import {StatusBar} from '@ionic-native/status-bar/ngx';
+import {Router} from '@angular/router';
+import {AuthenticationService} from './@core/services/authentication.service';
+import {FCM} from '@ionic-native/fcm/ngx';
+import {NetworkService} from './@core/services/network.service';
+import {OrderService} from './@core/services/order.service';
+import {GeolocationService} from './@core/services/geolocation.service';
 
 @Component({
   selector: 'app-root',
@@ -29,6 +30,7 @@ export class AppComponent {
         private authenticationService: AuthenticationService,
         private fcm: FCM,
         private network: NetworkService,
+        private geoService: GeolocationService,
         private orderService: OrderService,
         public toastController: ToastController
     ) {
@@ -38,7 +40,7 @@ export class AppComponent {
     async presentToastWithOptions(header: string, message: string) {
         const toast = await this.toastController.create({
           header: header,
-          message: message, 
+            message: message
         });
         toast.present();
     }

@@ -1,13 +1,14 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {LoadingController, MenuController, ModalController, Platform} from '@ionic/angular';
+import {LoadingController, MenuController, ModalController} from '@ionic/angular';
 import * as L from 'leaflet/dist/leaflet.js';
 import {User} from '../../@core/models/user';
-import {Geolocation} from '@ionic-native/geolocation/ngx';
 import {Markers} from '../../@core/models/markers';
 import {ToModalPage} from '../../modals/order/location/to/to-modal.page';
 import {YaHelper} from '../../@core/helpers/yandex-geocoder.helper';
 import {OrderService} from '../../@core/services/order.service';
 import {AuthenticationService} from '../../@core/services/authentication.service';
+import {SubdivisionService} from '../../@core/services/subdivision.service';
+import {GeolocationService} from '../../@core/services/geolocation.service';
 
 @Component({
     selector: 'main-user',
@@ -15,68 +16,74 @@ import {AuthenticationService} from '../../@core/services/authentication.service
     styleUrls: ['./main-user.page.scss']
 })
 export class MainUserPage implements OnInit {
-    ws;
+    ws: any;
     @ViewChild('map') mapContainer: ElementRef;
     markers: Markers = new Markers();
     user: User;
     map: L;
     toModal: any;
     loader: any;
-    currentStatus;
+    currentStatus: any;
     currentOrder;
     currentOrderMsg;
 
+    subdivisions: any;
+
     location = {
-        lat: 0,
-        lng: 0,
+        lat: 41.325306,
+        lng: 69.317139,
         from: {
-            lat: 0,
-            lng: 0,
+            lat: 41.325306,
+            lng: 69.317139,
             address: ''
         },
         to: {
             lat: 0,
             lng: 0,
-            address: ''
+            address: 'Куда?'
         }
     };
 
     constructor(
-        private geolocation: Geolocation,
+        private geoService: GeolocationService,
         private menuCtrl: MenuController,
         public modalController: ModalController,
         public loadingController: LoadingController,
         public orderService: OrderService,
         private yaHelper: YaHelper,
-        private authService: AuthenticationService
+        private authService: AuthenticationService,
+        private subdivisionService: SubdivisionService
     ) {
         this.currentStatus = 0;
-        this.location.to.address = 'Куда?';
-        this.location.lat = 41.310387;
-        this.location.lng = 69.274695;
-        this.location.from.lat = 41.310387;
-        this.location.from.lng = 69.274695;
+        this.updateUserLocation();
         authService.getCurrentUser().subscribe(user => {
             if (user) {
                 this.user = user;
             }
         });
         this.orderService.userOrderEmitter$.subscribe(data => {
-            alert(JSON.stringify(data));
-            if ( data.type === 'take_order' ) {
-                this.currentStatus = 45;
-            } else if ( data.type === 'driver_is_waiting' ) {
-                this.currentStatus = 50;
-            } else if ( data.type === 'started_order' ) {
-                this.currentStatus = 55;
-            } else if (data.type === 'completed_order') {
-                this.presentLoading(this.currentOrderMsg.title, 2000, 'crescent');
-                this.currentStatus = 0;
+            switch (data.type) {
+                case 'take_order':
+                    this.currentStatus = 45;
+                    break;
+                case 'driver_is_waiting':
+                    this.currentStatus = 50;
+                    break;
+                case 'started_order':
+                    this.currentStatus = 55;
+                    break;
+                case 'completed_order':
+                    this.presentLoading(this.currentOrderMsg.title, 2000, 'crescent');
+                    this.currentStatus = 0;
+                    break;
+                default:
+                    this.currentStatus = 0;
+                    break;
             }
+            // alert(JSON.stringify(data));
             // this.currentOrderMsg.title = data.title;
             this.currentOrderMsg = data.body;
         });
-        this.ws = new WebSocket( `wss://telecom-car.uz/ws?user_id=${this.user.profile.user_id}&lat=${this.location.lat}&lng=${this.location.lng}`);
     }
 
     ngOnInit(): void {
@@ -95,13 +102,12 @@ export class MainUserPage implements OnInit {
             });
         } catch (e) {
         }
-        setInterval(this.updateUserLocation, 1000);
     }
 
     ionViewWillEnter() {
         this.menuCtrl.enable(true);
         this.loadMap();
-        this.updateUserLocation();
+        this.initWebSocket();
         this.updateAddress(this.location.from.lng, this.location.from.lat);
     }
 
@@ -112,10 +118,15 @@ export class MainUserPage implements OnInit {
         });
         await this.toModal.present();
         const {data} = await this.toModal.onDidDismiss();
+        let latLng = null;
         if (data.result !== 'cancel') {
-
-            this.location.to.address = data.result.GeoObject.name;
-            const latLng = data.result.GeoObject.Point.pos;
+            if (data.subdivision) {
+                this.location.to.address = data.result.address;
+                latLng = [data.result.lat, data.result.lng];
+            } else {
+                this.location.to.address = data.result.GeoObject.name;
+                latLng = data.result.GeoObject.Point.pos;
+            }
             if (!this.markers.pinB) {
                 this.markers.setPinBLatLng(latLng);
                 this.markers.pinB.addTo(this.map);
@@ -163,6 +174,21 @@ export class MainUserPage implements OnInit {
 
         this.map.on('move', (e) => this.onMove(e, this.markers.pinA));
         this.map.on('moveend', (e) => this.onMoveEnd(e));
+        this.subdivisionService.subdivisions().subscribe(res => {
+            if (res) {
+                for (let i = 0; i < res.length; i++) {
+                    const marker = L.marker([res[i].lat, res[i].lng], {
+                        icon: L.icon({
+                            iconUrl: 'assets/icon/marker-icon.png',
+                            shadowUrl: 'assets/icon/marker-shadow.png',
+                            iconAnchor: [12, 41],
+                            popupAnchor: [0, -41]
+                        })
+                    }).addTo(this.map);
+                    marker.bindPopup(`<p><b>${res[i].name}</b></p><p>${res[i].address}</p>`);
+                }
+            }
+        });
     }
 
     onMove(event, marker) {
@@ -181,6 +207,7 @@ export class MainUserPage implements OnInit {
     }
 
     onPanTo() {
+        this.updateUserLocation();
         this.map.panTo([
             this.location.lat,
             this.location.lng
@@ -199,7 +226,9 @@ export class MainUserPage implements OnInit {
     }
 
     setUserLocation(lat: number, lng: number) {
-        this.ws.send(this.prepareWsMessage('coordinates', {'lat': lat, 'lng': lng}));
+        if (this.ws) {
+            this.ws.send(this.prepareWsMessage('coordinates', {'lat': lat, 'lng': lng}));
+        }
         this.location.lat = lat;
         this.location.lng = lng;
         this.markers.pinUser.setLatLng({
@@ -217,9 +246,9 @@ export class MainUserPage implements OnInit {
     }
 
     updateUserLocation() {
-        try {
-            this.geolocation.getCurrentPosition()
-                .then((position) => this.setUserLocation(position.coords.latitude, position.coords.longitude));
+        try{
+            this.geoService.getGeolocation();
+            this.setUserLocation(this.geoService.lat, this.geoService.lng);
         } catch (e) {
         }
     }
@@ -277,7 +306,7 @@ export class MainUserPage implements OnInit {
         }
     }
 
-    prepareWsMessage(actionName, sendData) {
+    prepareWsMessage(actionName, sendData): string {
         return JSON.stringify({
             action: actionName,
             data: sendData
@@ -291,5 +320,13 @@ export class MainUserPage implements OnInit {
                 this.currentStatus = 0;
             }
         });
+    }
+
+    initWebSocket() {
+        const wsUrl = 'wss://telecom-car.uz/ws';
+        const userId = this.user.profile.user_id;
+        const lat = this.location.lat;
+        const lng = this.location.lng;
+        this.ws = new WebSocket(`${wsUrl}?user_id=${userId}&lat=${lat}&lng=${lng}`);
     }
 }

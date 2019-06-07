@@ -14,6 +14,17 @@
 </ion-header>
 
 <ion-content padding>
+    <ion-list *ngIf="!addresses || addresses === []">
+        <p>Филиалы</p>
+        <ion-item *ngFor="let subdivision of subdivisions; index as i">
+            <ion-label text-wrap (click)="onClickAddress(i,true)">
+                <ion-text color="medium-shade">
+                    <h2>{{subdivision.name}}</h2>
+                </ion-text>
+                <p>{{subdivision.address}}</p>
+            </ion-label>
+        </ion-item>
+    </ion-list>
     <ion-list>
         <p id="addressesNotFound" *ngIf="!addresses || addresses === []">Адреса не найдены</p>
         <ion-item *ngFor="let address of addresses; index as i">

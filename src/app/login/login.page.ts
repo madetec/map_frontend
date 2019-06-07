@@ -13,9 +13,9 @@ import {AuthenticationService} from '../@core/services/authentication.service';
 
 export class LoginPage implements OnInit {
     signInForm: FormGroup;
-    hasError: boolean = false;
+    hasError = false;
     errMsg: string;
-    disabled: boolean = false;
+    disabled = false;
     constructor(
         private authenticationService: AuthenticationService,
         private formBuilder: FormBuilder,
@@ -41,6 +41,7 @@ export class LoginPage implements OnInit {
     onSubmit() {
         if (this.hasError = this.isEmpty(this.signInForm.controls.username.value, this.signInForm.controls.password.value)) {
             this.errMsg = 'Поля не должны быть пустыми';
+            this.disabled = false;
         } else {
             this.disabled = true;
             const response = this.authenticationService.login(

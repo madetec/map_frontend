@@ -52,7 +52,7 @@ export class OrderService {
 
     newDriverOrder(id: number) {
         this.getDriverOrder(id).subscribe(data => {
-            if(data.status.code == 10) {
+            if(data.status.code === 10) {
                 this.driverOrders.push(data);
                 this.driverOrdersEmitter$.emit(this.driverOrders);
             }

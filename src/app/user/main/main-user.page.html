@@ -15,9 +15,8 @@
 </ion-header>
 
 <ion-content>
-  <div id="map" class="map"></div>
 
-  <!-- Oddiy -->
+  <div id="map" class="map"></div>
   <ng-container *ngIf="currentStatus === 0 || currentStatus === 25">
     <div class="map-current-location">
       <h2 class="animated" [ngClass]="{'fadeInUp': location.from.address}">
@@ -26,7 +25,6 @@
     <div id="panTo" [ngClass]="{'panToTop': markers.pinB}" class="cbutton cbutton--effect-novak" (click)="onPanTo()">
       <ion-icon icon="icon-only" name="navigate"></ion-icon>
     </div>
-
     <div class="toButton" [ngClass]="{'hide': markers.pinB}">
       <ion-item lines="full">
         <ion-icon slot="start" name="pin"></ion-icon>
@@ -55,7 +53,6 @@
     </div>
   </ng-container>
 
-  <!-- Aktivniy zakaz -->
   <ng-container *ngIf="currentStatus === 10">
     <div class="order">
       <ion-card>
@@ -164,5 +161,4 @@
       </ion-card>
     </div>
   </ng-container>
-
 </ion-content>

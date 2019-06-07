@@ -1,4 +1,5 @@
 import * as L from 'leaflet/dist/leaflet.js';
+import {HttpClient} from '@angular/common/http';
 
 export class Markers {
     protected iconPinA: object;
@@ -13,10 +14,10 @@ export class Markers {
     constructor() {
         this.iconPinA = L.icon({
             iconUrl: 'assets/icon/pin_a.svg',
+            shadowUrl: 'assets/icon/marker-shadow.png',
             iconSize: [50, 62.3],
-            shadowSize: [50, 62.3],
+            shadowSize: [75, 63],
             iconAnchor: [25, 62.3],
-            shadowAnchor: [4, 62],
             popupAnchor: [-3, -76]
         });
         this.iconPinB = L.icon({
