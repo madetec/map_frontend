@@ -121,6 +121,8 @@ export class MainDriverPage implements OnInit {
     takeOrder(orderId: number) {
         this.orderService.takeDriverOrder(orderId).subscribe( res => {
             this.isDriverFree = false;
+            this.status = true;
+            this.changeStatus();
             this.activeOrder = res;
             this.setCurrentOrderRoute(this.activeOrder.from.lat, this.activeOrder.from.lng);
         });
@@ -143,6 +145,8 @@ export class MainDriverPage implements OnInit {
     completedOrder(orderId: number) {
         this.orderService.completedDriverOrder(orderId).subscribe( res => {
             this.isDriverFree = true;
+            this.status = false;
+            this.changeStatus();
             this.activeOrder = undefined;
             this.orderService.removeDriverOrder(orderId);
             console.log(res);
@@ -151,6 +155,11 @@ export class MainDriverPage implements OnInit {
 
     cancelOrder(orderId: number) {
         this.orderService.cancelDriverOrder(orderId).subscribe( res => {
+            this.isDriverFree = true;
+            this.status = false;
+            this.changeStatus();
+            this.activeOrder = undefined;
+            this.orderService.removeDriverOrder(orderId);
             console.log(res);
         });
     }
