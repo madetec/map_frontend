@@ -304,6 +304,10 @@ export class MainUserPage implements OnInit {
         if (this.toModal) {
             this.toModal.dismiss();
         }
+        this.map.eachLayer(function (layer) {
+            layer.remove();
+        });
+        this.map.remove();
     }
 
     prepareWsMessage(actionName, sendData): string {

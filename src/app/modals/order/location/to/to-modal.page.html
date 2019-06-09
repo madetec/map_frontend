@@ -15,7 +15,6 @@
 
 <ion-content padding>
     <ion-list *ngIf="!addresses || addresses === []">
-        <p>Филиалы</p>
         <ion-item *ngFor="let subdivision of subdivisions; index as i">
             <ion-label text-wrap (click)="onClickAddress(i,true)">
                 <ion-text color="medium-shade">
