@@ -1,6 +1,7 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {LoadingController, MenuController, ModalController} from '@ionic/angular';
 import * as L from 'leaflet/dist/leaflet.js';
+import 'leaflet-routing-machine';
 import {User} from '../../@core/models/user';
 import {Markers} from '../../@core/models/markers';
 import {ToModalPage} from '../../modals/order/location/to/to-modal.page';
@@ -21,6 +22,7 @@ export class MainUserPage implements OnInit {
     markers: Markers = new Markers();
     user: User;
     map: L;
+    routerControl: any;
     toModal: any;
     loader: any;
     currentStatus: any;
@@ -133,14 +135,15 @@ export class MainUserPage implements OnInit {
             } else {
                 this.markers.pinB.setLatLng({lat: latLng[0], lng: latLng[1]});
             }
+            this.routerControl.spliceWaypoints(this.routerControl.getWaypoints().length - 1, 1, L.latLng(latLng[0], latLng[1]));
 
-            const bounds = new L.LatLngBounds([
-                [this.location.from.lat, this.location.from.lng],
-                [latLng[0], latLng[1]],
-            ]);
-            this.map.fitBounds(bounds);
-            const zoom = this.map.getBoundsZoom(bounds);
-            this.map.setZoom(zoom - 1);
+            // const bounds = new L.LatLngBounds([
+            //     [this.location.from.lat, this.location.from.lng],
+            //     [latLng[0], latLng[1]],
+            // ]);
+            // this.map.fitBounds(bounds);
+            // const zoom = this.map.getBoundsZoom(bounds);
+            // this.map.setZoom(zoom - 1);
 
             this.location.to.lat = latLng[0];
             this.location.to.lng = latLng[1];
@@ -168,6 +171,13 @@ export class MainUserPage implements OnInit {
 
         this.markers.setPinALatLng([this.location.lat, this.location.lng]);
         this.markers.pinA.addTo(this.map);
+        this.routerControl = L.Routing.control({
+            fitSelectedRoutes: true,
+            routeWhileDragging: false
+        })
+        .addTo(this.map);
+        this.routerControl.hide();
+        this.routerControl.spliceWaypoints(0, 1, L.latLng(this.location.lat, this.location.lng));
 
         this.markers.setPinUserLatLng([this.location.lat, this.location.lng]);
         this.markers.pinUser.addTo(this.map);
@@ -246,7 +256,7 @@ export class MainUserPage implements OnInit {
     }
 
     updateUserLocation() {
-        try{
+        try {
             this.geoService.getGeolocation();
             this.setUserLocation(this.geoService.lat, this.geoService.lng);
         } catch (e) {
