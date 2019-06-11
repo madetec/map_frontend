@@ -4,6 +4,7 @@ import {FormsModule} from '@angular/forms';
 import {RouterModule, Routes} from '@angular/router';
 import {IonicModule} from '@ionic/angular';
 import {MainDriverPage} from './main-driver.page';
+import {NgxMaskModule} from 'ngx-mask';
 
 const routes: Routes = [
   {
@@ -17,7 +18,8 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    NgxMaskModule.forRoot()
   ],
   declarations: [MainDriverPage]
 })

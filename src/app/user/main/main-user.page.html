@@ -89,10 +89,16 @@
             <h5>Водитель в пути</h5>
           </ion-card-subtitle>
           <ion-card-title>
-            <p>{{ currentOrderMsg }}</p>
+            <p>
+              {{ currentOrder.driver.name }} <br>
+              <span>{{ currentOrder.driver.car.color.name }} {{ currentOrder.driver.car.model }} {{ currentOrder.driver.car.number }}</span>
+            </p>
           </ion-card-title>
         </ion-card-header>
         <ion-card-content>
+          <div class="map-order-from">
+            <ion-icon name="call"></ion-icon>+998 {{currentOrder.driver.phone | mask: '(00) 000-00-00'}}
+          </div>
           <div class="map-order-from">
             <ion-icon slot="icon-only" name="pin"></ion-icon> {{currentOrder.from.address}}
           </div>
@@ -116,10 +122,16 @@
             <h5>Водитель приехал и ожидает</h5>
           </ion-card-subtitle>
           <ion-card-title>
-            <p>{{ currentOrderMsg }}</p>
+            <p>
+              {{ currentOrder.driver.name }} <br>
+              <span>{{ currentOrder.driver.car.color.name }} {{ currentOrder.driver.car.model }} {{ currentOrder.driver.car.number }}</span>
+            </p>
           </ion-card-title>
         </ion-card-header>
         <ion-card-content>
+          <div class="map-order-from">
+            <ion-icon name="call"></ion-icon>+998 {{currentOrder.driver.phone | mask: '(00) 000-00-00'}}
+          </div>
           <div class="map-order-from">
             <ion-icon slot="icon-only" name="pin"></ion-icon> {{currentOrder.from.address}}
           </div>
@@ -143,10 +155,16 @@
             <h5>Водитель начал выполнение заказа</h5>
           </ion-card-subtitle>
           <ion-card-title>
-            <p>{{ currentOrderMsg }}</p>
+            <p>
+              {{ currentOrder.driver.name }} <br>
+              <span>{{ currentOrder.driver.car.color.name }} {{ currentOrder.driver.car.model }} {{ currentOrder.driver.car.number }}</span>
+            </p>
           </ion-card-title>
         </ion-card-header>
         <ion-card-content>
+          <div class="map-order-from">
+            <ion-icon name="call"></ion-icon>+998 {{currentOrder.driver.phone | mask: '(00) 000-00-00'}}
+          </div>
           <div class="map-order-from">
             <ion-icon slot="icon-only" name="pin"></ion-icon> {{currentOrder.from.address}}
           </div>

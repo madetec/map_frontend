@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import {LoadingController, MenuController, ModalController} from '@ionic/angular';
 import * as L from 'leaflet/dist/leaflet.js';
 import 'leaflet-routing-machine';
@@ -16,7 +16,7 @@ import {GeolocationService} from '../../@core/services/geolocation.service';
     templateUrl: './main-user.page.html',
     styleUrls: ['./main-user.page.scss']
 })
-export class MainUserPage implements OnInit {
+export class MainUserPage {
     ws: any;
     @ViewChild('map') mapContainer: ElementRef;
     markers: Markers = new Markers();
@@ -26,7 +26,7 @@ export class MainUserPage implements OnInit {
     toModal: any;
     loader: any;
     currentStatus: any;
-    currentOrder;
+    currentOrder: any;
     currentOrderMsg;
 
     subdivisions: any;
@@ -58,6 +58,7 @@ export class MainUserPage implements OnInit {
     ) {
         this.currentStatus = 0;
         this.updateUserLocation();
+        this.updateOrder();
         authService.getCurrentUser().subscribe(user => {
             if (user) {
                 this.user = user;
@@ -66,45 +67,42 @@ export class MainUserPage implements OnInit {
         this.orderService.userOrderEmitter$.subscribe(data => {
             switch (data.type) {
                 case 'take_order':
+                    this.updateOrder();
+                    this.presentLoading('Водитель в пути', 500, 'crescent');
                     this.currentStatus = 45;
                     break;
                 case 'driver_is_waiting':
+                    this.presentLoading('Водитель приехал и ожидает', 500, 'crescent');
                     this.currentStatus = 50;
                     break;
                 case 'started_order':
+                    this.presentLoading('Водитель начал выполнение заказа', 500, 'crescent');
                     this.currentStatus = 55;
                     break;
                 case 'completed_order':
-                    this.presentLoading(this.currentOrderMsg.title, 2000, 'crescent');
+                    this.presentLoading('Водитель выполнил заказ', 500, 'crescent');
+                    this.currentStatus = 0;
+                    break;
+                case 'cancel_order':
+                    this.presentLoading('Водитель отменил заказ', 500, 'crescent');
                     this.currentStatus = 0;
                     break;
                 default:
                     this.currentStatus = 0;
                     break;
             }
-            // alert(JSON.stringify(data));
-            // this.currentOrderMsg.title = data.title;
             this.currentOrderMsg = data.body;
         });
     }
 
-    ngOnInit(): void {
-        try {
-            this.orderService.getActiveOrder().subscribe(res => {
-                if (res) {
-                    if ( this.currentStatus === 25) {
-                        this.presentLoading(res.status.name, 2000, 'crescent');
-                        this.currentStatus = 0;
-                        this.currentOrder = undefined;
-                    } else {
-                        this.currentStatus = res.status.code;
-                        this.currentOrder = res;
-                    }
-                }
-            });
-        } catch (e) {
-        }
+    updateOrder() {
+        this.orderService.getActiveOrder().subscribe(res => {
+            if (res) {
+                this.currentOrder = res;
+            }
+        });
     }
+
 
     ionViewWillEnter() {
         this.menuCtrl.enable(true);
@@ -135,6 +133,7 @@ export class MainUserPage implements OnInit {
             } else {
                 this.markers.pinB.setLatLng({lat: latLng[0], lng: latLng[1]});
             }
+            this.routerControl.spliceWaypoints(0, 1, L.latLng(this.location.from.lat, this.location.from.lng));
             this.routerControl.spliceWaypoints(this.routerControl.getWaypoints().length - 1, 1, L.latLng(latLng[0], latLng[1]));
 
             // const bounds = new L.LatLngBounds([
@@ -177,7 +176,7 @@ export class MainUserPage implements OnInit {
         })
         .addTo(this.map);
         this.routerControl.hide();
-        this.routerControl.spliceWaypoints(0, 1, L.latLng(this.location.lat, this.location.lng));
+        // this.routerControl.spliceWaypoints(0, 1, L.latLng(this.location.from.lat, this.location.from.lng));
 
         this.markers.setPinUserLatLng([this.location.lat, this.location.lng]);
         this.markers.pinUser.addTo(this.map);
@@ -259,6 +258,7 @@ export class MainUserPage implements OnInit {
         try {
             this.geoService.getGeolocation();
             this.setUserLocation(this.geoService.lat, this.geoService.lng);
+            this.updateAddress(this.geoService.lng, this.geoService.lat);
         } catch (e) {
         }
     }
@@ -270,13 +270,13 @@ export class MainUserPage implements OnInit {
                 this.location.from = this.yaHelper.getAddress(res);
             }
         });
-
     }
 
     onClearTo() {
         this.map.removeLayer(this.markers.pinB);
         this.markers.pinB = null;
         this.location.to.address = 'Куда?';
+        this.routerControl.getPlan().setWaypoints([]);
     }
 
     clearAddress() {
@@ -284,7 +284,7 @@ export class MainUserPage implements OnInit {
     }
 
     onSubmit() {
-        this.presentLoading('Оформление заказа...', 3000, 'crescent');
+        this.presentLoading('Оформление заказа...', 1000, 'crescent');
         this.orderService.createOrder(
             this.location.from.lat,
             this.location.from.lng,
@@ -296,7 +296,7 @@ export class MainUserPage implements OnInit {
             this.currentStatus = data.status.code;
             this.currentOrder = data;
         }, error => {
-            // this.presentLoading(error, 3000, 'dots');
+            this.presentLoading(error, 500, 'dots');
         });
     }
 
@@ -330,7 +330,7 @@ export class MainUserPage implements OnInit {
     cancelOrder(orderId: number) {
         this.orderService.orderCanceled(orderId).subscribe(data => {
             if (data) {
-                this.presentLoading('Заказ отменен!', 3000, 'dots');
+                this.presentLoading('Заказ отменен!', 1000, 'dots');
                 this.currentStatus = 0;
             }
         });

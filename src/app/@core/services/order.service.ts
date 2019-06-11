@@ -1,5 +1,5 @@
-import { EventEmitter, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {EventEmitter, Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
 
 
 @Injectable({
@@ -52,8 +52,11 @@ export class OrderService {
 
     newDriverOrder(id: number) {
         this.getDriverOrder(id).subscribe(data => {
-            if(data.status.code === 10) {
+            if (data.status.code === 10) {
                 this.driverOrders.push(data);
+                this.driverOrdersEmitter$.emit(this.driverOrders);
+            } else if (data.status.code === 20) {
+                this.driverOrders = [];
                 this.driverOrdersEmitter$.emit(this.driverOrders);
             }
         });

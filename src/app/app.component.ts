@@ -83,6 +83,12 @@ export class AppComponent {
     onNotification(notif: any) {
         if (notif.type === 'new_order') {
             this.orderService.newDriverOrder(notif.id);
+        } else if (notif.type === 'cancel_order') {
+            if (notif.who === 'driver') {
+                this.orderService.userOrderNotif(notif);
+            } else if (notif.who === 'user') {
+                this.orderService.newDriverOrder(notif.id);
+            }
         } else {
             this.orderService.userOrderNotif(notif);
         }

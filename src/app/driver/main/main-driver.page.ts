@@ -1,12 +1,12 @@
-import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
-import { MenuController, IonSlides } from '@ionic/angular';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {IonSlides, LoadingController, MenuController} from '@ionic/angular';
 import * as L from 'leaflet/dist/leaflet.js';
 import 'leaflet-routing-machine';
-import { DriverService } from '../../@core/services/driver.service';
-import { MapService } from '../../@core/services/map.service';
-import { OrderService } from 'src/app/@core/services/order.service';
-import { User } from 'src/app/@core/models/user';
-import { AuthenticationService } from 'src/app/@core/services/authentication.service';
+import {DriverService} from '../../@core/services/driver.service';
+import {MapService} from '../../@core/services/map.service';
+import {OrderService} from 'src/app/@core/services/order.service';
+import {User} from 'src/app/@core/models/user';
+import {AuthenticationService} from 'src/app/@core/services/authentication.service';
 
 @Component({
     selector: 'main-driver',
@@ -44,7 +44,8 @@ export class MainDriverPage implements OnInit {
         private driverService: DriverService,
         private orderService: OrderService,
         private mapService: MapService,
-        private authService: AuthenticationService
+        private authService: AuthenticationService,
+        private loadingController: LoadingController
     ) {
         authService.getCurrentUser().subscribe(user => {
             if (user) {
@@ -55,10 +56,36 @@ export class MainDriverPage implements OnInit {
         this.location.lng = 69.274695;
     }
 
+    async presentLoading(text, duration = 0, spinner = null) {
+        const loader = await this.loadingController.create({
+            spinner: spinner,
+            duration: duration,
+            message: text,
+            translucent: true
+        });
+        await loader.present();
+    }
+
     ngOnInit() {
         this.ordersList = this.orderService.getDriverOrders();
         this.orderService.driverOrdersEmitter$.subscribe(res => {
-            this.ordersList = res;
+            if (res.length === 0) {
+                this.presentLoading('Пользователь отменил заказ.', 500, 'crescent');
+                this.ordersList = [];
+                this.isDriverFree = true;
+                this.changeStatus();
+                this.status = false;
+                this.activeOrder = undefined;
+                this.routerControl.getPlan().setWaypoints([]);
+                this.map.eachLayer(function (layer) {
+                    layer.remove();
+                });
+                this.map.remove();
+                this.loadMap();
+            } else {
+                this.presentLoading('Новый заказ', 500, 'crescent');
+                this.ordersList = res;
+            }
         });
     }
 
@@ -149,18 +176,21 @@ export class MainDriverPage implements OnInit {
             this.changeStatus();
             this.activeOrder = undefined;
             this.orderService.removeDriverOrder(orderId);
-            console.log(res);
+            this.routerControl.getPlan().setWaypoints([]);
         });
     }
 
     cancelOrder(orderId: number) {
-        this.orderService.cancelDriverOrder(orderId).subscribe( res => {
-            this.isDriverFree = true;
-            this.status = false;
-            this.changeStatus();
-            this.activeOrder = undefined;
-            this.orderService.removeDriverOrder(orderId);
-            console.log(res);
+        this.isDriverFree = true;
+        this.status = false;
+        this.changeStatus();
+        this.activeOrder = undefined;
+        this.orderService.removeDriverOrder(orderId);
+        this.mapService.map.eachLayer(function (layer) {
+            layer.remove();
         });
+        this.mapService.map.remove();
+        this.loadMap();
+        this.routerControl.getPlan().setWaypoints([]);
     }
 }

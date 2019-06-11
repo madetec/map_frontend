@@ -54,6 +54,9 @@
         </ion-card-header>
         <ion-card-content>
           <div class="map-order-from">
+            <ion-icon name="call"></ion-icon>+998 {{activeOrder.user.phone | mask: '(00) 000-00-00'}}
+          </div>
+          <div class="map-order-from">
             <ion-icon slot="icon-only" name="pin"></ion-icon> {{activeOrder.from.address}}
           </div>
           <div class="map-order-to">
