@@ -31,7 +31,7 @@ export class GeolocationService {
     async updateGeolocation(status) {
         const toast = this.toastCtrl.create({
             message: `${status}`,
-            duration: 3000,
+            duration: 1000,
             position: 'bottom'
         });
         toast.then(toast => toast.present());

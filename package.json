@@ -1,7 +1,7 @@
 {
   "name": "telecom-car",
-  "version": "1.0.7",
-  "author": "Ionic Framework",
+  "version": "1.0.8",
+  "author": "Madetec-Solution",
   "homepage": "https://telecom-car.uz/",
   "scripts": {
     "ng": "ng",
@@ -30,7 +30,7 @@
     "@ionic/angular": "^4.5.0",
     "@ionic/storage": "^2.2.0",
     "animate.css": "^3.7.2",
-    "cordova-android": "7.1.4",
+    "cordova-android": "8.0.0",
     "cordova-ios": "4.5.5",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-fcm-with-dependecy-updated": "^2.4.0",
@@ -77,7 +77,7 @@
     "tslint": "~5.12.0",
     "typescript": "~3.1.6"
   },
-  "description": "Telecom Car",
+  "description": "TelecomCar",
   "cordova": {
     "plugins": {
       "cordova-plugin-whitelist": {},

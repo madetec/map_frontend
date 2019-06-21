@@ -7,6 +7,7 @@ import {MapService} from '../../@core/services/map.service';
 import {OrderService} from 'src/app/@core/services/order.service';
 import {User} from 'src/app/@core/models/user';
 import {AuthenticationService} from 'src/app/@core/services/authentication.service';
+import {WebsocketService} from '../../@core/services/websocket.service';
 
 @Component({
     selector: 'main-driver',
@@ -38,14 +39,15 @@ export class MainDriverPage implements OnInit {
     ordersList: any[];
     isDriverFree: boolean = true;
     activeOrder: any;
-
+    ws: WebSocket;
     constructor(
         private menuCtrl: MenuController,
         private driverService: DriverService,
         private orderService: OrderService,
         private mapService: MapService,
         private authService: AuthenticationService,
-        private loadingController: LoadingController
+        private loadingController: LoadingController,
+        private websocket: WebsocketService
     ) {
         authService.getCurrentUser().subscribe(user => {
             if (user) {
@@ -93,6 +95,7 @@ export class MainDriverPage implements OnInit {
         this.menuCtrl.enable(true);
         this.loadMap();
         this.initStatus();
+        this.websocket.initWs(this.user.profile.user_id, this.location.lat, this.location.lng);
     }
 
     loadMap() {

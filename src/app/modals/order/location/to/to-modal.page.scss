@@ -1,14 +1,15 @@
 ion-header {
   height: auto;
   box-shadow: none;
-  //padding: 10px;
-  ion-toolbar {
-    height: 50px;
+  ion-title {
+    text-align: left;
+    padding-left: 10px;
   }
   ion-input {
     font-weight: 400;
     font-size: 16px;
     ion-icon {
+      margin-right: 5px;
       color: #0054dc;
     }
   }

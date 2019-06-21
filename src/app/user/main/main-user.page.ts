@@ -10,6 +10,7 @@ import {OrderService} from '../../@core/services/order.service';
 import {AuthenticationService} from '../../@core/services/authentication.service';
 import {SubdivisionService} from '../../@core/services/subdivision.service';
 import {GeolocationService} from '../../@core/services/geolocation.service';
+import {WebsocketService} from '../../@core/services/websocket.service';
 
 @Component({
     selector: 'main-user',
@@ -54,7 +55,8 @@ export class MainUserPage {
         public orderService: OrderService,
         private yaHelper: YaHelper,
         private authService: AuthenticationService,
-        private subdivisionService: SubdivisionService
+        private subdivisionService: SubdivisionService,
+        private websocket: WebsocketService
     ) {
         this.currentStatus = 0;
         this.updateUserLocation();
@@ -99,6 +101,7 @@ export class MainUserPage {
         this.orderService.getActiveOrder().subscribe(res => {
             if (res) {
                 this.currentOrder = res;
+                this.currentStatus = 10;
             }
         });
     }
@@ -107,7 +110,7 @@ export class MainUserPage {
     ionViewWillEnter() {
         this.menuCtrl.enable(true);
         this.loadMap();
-        this.initWebSocket();
+        this.websocket.initWs(this.user.profile.user_id, this.location.lat, this.location.lng);
         this.updateAddress(this.location.from.lng, this.location.from.lat);
     }
 
@@ -236,7 +239,7 @@ export class MainUserPage {
 
     setUserLocation(lat: number, lng: number) {
         if (this.ws) {
-            this.ws.send(this.prepareWsMessage('coordinates', {'lat': lat, 'lng': lng}));
+            this.websocket.send('coordinates', {'lat': lat, 'lng': lng});
         }
         this.location.lat = lat;
         this.location.lng = lng;
@@ -285,6 +288,14 @@ export class MainUserPage {
 
     onSubmit() {
         this.presentLoading('Оформление заказа...', 1000, 'crescent');
+        // this.websocket.send('createOrder', {
+        //     'from_lat': this.location.from.lat,
+        //     'from_lng': this.location.from.lng,
+        //     'from_address': this.location.from.address,
+        //     'to_lat': this.location.to.lat,
+        //     'to_lng': this.location.to.lng,
+        //     'to_address': this.location.to.address
+        // });
         this.orderService.createOrder(
             this.location.from.lat,
             this.location.from.lng,
@@ -296,7 +307,7 @@ export class MainUserPage {
             this.currentStatus = data.status.code;
             this.currentOrder = data;
         }, error => {
-            this.presentLoading(error, 500, 'dots');
+            this.presentLoading(JSON.stringify(error), 500, 'dots');
         });
     }
 
@@ -320,12 +331,6 @@ export class MainUserPage {
         this.map.remove();
     }
 
-    prepareWsMessage(actionName, sendData): string {
-        return JSON.stringify({
-            action: actionName,
-            data: sendData
-        });
-    }
 
     cancelOrder(orderId: number) {
         this.orderService.orderCanceled(orderId).subscribe(data => {
@@ -336,11 +341,4 @@ export class MainUserPage {
         });
     }
 
-    initWebSocket() {
-        const wsUrl = 'wss://telecom-car.uz/ws';
-        const userId = this.user.profile.user_id;
-        const lat = this.location.lat;
-        const lng = this.location.lng;
-        this.ws = new WebSocket(`${wsUrl}?user_id=${userId}&lat=${lat}&lng=${lng}`);
-    }
 }
