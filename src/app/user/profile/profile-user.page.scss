@@ -2,7 +2,7 @@ ion-item {
   --background: none;
 }
 ion-content {
-  --offset-top: -70px!important;
+  top: 80px!important;
 }
 ion-note[slot=start] {
   margin-right: 0;

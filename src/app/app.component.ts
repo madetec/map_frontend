@@ -47,6 +47,7 @@ export class AppComponent {
 
     initializeApp() {
         this.platform.ready().then(() => {
+            this.disabledBackButton();
             this.configureStatusBar();
             this.splashScreen.hide();
             this.network.onNetworkChange().subscribe();
@@ -112,6 +113,15 @@ export class AppComponent {
     configureStatusBar() {
         this.statusBar.styleDefault();
         this.statusBar.backgroundColorByHexString('#f6f6f6');
+    }
+
+    disabledBackButton() {
+        this.platform.backButton.subscribeWithPriority(9999, () => {
+            document.addEventListener('backbutton', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }, false);
+        });
     }
 
     logout() {

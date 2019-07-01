@@ -25,10 +25,9 @@ export class AuthenticationService {
         private device: Device,
         private router: Router
     ) {
-        this.checkToken();
-        // this.platform.ready().then(() => {
-        //     this.checkToken();
-        // });
+        this.platform.ready().then(() => {
+            this.checkToken();
+        });
     }
 
     login(username: string, password: string) {
@@ -116,6 +115,7 @@ export class AuthenticationService {
         return this.storage.remove(CURRENT_USER).then(() => {
             this.currentUser.next(null);
             this.currentMenu.next(null);
+            this.removeFirebaseToken();
             this.authenticationState.next(false);
         });
     }
@@ -124,8 +124,8 @@ export class AuthenticationService {
         return this.authenticationState.value;
     }
 
-    checkToken() {
-        return this.storage.get(CURRENT_USER).then(res => {
+    checkToken(): void {
+        this.storage.get(CURRENT_USER).then(res => {
             if (res) {
                 this.currentMenu.next(res.role);
                 this.currentUser.next(res);
@@ -261,8 +261,18 @@ export class AuthenticationService {
         return this.http.post<any>('http://api.telecom-car.uz/device/add', {
             uid: this.device.uuid,
             firebase_token: token,
-            name: this.device.platform
+            name: `${this.device.platform}, ${this.device.version}`
         }).subscribe(() => {
         });
+    }
+
+    removeFirebaseToken() {
+        try {
+            if (this.device.uuid) {
+                return this.http.get<any>(`http://api.telecom-car.uz/device/remove/${this.device.uuid}`)
+                    .subscribe(() => {});
+            }
+        } catch (e) {
+        }
     }
 }
