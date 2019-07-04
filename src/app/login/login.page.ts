@@ -48,7 +48,7 @@ export class LoginPage implements OnInit {
                 this.signInForm.controls.username.value,
                 this.signInForm.controls.password.value
             );
-            if (response.closed) {
+            if(response.closed){
                 this.disabled = false;
             }
         }

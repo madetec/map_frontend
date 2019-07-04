@@ -58,11 +58,10 @@
       <ion-card>
         <ion-card-header>
           <ion-card-subtitle>
-            <h5>Статус заказа:</h5>
-            <h3>{{currentOrder.status.name}}</h3>
+              {{currentOrder.status.name}}
           </ion-card-subtitle>
           <ion-card-title>
-            <p>Ищем свободную машину, ожидайте...</p>
+              Ищем свободную машину, ожидайте...
           </ion-card-title>
         </ion-card-header>
         <ion-card-content>
@@ -86,24 +85,27 @@
       <ion-card>
         <ion-card-header>
           <ion-card-subtitle>
-            <h5>Водитель в пути</h5>
+              Водитель в пути
           </ion-card-subtitle>
           <ion-card-title>
-            <p>
-              {{ currentOrder.driver.name }} <br>
-              <span>{{ currentOrder.driver.car.color.name }} {{ currentOrder.driver.car.model }} {{ currentOrder.driver.car.number }}</span>
-            </p>
+              {{ currentOrder.driver.name }}
           </ion-card-title>
+            <ion-card-subtitle>
+                {{ currentOrder.driver.car.color.name }} {{ currentOrder.driver.car.model }} {{ currentOrder.driver.car.number }}
+            </ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
           <div class="map-order-from">
-            <ion-icon name="call"></ion-icon>+998 {{currentOrder.driver.phone | mask: '(00) 000-00-00'}}
+              <ion-icon name="call"></ion-icon>
+              <a href="tel:{{currentOrder.driver.phone}}">+998 {{currentOrder.driver.phone | mask: '(00) 000-00-00'}}</a>
           </div>
           <div class="map-order-from">
-            <ion-icon slot="icon-only" name="pin"></ion-icon> {{currentOrder.from.address}}
+              <ion-icon slot="icon-only" name="pin" color="danger"></ion-icon>
+              {{currentOrder.from.address}}
           </div>
           <div class="map-order-to">
-            <ion-icon slot="icon-only" name="compass"></ion-icon> {{currentOrder.to.address}}
+              <ion-icon slot="icon-only" name="pin" color="primary"></ion-icon>
+              {{currentOrder.to.address}}
           </div>
           <ion-buttons>
             <ion-button shape="round" class="button accept" expand="block" fill="clear"
@@ -119,25 +121,28 @@
       <ion-card>
         <ion-card-header>
           <ion-card-subtitle>
-            <h5>Водитель приехал и ожидает</h5>
+              Водитель приехал и ожидает
           </ion-card-subtitle>
-          <ion-card-title>
-            <p>
-              {{ currentOrder.driver.name }} <br>
-              <span>{{ currentOrder.driver.car.color.name }} {{ currentOrder.driver.car.model }} {{ currentOrder.driver.car.number }}</span>
-            </p>
-          </ion-card-title>
+            <ion-card-title>
+                {{ currentOrder.driver.name }}
+            </ion-card-title>
+            <ion-card-subtitle>
+                {{ currentOrder.driver.car.color.name }} {{ currentOrder.driver.car.model }} {{ currentOrder.driver.car.number }}
+            </ion-card-subtitle>
         </ion-card-header>
-        <ion-card-content>
-          <div class="map-order-from">
-            <ion-icon name="call"></ion-icon>+998 {{currentOrder.driver.phone | mask: '(00) 000-00-00'}}
-          </div>
-          <div class="map-order-from">
-            <ion-icon slot="icon-only" name="pin"></ion-icon> {{currentOrder.from.address}}
-          </div>
-          <div class="map-order-to">
-            <ion-icon slot="icon-only" name="compass"></ion-icon> {{currentOrder.to.address}}
-          </div>
+          <ion-card-content>
+              <div class="map-order-from">
+                  <ion-icon name="call"></ion-icon>
+                  <a href="tel:{{currentOrder.driver.phone}}">+998 {{currentOrder.driver.phone | mask: '(00) 000-00-00'}}</a>
+              </div>
+              <div class="map-order-from">
+                  <ion-icon slot="icon-only" name="pin" color="danger"></ion-icon>
+                  {{currentOrder.from.address}}
+              </div>
+              <div class="map-order-to">
+                  <ion-icon slot="icon-only" name="pin" color="primary"></ion-icon>
+                  {{currentOrder.to.address}}
+              </div>
           <ion-buttons>
             <ion-button shape="round" class="button accept" expand="block" fill="clear"
             (click)="cancelOrder(currentOrder.id)">Отменить</ion-button>
@@ -152,25 +157,28 @@
       <ion-card>
         <ion-card-header>
           <ion-card-subtitle>
-            <h5>Водитель начал выполнение заказа</h5>
+              Водитель начал выполнение заказа
           </ion-card-subtitle>
-          <ion-card-title>
-            <p>
-              {{ currentOrder.driver.name }} <br>
-              <span>{{ currentOrder.driver.car.color.name }} {{ currentOrder.driver.car.model }} {{ currentOrder.driver.car.number }}</span>
-            </p>
-          </ion-card-title>
+            <ion-card-title>
+                {{ currentOrder.driver.name }}
+            </ion-card-title>
+            <ion-card-subtitle>
+                {{ currentOrder.driver.car.color.name }} {{ currentOrder.driver.car.model }} {{ currentOrder.driver.car.number }}
+            </ion-card-subtitle>
         </ion-card-header>
-        <ion-card-content>
-          <div class="map-order-from">
-            <ion-icon name="call"></ion-icon>+998 {{currentOrder.driver.phone | mask: '(00) 000-00-00'}}
-          </div>
-          <div class="map-order-from">
-            <ion-icon slot="icon-only" name="pin"></ion-icon> {{currentOrder.from.address}}
-          </div>
-          <div class="map-order-to">
-            <ion-icon slot="icon-only" name="compass"></ion-icon> {{currentOrder.to.address}}
-          </div>
+          <ion-card-content>
+              <div class="map-order-from">
+                  <ion-icon name="call"></ion-icon>
+                  <a href="tel:{{currentOrder.driver.phone}}">+998 {{currentOrder.driver.phone | mask: '(00) 000-00-00'}}</a>
+              </div>
+              <div class="map-order-from">
+                  <ion-icon slot="icon-only" name="pin" color="danger"></ion-icon>
+                  {{currentOrder.from.address}}
+              </div>
+              <div class="map-order-to">
+                  <ion-icon slot="icon-only" name="pin" color="primary"></ion-icon>
+                  {{currentOrder.to.address}}
+              </div>
           <ion-buttons>
             <ion-button shape="round" class="button accept" expand="block" fill="clear"
             (click)="cancelOrder(currentOrder.id)">Отменить</ion-button>

@@ -18,6 +18,7 @@ import {WebsocketService} from '../../@core/services/websocket.service';
     styleUrls: ['./main-user.page.scss']
 })
 export class MainUserPage {
+    updateOrderInterval: any;
     ws: any;
     @ViewChild('map') mapContainer: ElementRef;
     markers: Markers = new Markers();
@@ -60,7 +61,6 @@ export class MainUserPage {
     ) {
         this.currentStatus = 0;
         this.updateUserLocation();
-        this.updateOrder();
         authService.getCurrentUser().subscribe(user => {
             if (user) {
                 this.user = user;
@@ -71,15 +71,15 @@ export class MainUserPage {
                 case 'take_order':
                     this.updateOrder();
                     this.presentLoading('Водитель в пути', 500, 'crescent');
-                    this.currentStatus = 45;
+                    this.currentStatus = data.status;
                     break;
                 case 'driver_is_waiting':
                     this.presentLoading('Водитель приехал и ожидает', 500, 'crescent');
-                    this.currentStatus = 50;
+                    this.currentStatus = data.status;
                     break;
                 case 'started_order':
                     this.presentLoading('Водитель начал выполнение заказа', 500, 'crescent');
-                    this.currentStatus = 55;
+                    this.currentStatus = data.status;
                     break;
                 case 'completed_order':
                     this.presentLoading('Водитель выполнил заказ', 500, 'crescent');
@@ -101,8 +101,12 @@ export class MainUserPage {
         this.orderService.getActiveOrder().subscribe(res => {
             if (res) {
                 this.currentOrder = res;
-                this.currentStatus = 10;
+                this.currentStatus = res.status.code;
             }
+        }, error => {
+            this.currentOrder = null;
+            this.currentStatus = 0;
+            console.log(`${error.status} | ${error.error.message}`);
         });
     }
 
@@ -112,6 +116,9 @@ export class MainUserPage {
         this.loadMap();
         this.websocket.initWs(this.user.profile.user_id, this.location.lat, this.location.lng);
         this.updateAddress(this.location.from.lng, this.location.from.lat);
+        this.updateOrderInterval = setInterval((e) => {
+            this.updateOrder();
+        }, 3000);
     }
 
     async toModalPresent() {
@@ -329,6 +336,7 @@ export class MainUserPage {
             layer.remove();
         });
         this.map.remove();
+        clearInterval(this.updateOrderInterval);
     }
 
 

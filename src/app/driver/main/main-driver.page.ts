@@ -17,7 +17,7 @@ import {WebsocketService} from '../../@core/services/websocket.service';
 export class MainDriverPage implements OnInit {
     @ViewChild('map') mapContainer: ElementRef;
     @ViewChild('slider') sliderContainer: IonSlides;
-
+    updateOrderInterval: any;
     map: L;
     socket: any;
     user: User;
@@ -68,6 +68,19 @@ export class MainDriverPage implements OnInit {
         await loader.present();
     }
 
+    updateOrder() {
+        this.orderService.getActiveOrderForDriver().subscribe(res => {
+            if (res) {
+                this.isDriverFree = false;
+                this.activeOrder = res;
+            }
+        }, error => {
+            this.activeOrder = undefined;
+            this.isDriverFree = true;
+            console.log(`${error.status} | ${error.error.message}`);
+        });
+    }
+
     ngOnInit() {
         this.ordersList = this.orderService.getDriverOrders();
         this.orderService.driverOrdersEmitter$.subscribe(res => {
@@ -96,6 +109,11 @@ export class MainDriverPage implements OnInit {
         this.loadMap();
         this.initStatus();
         this.websocket.initWs(this.user.profile.user_id, this.location.lat, this.location.lng);
+        this.updateOrderInterval = setInterval((e) => this.updateOrder(), 3000);
+    }
+
+    ionViewWillLeave() {
+        clearInterval(this.updateOrderInterval);
     }
 
     loadMap() {

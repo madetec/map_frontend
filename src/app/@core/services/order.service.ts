@@ -26,6 +26,10 @@ export class OrderService {
         return this.http.get <any>('http://api.telecom-car.uz/user/order/active');
     }
 
+    getActiveOrderForDriver() {
+        return this.http.get <any>('http://api.telecom-car.uz/driver/order/active');
+    }
+
     getOrders() {
         return this.http.get <any>('http://api.telecom-car.uz/user/order');
     }
